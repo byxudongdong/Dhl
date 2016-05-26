@@ -22,16 +22,10 @@ public class Fenjian_SKU extends Activity {
 		
 	}
 	
-	public void pallet_pick(View v)
+	public void sku_tijiao(View v)
 	{
 
-	}
-	
-	public void case_pick(View v)
-	{
-		
-	}
-	
+	}	
 	
 	public void sku_back(View v)
 	{

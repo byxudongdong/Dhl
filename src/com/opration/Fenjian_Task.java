@@ -26,7 +26,7 @@ public class Fenjian_Task extends Activity {
 	public void opration_task(View v)
 	{
 		startActivity( new Intent( Fenjian_Task.this,
-              com.opration.Fenjian_huowei.class));
+              com.opration.Fenjian_Huowei.class));
 	}
 	
 	public void jianhuo_back(View v)

@@ -37,7 +37,7 @@
         <activity android:label="@string/fenjian" android:name="com.opration.Fenjian_Task">
             <category android:name="android.intent.category.DEFAULT"/>
         </activity>   
-        <activity android:label="@string/fenjian" android:name="com.opration.Fenjian_houwei">
+        <activity android:label="@string/fenjian" android:name="com.opration.Fenjian_Huowei">
             <category android:name="android.intent.category.DEFAULT"/>
         </activity>   
         <activity android:label="@string/fenjian" android:name="com.opration.Fenjian_SKU">

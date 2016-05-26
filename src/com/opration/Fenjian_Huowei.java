@@ -13,7 +13,7 @@ import android.view.View;
  * @author 
  *
  */
-public class Jianhuo_huowei extends Activity {
+public class Fenjian_Huowei extends Activity {
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
@@ -25,8 +25,8 @@ public class Jianhuo_huowei extends Activity {
 	
 	public void huowei(View v)
 	{
-		startActivity( new Intent( Jianhuo_huowei.this,
-              com.opration.Jianhuo_SKU.class));
+		startActivity( new Intent( Fenjian_Huowei.this,
+              com.opration.Fenjian_SKU.class));
 	}
 	
 	public void huowei_back(View v)
