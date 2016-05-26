@@ -1,6 +1,3 @@
-/**
- * 
- */
 package com.opration;
 
 import com.dhl.R;
@@ -9,30 +6,25 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
-/**
- * @author 
- *
- */
-public class Opration_Task extends Activity {
+public class Jianhuo_Doc extends Activity{
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.opration_task);
+		setContentView(R.layout.jianhuo_doc);
 		
 	}
 	
-	public void opration_task(View v)
+	public void DocID_ok(View v)
 	{
-		startActivity( new Intent( Opration_Task.this,
-              com.opration.Opration_huowei.class));
+		startActivity( new Intent( Jianhuo_Doc.this,
+              com.opration.Jianhuo_Task.class));
 	}
 	
 	public void jianhuo_back(View v)
 	{
 		finish();
 	}
-	
 
 }

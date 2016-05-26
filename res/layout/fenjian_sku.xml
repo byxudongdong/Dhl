@@ -56,63 +56,31 @@
 	            android:layout_marginTop="5dp"
 	            android:textSize="28dp" />
 	    </LinearLayout>
-
-	    <LinearLayout
-	        android:layout_width="match_parent"
-	        android:layout_height="wrap_content"
-	        android:orientation="horizontal" >
-
-	        <Button
-	            android:id="@+id/pallet_pick"
-	            android:layout_width="wrap_content"
-	            android:layout_height="wrap_content"
-	            android:layout_marginLeft="8dp"
-	            android:layout_marginTop="5dp"
-	            android:background="@drawable/draw_button"
-	            android:onClick="pallet_pick"
-	            android:paddingLeft="5dp"
-	            android:paddingRight="5dp"
-	            android:text="Pallet pick"
-	            android:textSize="26dp" />
-
-	        <Button
-	            android:id="@+id/case_pick"
-	            android:layout_width="wrap_content"
-	            android:layout_height="wrap_content"
-	            android:layout_marginLeft="8dp"
-	            android:layout_marginTop="5dp"
-	            android:background="@drawable/draw_button"
-	            android:onClick="case_pick"
-	            android:paddingLeft="5dp"
-	            android:paddingRight="5dp"
-	            android:text="Case pick"
-	            android:textSize="26dp" />
-
-	        <Button
-	            android:id="@+id/piece_pick"
-	            android:layout_width="wrap_content"
-	            android:layout_height="wrap_content"
-	            android:layout_marginLeft="8dp"
-	            android:layout_marginTop="5dp"
-	            android:background="@drawable/draw_button"
-	            android:onClick="piece_pick"
-	            android:paddingLeft="5dp"
-	            android:paddingRight="5dp"
-	            android:text="Piece pick"
-	            android:textSize="26dp" />
-	    </LinearLayout>
 	        
 	    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal" >
 
+	        <Button
+	            android:id="@+id/Button01"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:layout_marginLeft="55dp"
+	            android:layout_marginTop="20dp"
+	            android:background="@drawable/draw_button"
+	            android:onClick="sku_tijiao"
+	            android:paddingLeft="5dp"
+	            android:paddingRight="5dp"
+	            android:text="@string/tijiao"
+	            android:textSize="26dp" />
+
         <Button
             android:id="@+id/sku_back"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:layout_marginLeft="155dp"          
+            android:layout_marginLeft="55dp"          
             android:background="@drawable/draw_button"
             android:onClick="sku_back"
             android:paddingLeft="35dp"

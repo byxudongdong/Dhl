@@ -12,15 +12,17 @@
     <string name="TaskID">请输入TaskID</string>
     <string name="huowei">货位:</string>
     <string name="SKU">SKU:</string>
-    <string name="count">数量</string>
+    <string name="count">数量:</string>
     <string name="tijiao">手输提交</string>
     <string name="mainmenu_name">主菜单</string>
     <string name="fahuo_main_name">发货菜单</string>
     <string name="jianhuo_back">  返   回  </string>
     <string name="fahuo_func_name">拣货操作</string>
     <string name="opration_task">TaskID:</string>
-    <string name="jianhuo">拣货</string>
+    <string name="jianhuo">拣货操作</string>
     <string name="huowei_info">请输入货位信息</string>
+    <string name="fenjian">分拣操作</string>
+
     
 
 </resources>

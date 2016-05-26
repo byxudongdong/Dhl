@@ -23,7 +23,7 @@ public class MainActivity extends Activity {
 	public void login_ok(View v)
 	{
 		startActivity( new Intent( MainActivity.this,
-              com.dhl.main_menu.class));
+              com.dhl.Main_menu.class));
 	}
 	
 	public void login_close(View v)

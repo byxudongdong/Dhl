@@ -13,23 +13,23 @@ import android.view.View;
  * @author 
  *
  */
-public class Opration_huowei extends Activity {
+public class Fenjian_Task extends Activity {
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.opration_huowei);
+		setContentView(R.layout.opration_task);
 		
 	}
 	
-	public void huowei(View v)
+	public void opration_task(View v)
 	{
-		startActivity( new Intent( Opration_huowei.this,
-              com.opration.Opration_SKU.class));
+		startActivity( new Intent( Fenjian_Task.this,
+              com.opration.Fenjian_huowei.class));
 	}
 	
-	public void huowei_back(View v)
+	public void jianhuo_back(View v)
 	{
 		finish();
 	}

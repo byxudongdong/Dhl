@@ -42,7 +42,7 @@
         android:paddingRight="10dp"
         android:text="@string/tijiao"
         android:onClick="huowei"
-        android:textSize="26dp" />
+        android:textSize="26sp" />
 
     <Button
         android:id="@+id/huowei_back"
@@ -56,7 +56,7 @@
         android:onClick="huowei_back"
         android:paddingLeft="35dp"
         android:paddingRight="35dp"
-        android:text="@string/jianhuo_back"
-        android:textSize="26dp" />
+        android:text="@string/back"
+        android:textSize="26sp" />
 
 </RelativeLayout>

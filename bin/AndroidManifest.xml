@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<manifest android:versionCode="1" android:versionName="1.0"
+<manifest android:versionCode="2" android:versionName="1.2"
     package="com.dhl" xmlns:android="http://schemas.android.com/apk/res/android">
     <uses-sdk android:minSdkVersion="14" android:targetSdkVersion="18"/>
     <application android:allowBackup="true"
@@ -11,23 +11,37 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:label="@string/mainmenu_name" android:name="com.dhl.main_menu">
+        <activity android:label="@string/mainmenu_name" android:name="com.dhl.Main_menu">
             <category android:name="android.intent.category.DEFAULT"/>
         </activity>
-        <activity android:label="@string/fahuo_main_name" android:name="com.dhl.fahuo_menu">
+        <activity android:label="@string/fahuo_main_name" android:name="com.dhl.Fahuo_menu">
             <category android:name="android.intent.category.DEFAULT"/>
         </activity>
-        <activity android:label="@string/fahuo_func_name" android:name="com.dhl.jianhuo_func">
+        
+        <activity android:label="@string/jianhuo" android:name="com.opration.Jianhuo_Doc">
             <category android:name="android.intent.category.DEFAULT"/>
         </activity>
-        <activity android:label="@string/jianhuo" android:name="com.opration.Opration_Task">
+        <activity android:label="@string/jianhuo" android:name="com.opration.Jianhuo_Task">
             <category android:name="android.intent.category.DEFAULT"/>
         </activity>
-        <activity android:label="@string/jianhuo" android:name="com.opration.Opration_huowei">
+        <activity android:label="@string/jianhuo" android:name="com.opration.Jianhuo_huowei">
             <category android:name="android.intent.category.DEFAULT"/>
         </activity>
-        <activity android:label="@string/jianhuo" android:name="com.opration.Opration_SKU">
+        <activity android:label="@string/jianhuo" android:name="com.opration.Jianhuo_SKU">
             <category android:name="android.intent.category.DEFAULT"/>
-        </activity>                
+        </activity>           
+        
+        <activity android:label="@string/fenjian" android:name="com.opration.Fenjian_Doc">
+            <category android:name="android.intent.category.DEFAULT"/>
+        </activity>   
+        <activity android:label="@string/fenjian" android:name="com.opration.Fenjian_Task">
+            <category android:name="android.intent.category.DEFAULT"/>
+        </activity>   
+        <activity android:label="@string/fenjian" android:name="com.opration.Fenjian_houwei">
+            <category android:name="android.intent.category.DEFAULT"/>
+        </activity>   
+        <activity android:label="@string/fenjian" android:name="com.opration.Fenjian_SKU">
+            <category android:name="android.intent.category.DEFAULT"/>
+        </activity>                                        
     </application>
 </manifest>
