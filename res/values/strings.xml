@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Dhl</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="user_id">用户ID:</string>
+    <string name="userid_hint">请输入用户ID</string>
+    <string name="ok">确认</string>
+    <string name="back0">退出</string>
+    <string name="back">返回</string>
+    <string name="DocID">请输入DocID</string>
+    <string name="TaskID">请输入TaskID</string>
+    <string name="huowei">货位</string>
+    <string name="SKU">SKU</string>
+    <string name="count">数量</string>
+    <string name="tijiao">手输提交</string>
+    <string name="mainmenu_name">主菜单</string>
+    <string name="fahuo_main_name">发货菜单</string>
+    <string name="jianhuo_back">  返   回  </string>
+    <string name="fahuo_func_name">拣货操作</string>
+
+</resources>

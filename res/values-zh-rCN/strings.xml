@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Dhl</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="user_id">用户ID:</string>
+    <string name="userid_hint">请输入用户ID</string>
+    <string name="ok">确认</string>
+    <string name="back">退出</string>
+    <string name="DocID">请输入DocID</string>
+    <string name="TaskID">请输入TaskID</string>
+    <string name="huowei">货位</string>
+    <string name="SKU">SKU</string>
+    <string name="count">数量</string>
+
+</resources>
