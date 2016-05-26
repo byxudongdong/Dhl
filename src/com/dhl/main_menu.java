@@ -6,7 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
-public class main_menu extends Activity{
+public class Main_menu extends Activity{
 	public Button fahuo_main;
 	public Button qita_main;
 	public Button sync_main;
@@ -24,8 +24,8 @@ public class main_menu extends Activity{
 	
 	public void fahuo_main(View v)
 	{
-		startActivity( new Intent( main_menu.this,
-              com.dhl.fahuo_menu.class));
+		startActivity( new Intent( Main_menu.this,
+              com.dhl.Fahuo_menu.class));
 	}
 
 	public void back(View v)

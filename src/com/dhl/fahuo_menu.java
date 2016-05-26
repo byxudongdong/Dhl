@@ -6,7 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
-public class fahuo_menu extends Activity{
+public class Fahuo_menu extends Activity{
 	public Button jianhuo_main;
 	public Button baozhuang_main;
 	public Button fenjian_main;
@@ -25,8 +25,20 @@ public class fahuo_menu extends Activity{
 
 	public void jianhuo_main(View v)
 	{
-		startActivity( new Intent( fahuo_menu.this,
-              com.dhl.jianhuo_func.class));
+		startActivity( new Intent( Fahuo_menu.this,
+              com.opration.Jianhuo_Doc.class));
+	}
+	
+	public void fenjian_menu(View v)
+	{
+		startActivity( new Intent( Fahuo_menu.this,
+              com.opration.Fenjian_Doc.class));
+	}
+	
+	public void baozhuang_menu(View v)
+	{
+		startActivity( new Intent( Fahuo_menu.this,
+              com.opration.Jianhuo_Doc.class));
 	}
 	
 	public void fahuo_menu_back(View v)
