@@ -9,7 +9,7 @@
     <string name="back">退出</string>
     <string name="DocID">请输入DocID</string>
     <string name="TaskID">请输入TaskID</string>
-    <string name="huowei">货位</string>
+    <string name="huowei">货位：</string>
     <string name="SKU">SKU</string>
     <string name="count">数量</string>
 
