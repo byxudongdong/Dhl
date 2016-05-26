@@ -15,10 +15,10 @@ public class jianhuo_func extends Activity{
 		
 	}
 	
-	public void jianhuo_main(View v)
+	public void DocID_ok(View v)
 	{
 		startActivity( new Intent( jianhuo_func.this,
-              com.dhl.jianhuo_func.class));
+              com.opration.Opration_Task.class));
 	}
 	
 	public void jianhuo_back(View v)
