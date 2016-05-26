@@ -38,7 +38,7 @@ public class Fahuo_menu extends Activity{
 	public void baozhuang_menu(View v)
 	{
 		startActivity( new Intent( Fahuo_menu.this,
-              com.opration.Jianhuo_Doc.class));
+              com.baozhuang.Doc_baozhuang.class));
 	}
 	
 	public void fahuo_menu_back(View v)

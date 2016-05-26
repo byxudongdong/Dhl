@@ -27,6 +27,18 @@ public class Main_menu extends Activity{
 		startActivity( new Intent( Main_menu.this,
               com.dhl.Fahuo_menu.class));
 	}
+	
+	public void other(View v)
+	{
+		startActivity( new Intent( Main_menu.this,
+              com.others.Other_func.class));
+	}
+	
+	public void sync(View v)
+	{
+		startActivity( new Intent( Main_menu.this,
+              com.others.Sync.class));
+	}
 
 	public void back(View v)
 	{

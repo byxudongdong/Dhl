@@ -42,6 +42,37 @@
         </activity>   
         <activity android:label="@string/fenjian" android:name="com.opration.Fenjian_SKU">
             <category android:name="android.intent.category.DEFAULT"/>
-        </activity>                                        
+        </activity>  
+        
+        <activity android:label="@string/baozhuang" android:name="com.baozhuang.Doc_baozhuang">
+            <category android:name="android.intent.category.DEFAULT"/>
+        </activity> 
+        <activity android:label="@string/baozhuang" android:name="com.baozhuang.Box_baozhuang">
+            <category android:name="android.intent.category.DEFAULT"/>
+        </activity> 
+        <activity android:label="@string/baozhuang" android:name="com.baozhuang.SKU_baozhuang">
+            <category android:name="android.intent.category.DEFAULT"/>
+        </activity> 
+
+        <activity android:label="@string/qita" android:name="com.others.Other_func">
+            <category android:name="android.intent.category.DEFAULT"/>
+        </activity> 
+        
+        <activity android:label="@string/qita" android:name="com.others.Wait">
+            <category android:name="android.intent.category.DEFAULT"/>
+        </activity> 
+        
+        <activity android:label="@string/qita" android:name="com.others.Wait_pandian">
+            <category android:name="android.intent.category.DEFAULT"/>
+        </activity> 
+        
+        <activity android:label="@string/timeout" android:name="com.timeout.Timeout">
+            <category android:name="android.intent.category.DEFAULT"/>
+        </activity>     
+        
+        <activity android:label="@string/sync" android:name="com.others.Sync">
+            <category android:name="android.intent.category.DEFAULT"/>
+        </activity>   
+        
     </application>
 </manifest>
