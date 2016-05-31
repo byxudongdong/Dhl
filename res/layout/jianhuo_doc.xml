@@ -26,6 +26,7 @@
             android:layout_marginLeft="30dp"
             android:layout_marginTop="50dp"
             android:hint="@string/DocID"
+            android:singleLine="true"
             android:textSize="28sp" />
     </LinearLayout>
 
@@ -45,7 +46,7 @@
         android:textSize="26sp" />
 
     <Button
-        android:id="@+id/jianhuo_func_back"
+        android:id="@+id/jianhuo_menu_back"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignBaseline="@+id/doc_id_record"

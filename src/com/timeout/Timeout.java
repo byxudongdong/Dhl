@@ -1,10 +1,8 @@
 package com.timeout;
 
-import com.baozhuang.Doc_baozhuang;
-import com.dhl.R;
+import com.login.R;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 

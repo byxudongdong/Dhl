@@ -1,6 +1,6 @@
 package com.others;
 
-import com.dhl.R;
+import com.login.R;
 
 import android.app.Activity;
 import android.os.Bundle;

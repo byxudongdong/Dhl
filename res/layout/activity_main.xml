@@ -17,16 +17,18 @@
             android:layout_marginLeft="30dp"
             android:layout_marginTop="50dp"
             android:text="@string/user_id"
-            android:textSize="28dp" />
+            android:textSize="28sp" />
 
         <EditText
             android:id="@+id/user_id_data"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:singleLine="true"
             android:layout_marginLeft="30dp"
             android:layout_marginTop="50dp"
             android:hint="@string/userid_hint"
-            android:textSize="28dp" />
+            android:text="999999"
+            android:textSize="28sp" />
     </LinearLayout>
 
     <Button
@@ -42,7 +44,7 @@
         android:background="@drawable/draw_button"
         android:text="@string/back0" 
         android:onClick="login_close"
-        android:textSize="26dp"
+        android:textSize="26sp"
         />
 
     <Button
@@ -58,6 +60,6 @@
         android:paddingRight="20dp"
         android:text="@string/ok"
         android:onClick="login_ok"
-        android:textSize="26dp" />
+        android:textSize="26sp" />
 
 </RelativeLayout>
