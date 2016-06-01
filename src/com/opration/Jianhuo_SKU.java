@@ -94,7 +94,9 @@ public class Jianhuo_SKU extends Activity {
 						        		+ "values ("
 						        		+ "'"+sp.getString("user_id", "")+"'"+","
 						        		+ "'×Ü¼ğ',"
-						        		+ "'É¨ÃèSKU',"
+						        		+ "'"
+						        		+ "É¨ÃèSKU"+"-"+sp.getString("task_event", "")
+						        		+ "',"
 						        		+ sp.getInt("doc_id", 0)+","
 						        		+ sp.getInt("task_id",0)+","
 						        		+ "'"+sp.getString("loc_id", "")+"'"+","

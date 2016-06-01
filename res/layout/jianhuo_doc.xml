@@ -27,6 +27,7 @@
             android:layout_marginTop="50dp"
             android:hint="@string/DocID"
             android:singleLine="true"
+            android:inputType="number"
             android:textSize="28sp" />
     </LinearLayout>
 

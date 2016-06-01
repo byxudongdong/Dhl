@@ -84,7 +84,7 @@ public class Jianhuo_Task extends Activity {
 				        		+ "last_opt_id,"
 				        		+ "pushstate) "
 				        		+ "values ("
-				        		+ sp.getString("user_id", "")+","
+				        		+ "'"+sp.getString("user_id", "")+"'"+","
 				        		+ "'×Ü¼ð','É¨ÃèTASKID',"
 				        		+ sp.getInt("doc_id", 0)+","
 				        		+ sp.getInt("task_id",0)+","
