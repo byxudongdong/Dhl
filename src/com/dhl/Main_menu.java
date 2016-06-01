@@ -82,14 +82,14 @@ public class Main_menu extends Activity{
 				        		+"("			                    				                    
 			                    +"ref_id integer primary key," 
 			                    +"user_id text not null,"
-			                    +"task_time timestamp not null default CURRENT_TIMESTAMP,"
+			                    +"task_time timestamp not null default (datetime('now','localtime')),"
 			                    +"task_name text not null,"
 			                    +"task_event text,"
 			                    +"doc_id integer,"
 			                    +"task_id integer,"
-			                    +"loc_id integer,"
-			                    +"box_id integer,"
-			                    +"sku integer,"
+			                    +"loc_id text,"
+			                    +"box_id text,"
+			                    +"sku text,"
 			                    +"qty integer,"
 			                    +"last_opt_id integer,"
 			                    +"pushstate integer not null"
@@ -98,34 +98,12 @@ public class Main_menu extends Activity{
 				        
 				        if(db.rawQuery("select * from locid", null).moveToNext() == false)
 				        {
-				        //插入记录
+				        //插入同步货架记录
 					        db.execSQL("insert into locid (loc_id,String) values ('loc_id','001')");
 					        db.execSQL("insert into locid (loc_id,String) values ('loc_id','002')");
 					        db.execSQL("insert into locid (loc_id,String) values ('loc_id','003')");
 				        }
-				        //newref_id =sp.getInt("ref_id", 1)+1;
-//				        db.execSQL("insert into ptsdata (user_id,task_time,task_name,"
-//				        		+ "task_event,doc_id,task_id,loc_id,box_id,sku,qty,last_opt_id,"
-//				        		+ "pushstate) "
-//				        		+ "values ("
-//				        		//+ newref_id
-//				        		+ "'user01','2016-05-30 11:12:25','总拣','扫描DOCID',"
-//				        		+ "413413,111111,111112,111113,2312343,342352,0,0)");
-				        
-//				        //获取游标对象
-//				        Cursor queryResult = db.rawQuery("select * from locid", null);
-//				        if (queryResult.getColumnCount() != 0) {
-//				            //打印所有记录
-//				            while (queryResult.moveToNext()) {
-//				                Log.i("info", "id: " + queryResult.getInt(queryResult.getColumnIndex("_id"))
-//				                        + " loc_id: " + queryResult.getString(queryResult.getColumnIndex("loc_id"))
-//				                        + " String: " + queryResult.getString(queryResult.getColumnIndex("String"))
-//				                        );
-//				            }				            
-//				        }
-//					      	//关闭游标对象
-//				            queryResult.close();
-				        //关闭数据库
+
 				        db.close();
 	            	}
 	            	else{
@@ -156,57 +134,27 @@ public class Main_menu extends Activity{
 				        		+"("			                    				                    
 			                    +"ref_id integer primary key," 
 			                    +"user_id text not null,"
-			                    +"task_time timestamp not null default CURRENT_TIMESTAMP,"
+			                    +"task_time timestamp not null default (datetime('now','localtime')),"
 			                    +"task_name text not null,"
 			                    +"task_event text,"
 			                    +"doc_id integer,"
 			                    +"task_id integer,"
-			                    +"loc_id integer,"
-			                    +"box_id integer,"
-			                    +"sku integer,"
+			                    +"loc_id text,"
+			                    +"box_id text,"
+			                    +"sku text,"
 			                    +"qty integer,"
 			                    +"last_opt_id integer,"
 			                    +"pushstate integer not null"
 			                    + ")"
 			                    );
 				        
-//				        if(db.rawQuery("select * from locid", null).moveToNext() == false)
-//				        {
-//				        //插入记录
-//					        db.execSQL("insert into locid (loc_id,String) values ('loc_id','001')");
-//					        db.execSQL("insert into locid (loc_id,String) values ('loc_id','002')");
-//					        db.execSQL("insert into locid (loc_id,String) values ('loc_id','003')");
-//				        }
-//				        //newref_id =sp.getInt("ref_id", 1)+1;
-//				        db.execSQL("insert into ptsdata (user_id,task_time,task_name,"
-//				        		+ "task_event,doc_id,task_id,loc_id,box_id,sku,qty,last_opt_id,"
-//				        		+ "pushstate) "
-//				        		+ "values ("
-//				        		//+ newref_id
-//				        		+ "'user01','2016-05-30 11:12:25','总拣','扫描DOCID',"
-//				        		+ "413413,111111,111112,111113,2312343,342352,0,0)");
-				        
-//				        //获取游标对象
-//				        Cursor queryResult = db.rawQuery("select * from locid", null);
-//				        if (queryResult.getColumnCount() != 0) {
-//				            //打印所有记录
-//				            while (queryResult.moveToNext()) {
-//				                Log.i("info", "id: " + queryResult.getInt(queryResult.getColumnIndex("_id"))
-//				                        + " loc_id: " + queryResult.getString(queryResult.getColumnIndex("loc_id"))
-//				                        + " String: " + queryResult.getString(queryResult.getColumnIndex("String"))
-//				                        );
-//				            }				            
-//				        }
-//					      	//关闭游标对象
-//				            queryResult.close();
-				        //关闭数据库
 				        db.close();
 				        
 	            	}
 	            	
 	            	
 	            	try {
-						Thread.sleep(3000);
+						Thread.sleep(1000);
 					} catch (InterruptedException e) {
 						// TODO 自动生成的 catch 块
 						e.printStackTrace();

@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/logo_bg"
+    android:background="@drawable/pts"
      >
 
     <RelativeLayout
@@ -34,6 +34,7 @@
             android:layout_width="fill_parent"
             android:layout_height="40dip"
             android:layout_below="@id/tv_zh"
+            android:singleLine="true"
             android:layout_marginLeft="12dip"
             android:layout_marginRight="10dip" />
 
@@ -57,6 +58,7 @@
             android:layout_marginLeft="12dip"
             android:layout_marginRight="10dip"
             android:maxLines="200"
+            android:singleLine="true"
             android:password="true"
             android:scrollHorizontally="true" />
 

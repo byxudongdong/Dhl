@@ -10,6 +10,7 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -58,13 +59,15 @@ public class MainActivity extends Activity {
 	
 	public void login_ok(View v)
 	{
-
-		Editor editor = sp.edit();
-		editor.putString("user_id", userid.getText().toString());
-		editor.commit();
-		Log.i("user_id", userid.getText().toString());
-		startActivity( new Intent( MainActivity.this,
-              com.dhl.Main_menu.class));
+		if(!TextUtils.isEmpty(userid.getText()))
+		{
+			Editor editor = sp.edit();
+			editor.putString("user_id", userid.getText().toString());
+			editor.commit();
+			Log.i("user_id", userid.getText().toString());
+			startActivity( new Intent( MainActivity.this,
+	              com.dhl.Main_menu.class));
+		}
 	}
 	
 	public void login_close(View v)

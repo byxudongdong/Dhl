@@ -1,8 +1,8 @@
 package com.opration;
 
-import com.dhl.Main_menu;
 import com.login.DatabaseHelper;
 import com.login.R;
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -11,14 +11,16 @@ import android.content.SharedPreferences.Editor;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.text.format.Time;
 import android.util.Log;
 import android.view.View;
-import gettime.Gettime;
+import android.widget.EditText;
 
 public class Jianhuo_Doc extends Activity{
 	private SharedPreferences sp;
 	private String newdate;
+	private EditText doc_id_data;
 	String newtime = null;
 	Thread newThread = null; //声明一个子线程    
 	
@@ -27,6 +29,7 @@ public class Jianhuo_Doc extends Activity{
 	{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.jianhuo_doc);
+		doc_id_data = (EditText)findViewById(R.id.doc_id_data);
 		
 		//获得实例对象
 		sp = this.getSharedPreferences("userInfo", Context.MODE_WORLD_READABLE);
@@ -54,14 +57,14 @@ public class Jianhuo_Doc extends Activity{
 				        		+"("			                    				                    
 			                    +"ref_id integer primary key," 
 			                    +"user_id text not null,"
-			                    +"task_time timestamp not null default CURRENT_TIMESTAMP,"
+			                    +"task_time timestamp not null default (datetime('now','localtime')),"
 			                    +"task_name text not null,"
 			                    +"task_event text,"
 			                    +"doc_id integer,"
 			                    +"task_id integer,"
-			                    +"loc_id integer,"
-			                    +"box_id integer,"
-			                    +"sku integer,"
+			                    +"loc_id text,"
+			                    +"box_id text,"
+			                    +"sku text,"
 			                    +"qty integer,"
 			                    +"last_opt_id integer,"
 			                    +"pushstate integer not null"
@@ -72,9 +75,10 @@ public class Jianhuo_Doc extends Activity{
 				        		+ "task_event,doc_id,last_opt_id,"
 				        		+ "pushstate) "
 				        		+ "values ("
-				        		+ sp.getString("user_id", "")+","
+				        		+ "'"+sp.getString("user_id", "")+"'"+","
 				        		+ "'总拣','扫描DOCID',"
-				        		+ "413413,0,0)");
+				        		+  sp.getInt("doc_id", 0)+","
+				        		+ "0,0)");
 				        
 				        //获取游标对象
 				        Cursor queryResult = db.rawQuery("select * from ptsdata", null);
@@ -83,7 +87,7 @@ public class Jianhuo_Doc extends Activity{
 				            while (queryResult.moveToNext()) {
 				                Log.i("info", "user_id: " + queryResult.getInt(queryResult.getColumnIndex("user_id"))
 				                        + " timastamp: " + queryResult.getString(queryResult.getColumnIndex("task_time"))
-				                        + " String: " + queryResult.getString(queryResult.getColumnIndex("task_event"))
+				                        + " String: " + queryResult.getString(queryResult.getColumnIndex("doc_id"))
 				                        );
 				            }				            
 				        }
@@ -98,9 +102,9 @@ public class Jianhuo_Doc extends Activity{
 	            		int year = t.year;  
 	            		int month = t.month + 1;  
 	            		int date = t.monthDay;  
-	            		int hour = t.hour; // 0-23  
-	            		int minute = t.minute;  
-	            		int second = t.second;
+//	            		int hour = t.hour; // 0-23  
+//	            		int minute = t.minute;  
+//	            		int second = t.second;
 	            		newtime = getString(year)+"-"+getString(month)+"-"+getString(date);
 	            		Editor editor = sp.edit();
 						editor.putString("NEW_TIME", newtime);
@@ -115,28 +119,28 @@ public class Jianhuo_Doc extends Activity{
 				        		+"("			                    				                    
 			                    +"ref_id integer primary key," 
 			                    +"user_id text not null,"
-			                    +"task_time timestamp not null default CURRENT_TIMESTAMP,"
+			                    +"task_time timestamp not null default (datetime('now','localtime')),"
 			                    +"task_name text not null,"
 			                    +"task_event text,"
 			                    +"doc_id integer,"
 			                    +"task_id integer,"
-			                    +"loc_id integer,"
-			                    +"box_id integer,"
-			                    +"sku integer,"
+			                    +"loc_id text,"
+			                    +"box_id text,"
+			                    +"sku text,"
 			                    +"qty integer,"
 			                    +"last_opt_id integer,"
 			                    +"pushstate integer not null"
 			                    + ")"
 			                    );
 				        				        
-				        db.execSQL("insert into ptsdata (user_id,task_time,task_name,"
-				        		+ "task_event,doc_id,task_id,loc_id,box_id,sku,qty,last_opt_id,"
+				        db.execSQL("insert into ptsdata (user_id,task_name,"
+				        		+ "task_event,doc_id,last_opt_id,"
 				        		+ "pushstate) "
 				        		+ "values ("
-				        		+ "'user01',"
-				        		+ "'2016-05-30 11:12:25',"
+				        		+ "'"+sp.getString("user_id", "")+"'"+","
 				        		+ "'总拣','扫描DOCID',"
-				        		+ "413413,111111,111112,111113,2312343,342352,0,0)");
+				        		+  sp.getInt("doc_id", 0)+","
+				        		+ "0,0)");
 				        
 				        //关闭数据库
 				        db.close();
@@ -145,14 +149,23 @@ public class Jianhuo_Doc extends Activity{
 
 	            }
         	},"zongjian_doc");
-		newThread.start(); //启动线程
+		//newThread.start(); //启动线程
 		
 	}
 	
 	public void DocID_ok(View v)
 	{
-		startActivity( new Intent( Jianhuo_Doc.this,
-              com.opration.Jianhuo_Task.class));
+		if(!TextUtils.isEmpty(doc_id_data.getText()) )
+		{
+			Editor editor = sp.edit();
+			editor.putInt("doc_id", Integer.parseInt( doc_id_data.getText().toString() ));
+			editor.commit();
+			
+			newThread.start(); //启动线程
+			
+			startActivity( new Intent( Jianhuo_Doc.this,
+	              com.opration.Jianhuo_Task.class));
+		}
 	}
 	
 	public void jianhuo_back(View v)
