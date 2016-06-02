@@ -38,11 +38,11 @@ public class SKU_baozhuang extends Activity {
 	private String newdate;
 	String newtime = null;
 	Thread newThread = null; //声明一个子线程    
-	SQLiteDatabase db;
 	
 	private EditText sku_id_data;
 	private EditText count_data;
 	
+	SQLiteDatabase db;
 	IntentFilter mFilter =null;
 	public String bt_data;
 	
@@ -61,7 +61,7 @@ public class SKU_baozhuang extends Activity {
 			}else if (count_data.hasFocus()) {
 				count_data.setText(bt_data);
 				count_data.setSelection(bt_data.length());
-				editor.putString("qty", bt_data);
+				editor.putInt("qty", Integer.valueOf(bt_data).intValue());
 				Log.i("user_data", count_data.getText().toString());
 			}								
 			editor.commit();
@@ -118,24 +118,7 @@ public class SKU_baozhuang extends Activity {
 					                    +"last_opt_id integer,"
 					                    +"pushstate integer not null"
 					                    + ")"
-					                    );
-						        				        
-//						        db.execSQL("insert into ptsdata (user_id,task_name,"
-//						        		+ "task_event,doc_id,"+"box_id,"+"sku,"+"qty,"
-//						        		+ "last_opt_id,"
-//						        		+ "pushstate) "
-//						        		+ "values ("
-//						        		+ "'"+sp.getString("user_id", "")+"'"+","
-//						        		+ "'包装',"
-//						        		+ "'"
-//						        		+ "扫描SKU"+"-"+sp.getString("task_event", "")
-//						        		+ "',"
-//						        		+ sp.getInt("doc_id", 0)+","
-//						        		//+ sp.getInt("task_id",0)+","
-//						        		+ "'"+sp.getString("box_id", "")+"'"+","
-//						        		+ "'"+sp.getString("sku", "")+"'"+","
-//						        		+ sp.getInt("qty", 0)+","
-//						        		+ "0,0)");
+					                    );						        				       
 						        
 						        //获取游标对象
 						        Cursor queryResult = db.rawQuery("select * from ptsdata", null);
@@ -195,6 +178,24 @@ public class SKU_baozhuang extends Activity {
 		newThread.start();		
 	}
 	
+	public void sku_tijiao(View v)
+	{
+		if(!TextUtils.isEmpty(sku_id_data.getText().toString()) && !TextUtils.isEmpty(count_data.getText().toString() ))
+		{
+			Editor editor = sp.edit();
+			editor.putString("task_event", "pack");
+			editor.putString("sku",  sku_id_data.getText().toString() ); //Integer.parseInt()
+			editor.putInt("qty", Integer.parseInt( count_data.getText().toString() ));
+			editor.commit();			
+			record();
+		}
+	}	
+	
+	public void sku_back(View v)
+	{
+		finish();
+	}
+	
 	private void record()
 	{
         db.execSQL("insert into ptsdata (user_id,task_name,"
@@ -213,24 +214,6 @@ public class SKU_baozhuang extends Activity {
         		+ "'"+sp.getString("sku", "")+"'"+","
         		+ sp.getInt("qty", 0)+","
         		+ "0,0)");
-	}
-	
-	public void sku_tijiao(View v)
-	{
-		if(!TextUtils.isEmpty(sku_id_data.getText().toString()) && !TextUtils.isEmpty(count_data.getText().toString() ))
-		{
-			Editor editor = sp.edit();
-			editor.putString("task_event", "pack");
-			editor.putString("sku",  sku_id_data.getText().toString() ); //Integer.parseInt()
-			editor.putInt("qty", Integer.parseInt( count_data.getText().toString() ));
-			editor.commit();			
-			record();
-		}
-	}	
-	
-	public void sku_back(View v)
-	{
-		finish();
 	}
 	
 	@Override
@@ -262,7 +245,7 @@ public class SKU_baozhuang extends Activity {
         // TODO Auto-generated method stub  
         mHandler.removeMessages(SHOW_ANOTHER_ACTIVITY);//從消息隊列中移除  
         Message msg = mHandler.obtainMessage(SHOW_ANOTHER_ACTIVITY);  
-        mHandler.sendMessageDelayed(msg, 1000*2* sp.getInt("timeout", 10) );//無操作?分钟后進入屏保  
+        mHandler.sendMessageDelayed(msg, 1000*60* sp.getInt("timeout", 10) );//無操作?分钟后進入屏保  
     }
       
     private Handler mHandler = new Handler()  

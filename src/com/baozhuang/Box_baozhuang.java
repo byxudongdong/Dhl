@@ -220,6 +220,7 @@ public class Box_baozhuang extends Activity {
         super.onResume();
         // The activity has become visible (it is now "resumed").
         resetTime();
+        registerReceiver(mreceiver,mFilter); 
     }
     @Override
     protected void onPause() {

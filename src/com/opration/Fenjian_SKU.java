@@ -3,18 +3,28 @@
  */
 package com.opration;
 
+import com.baozhuang.SKU_baozhuang;
+import com.dhl.broadrec;
 import com.login.DatabaseHelper;
 import com.login.R;
+import com.timeout.Timeout;
+
 import android.app.Activity;
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.text.TextUtils;
 import android.text.format.Time;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.EditText;
 
@@ -23,6 +33,7 @@ import android.widget.EditText;
  *
  */
 public class Fenjian_SKU extends Activity {
+	private static final int SHOW_ANOTHER_ACTIVITY = 0;
 	private SharedPreferences sp;
 	private String newdate;
 	String newtime = null;
@@ -31,8 +42,31 @@ public class Fenjian_SKU extends Activity {
 	private EditText sku_id_data;
 	private EditText count_data;
 	
-	private boolean record_flag =false;
-	private boolean thread_flag =true;
+	SQLiteDatabase db;
+	IntentFilter mFilter =null;
+	public String bt_data;
+	
+	BroadcastReceiver mreceiver = new  BroadcastReceiver(){
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			bt_data = intent.getStringExtra(broadrec.EXTRA_DATA);
+			
+			Editor editor = sp.edit();
+			if(sku_id_data.hasFocus())
+			{
+				sku_id_data.setText(bt_data);
+				sku_id_data.setSelection(bt_data.length());
+				editor.putString("sku", bt_data);
+				Log.i("user_data", sku_id_data.getText().toString());
+			}else if (count_data.hasFocus()) {
+				count_data.setText(bt_data);
+				count_data.setSelection(bt_data.length());
+				editor.putInt("qty", Integer.valueOf(bt_data).intValue());
+				Log.i("user_data", count_data.getText().toString());
+			}								
+			editor.commit();
+		}
+	};
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
@@ -42,6 +76,10 @@ public class Fenjian_SKU extends Activity {
 		sku_id_data = (EditText)findViewById(R.id.sku_id_data);
 		count_data = (EditText)findViewById(R.id.count_data);
 		
+		mFilter = new IntentFilter();
+		mFilter.addAction(broadrec.ACTION_DATA_AVAILABLE);
+		registerReceiver(mreceiver,mFilter);
+		
 		//获得实例对象
 		sp = this.getSharedPreferences("userInfo", Context.MODE_WORLD_READABLE);
 		newdate = sp.getString("NEWTIME", "");
@@ -50,10 +88,6 @@ public class Fenjian_SKU extends Activity {
 		newThread = new Thread(new Runnable() {
 		    @Override
 	            public void run() {
-		    		while(thread_flag)
-		    		{
-		    			if(record_flag)
-		    			{
 			            	newtime = sp.getString("NEW_TIME", null);//
 							//获取同步时间
 			            	if(newtime != null)
@@ -64,7 +98,7 @@ public class Fenjian_SKU extends Activity {
 								//创建一个SQLiteHelper对象
 						        DatabaseHelper helper = new DatabaseHelper(Fenjian_SKU.this, newtime.substring(0,10) + ".db");
 						        //使用getWritableDatabase()或getReadableDatabase()方法获得SQLiteDatabase对象
-						        SQLiteDatabase db = helper.getWritableDatabase();
+						        db = helper.getWritableDatabase();
 						        
 						        //创建一个表				        
 						        db.execSQL("create table if not exists ptsdata "
@@ -85,22 +119,6 @@ public class Fenjian_SKU extends Activity {
 					                    + ")"
 					                    );
 						        				        
-						        db.execSQL("insert into ptsdata (user_id,task_name,"
-						        		+ "task_event,doc_id,"+"task_id,"+"loc_id,"+"sku,"+"qty,"
-						        		+ "last_opt_id,"
-						        		+ "pushstate) "
-						        		+ "values ("
-						        		+ "'"+sp.getString("user_id", "")+"'"+","
-						        		+ "'分拣',"
-						        		+ "'"
-						        		+ "扫描SKU"+"-"+sp.getString("task_event", "")
-						        		+ "',"
-						        		+ sp.getInt("doc_id", 0)+","
-						        		+ sp.getInt("task_id",0)+","
-						        		+ "'"+sp.getString("loc_id", "")+"'"+","
-						        		+ "'"+sp.getString("sku", "")+"'"+","
-						        		+ sp.getInt("qty", 0)+","
-						        		+ "0,0)");
 						        
 						        //获取游标对象
 						        Cursor queryResult = db.rawQuery("select * from ptsdata", null);
@@ -115,8 +133,7 @@ public class Fenjian_SKU extends Activity {
 						        }
 							      	//关闭游标对象
 						            queryResult.close();
-						        //关闭数据库
-						        db.close();
+
 			            	}
 			            	else{
 			            		Time t=new Time(); // or Time t=new Time("GMT+8"); 加上Time Zone资料。  
@@ -152,29 +169,9 @@ public class Fenjian_SKU extends Activity {
 					                    +"pushstate integer not null"
 					                    + ")"
 					                    );
-						        				        
-						        db.execSQL("insert into ptsdata (user_id,task_name,"
-						        		+ "task_event,doc_id,"+"task_id,"+"loc_id,"+"sku,"+"qty,"
-						        		+ "last_opt_id,"
-						        		+ "pushstate) "
-						        		+ "values ("
-						        		+ "'"+sp.getString("user_id", "")+"'"+","
-						        		+ "'分拣',"
-						        		+ "'扫描SKU',"
-						        		+ sp.getInt("doc_id", 0)+","
-						        		+ sp.getInt("task_id",0)+","
-						        		+ "'"+sp.getString("loc_id", "")+"'"+","
-						        		+ "'"+sp.getString("sku", "")+"'"+","
-						        		+ sp.getInt("qty", 0)+","
-						        		+ "0,0)");
 						        
-						        //关闭数据库
-						        db.close();						        
-			            	}
-			            	record_flag = false;
-		    			}//if()
-		    		}//while()
-	            }
+			            	}   
+		        }
         	},"fenjian_sku");
 		newThread.start();
 	}
@@ -189,7 +186,7 @@ public class Fenjian_SKU extends Activity {
 			editor.putInt("qty", Integer.parseInt( count_data.getText().toString() ));
 			editor.commit();
 			
-			record_flag = true;
+			record();
 		}
 
 	}	
@@ -199,5 +196,73 @@ public class Fenjian_SKU extends Activity {
 		finish();
 	}
 	
+	private void record()
+	{
+        db.execSQL("insert into ptsdata (user_id,task_name,"
+        		+ "task_event,doc_id,"+"task_id,"+"loc_id,"+"sku,"+"qty,"
+        		+ "last_opt_id,"
+        		+ "pushstate) "
+        		+ "values ("
+        		+ "'"+sp.getString("user_id", "")+"'"+","
+        		+ "'分拣',"
+        		+ "'"
+        		+ "扫描SKU"+"-"+sp.getString("task_event", "")
+        		+ "',"
+        		+ sp.getInt("doc_id", 0)+","
+        		+ sp.getInt("task_id",0)+","
+        		+ "'"+sp.getString("loc_id", "")+"'"+","
+        		+ "'"+sp.getString("sku", "")+"'"+","
+        		+ sp.getInt("qty", 0)+","
+        		+ "0,0)");
+	}
+	
+	@Override
+    protected void onResume() {
+        super.onResume();
+        // The activity has become visible (it is now "resumed").
+        resetTime();
+        registerReceiver(mreceiver,mFilter); 
+    }
+    @Override
+    protected void onPause() {
+        super.onPause();
+        // Another activity is taking focus (this activity is about to be "paused").
+        unregisterReceiver(mreceiver);
+        //关闭数据库
+        db.close();
+    }
+	
+	
+	@Override  
+    public boolean dispatchTouchEvent(MotionEvent ev) {  
+        // TODO Auto-generated method stub  
+        //Log.i("TAG", "操作ing");  
+        resetTime();  
+        return super.dispatchTouchEvent(ev);  
+    }  
+      
+    private void resetTime() {  
+        // TODO Auto-generated method stub  
+        mHandler.removeMessages(SHOW_ANOTHER_ACTIVITY);//從消息隊列中移除  
+        Message msg = mHandler.obtainMessage(SHOW_ANOTHER_ACTIVITY);  
+        mHandler.sendMessageDelayed(msg, 1000*2* sp.getInt("timeout", 10) );//無操作?分钟后進入屏保  
+    }
+      
+    private Handler mHandler = new Handler()  
+    {  
+        @Override  
+        public void handleMessage(Message msg) {  
+            // TODO Auto-generated method stub  
+            super.handleMessage(msg);  
+            if(msg.what==SHOW_ANOTHER_ACTIVITY)  
+            {  
+                //跳到activity  
+//               Log.i(TAG, "跳到activity");  
+                 Intent intent=new Intent(Fenjian_SKU.this,Timeout.class);  
+                 startActivity(intent);  
+            }  
+        }  
+    };  
+
 
 }

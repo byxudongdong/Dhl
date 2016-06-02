@@ -44,8 +44,9 @@ public class Gettime {
      */
     private static String getWebsiteDatetime(String webUrl){
         try {
-            URL url = new URL(webUrl);// 取得资源对象
+            URL url = new URL(webUrl);// 取得资源对象           
             URLConnection uc = url.openConnection();// 生成连接对象
+            uc.setConnectTimeout(5000);
             uc.connect();// 发出连接
             long ld = uc.getDate();// 读取网站日期时间
             Date date = new Date(ld);// 转换为标准时间对象
