@@ -6,8 +6,8 @@ public class broadrec {
 	
 	public String action()
 	{
-		return ACTION_DATA_AVAILABLE;
 		
+		return ACTION_DATA_AVAILABLE;		
 	}
 	
 	public String rec_date()
@@ -15,6 +15,4 @@ public class broadrec {
 		return EXTRA_DATA;
 	}
 	
-	
-
 }

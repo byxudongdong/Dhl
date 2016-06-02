@@ -38,7 +38,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="49dp"
         android:background="@drawable/draw_button"
-        android:onClick="jianhuo_back"
+        android:onClick="timeout_back"
         android:paddingLeft="35dp"
         android:paddingRight="35dp"
         android:text="@string/timeout"

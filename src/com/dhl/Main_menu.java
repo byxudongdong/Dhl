@@ -154,7 +154,7 @@ public class Main_menu extends Activity{
 	            	
 	            	
 	            	try {
-						Thread.sleep(1000);
+						Thread.sleep(500);
 					} catch (InterruptedException e) {
 						// TODO 自动生成的 catch 块
 						e.printStackTrace();

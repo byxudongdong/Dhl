@@ -24,12 +24,13 @@ public class MainActivity extends Activity {
 	public String bt_data;
 	private SharedPreferences sp;
 	
-	class Myreceiver extends BroadcastReceiver{
+	BroadcastReceiver mreceiver = new  BroadcastReceiver(){
 		@Override
 		public void onReceive(Context context, Intent intent) {
 			bt_data = intent.getStringExtra(broadrec.EXTRA_DATA);
 			
 			userid.setText(bt_data);
+			userid.setSelection(bt_data.length());
 			Log.i("user_id", userid.getText().toString());
 			Editor editor = sp.edit();
 			editor.putString("user_id", bt_data);
@@ -37,8 +38,6 @@ public class MainActivity extends Activity {
 
 		}
 	};
-	Myreceiver mreceiver;
-	
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -69,6 +68,18 @@ public class MainActivity extends Activity {
 	              com.dhl.Main_menu.class));
 		}
 	}
+	
+	@Override
+    protected void onResume() {
+        super.onResume();
+        // The activity has become visible (it is now "resumed").
+    }
+    @Override
+    protected void onPause() {
+        super.onPause();
+        // Another activity is taking focus (this activity is about to be "paused").
+        unregisterReceiver(mreceiver);
+    }
 	
 	public void login_close(View v)
 	{

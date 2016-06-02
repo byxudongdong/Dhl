@@ -149,7 +149,6 @@ public class Jianhuo_Doc extends Activity{
 
 	            }
         	},"zongjian_doc");
-		//newThread.start(); //Æô¶¯Ïß³Ì
 		
 	}
 	

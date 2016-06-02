@@ -162,7 +162,8 @@ public class Jianhuo_Task extends Activity {
 	}
 	
 	public void opration_task(View v)
-	{	if(!TextUtils.isEmpty(task_id_data.getText()) )
+	{	
+		if(!TextUtils.isEmpty(task_id_data.getText()) )
 		{
 			Editor editor = sp.edit();
 			editor.putInt("task_id", Integer.parseInt( task_id_data.getText().toString() ));
