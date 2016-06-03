@@ -3,7 +3,6 @@
  */
 package com.opration;
 
-import com.baozhuang.Box_baozhuang;
 import com.dhl.broadrec;
 import com.login.DatabaseHelper;
 import com.login.R;
@@ -147,7 +146,10 @@ public class Fenjian_Huowei extends Activity {
             		int month = t.month + 1;  
             		int date = t.monthDay;  
 
-            		newtime = getString(year)+"-"+getString(month)+"-"+getString(date);
+            		newtime = String.valueOf(year)
+            				+"-"+String.format("%02d",month)
+		            		+"-"+String.format("%02d",date);
+            		
             		Editor editor = sp.edit();
 					editor.putString("NEW_TIME", newtime);
 					editor.commit();
@@ -262,4 +264,5 @@ public class Fenjian_Huowei extends Activity {
             }  
         }  
     };  
+    
 }

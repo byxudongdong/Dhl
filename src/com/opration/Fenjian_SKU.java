@@ -3,7 +3,6 @@
  */
 package com.opration;
 
-import com.baozhuang.SKU_baozhuang;
 import com.dhl.broadrec;
 import com.login.DatabaseHelper;
 import com.login.R;
@@ -118,8 +117,7 @@ public class Fenjian_SKU extends Activity {
 					                    +"pushstate integer not null"
 					                    + ")"
 					                    );
-						        				        
-						        
+						        				        						        
 						        //获取游标对象
 						        Cursor queryResult = db.rawQuery("select * from ptsdata", null);
 						        if (queryResult.getColumnCount() != 0) {
@@ -142,14 +140,17 @@ public class Fenjian_SKU extends Activity {
 			            		int month = t.month + 1;  
 			            		int date = t.monthDay;  
 		
-			            		newtime = getString(year)+"-"+getString(month)+"-"+getString(date);
+			            		newtime = String.valueOf(year)
+			            				+"-"+String.format("%02d",month)
+					            		+"-"+String.format("%02d",date);
+			            		
 			            		Editor editor = sp.edit();
 								editor.putString("NEW_TIME", newtime);
 								editor.commit();
 								//创建一个SQLiteHelper对象
 						        DatabaseHelper helper = new DatabaseHelper(Fenjian_SKU.this, newtime.substring(0,10) + ".db");
 						        //使用getWritableDatabase()或getReadableDatabase()方法获得SQLiteDatabase对象
-						        SQLiteDatabase db = helper.getWritableDatabase();
+						        db = helper.getWritableDatabase();
 						        
 						      //创建一个表				        
 						        db.execSQL("create table if not exists ptsdata "
@@ -245,7 +246,7 @@ public class Fenjian_SKU extends Activity {
         // TODO Auto-generated method stub  
         mHandler.removeMessages(SHOW_ANOTHER_ACTIVITY);//從消息隊列中移除  
         Message msg = mHandler.obtainMessage(SHOW_ANOTHER_ACTIVITY);  
-        mHandler.sendMessageDelayed(msg, 1000*2* sp.getInt("timeout", 10) );//無操作?分钟后進入屏保  
+        mHandler.sendMessageDelayed(msg, 1000*60* sp.getInt("timeout", 10) );//無操作?分钟后進入屏保  
     }
       
     private Handler mHandler = new Handler()  

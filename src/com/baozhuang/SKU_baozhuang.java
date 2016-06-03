@@ -143,14 +143,17 @@ public class SKU_baozhuang extends Activity {
 			            		int month = t.month + 1;  
 			            		int date = t.monthDay;  
 		
-			            		newtime = getString(year)+"-"+getString(month)+"-"+getString(date);
+			            		newtime = String.valueOf(year)
+			            				+"-"+String.format("%02d",month)
+					            		+"-"+String.format("%02d",date);
+			            		
 			            		Editor editor = sp.edit();
 								editor.putString("NEW_TIME", newtime);
 								editor.commit();
 								//创建一个SQLiteHelper对象
 						        DatabaseHelper helper = new DatabaseHelper(SKU_baozhuang.this, newtime.substring(0,10) + ".db");
 						        //使用getWritableDatabase()或getReadableDatabase()方法获得SQLiteDatabase对象
-						        SQLiteDatabase db = helper.getWritableDatabase();
+						        db = helper.getWritableDatabase();
 						        
 						      //创建一个表				        
 						        db.execSQL("create table if not exists ptsdata "

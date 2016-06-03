@@ -3,7 +3,6 @@
  */
 package com.opration;
 
-import com.baozhuang.Box_baozhuang;
 import com.dhl.broadrec;
 import com.login.DatabaseHelper;
 import com.login.R;
@@ -21,7 +20,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.renderscript.Sampler.Value;
 import android.text.TextUtils;
 import android.text.format.Time;
 import android.util.Log;
@@ -146,7 +144,10 @@ public class Fenjian_Task extends Activity {
             		int month = t.month + 1;  
             		int date = t.monthDay;  
 
-            		newtime = getString(year)+"-"+getString(month)+"-"+getString(date);
+            		newtime = String.valueOf(year)
+            				+"-"+String.format("%02d",month)
+		            		+"-"+String.format("%02d",date);
+            		
             		Editor editor = sp.edit();
 					editor.putString("NEW_TIME", newtime);
 					editor.commit();

@@ -147,7 +147,10 @@ public class Box_baozhuang extends Activity {
             		int month = t.month + 1;  
             		int date = t.monthDay;  
 
-            		newtime = getString(year)+"-"+getString(month)+"-"+getString(date);
+            		newtime = String.valueOf(year)
+            				+"-"+String.format("%02d",month)
+		            		+"-"+String.format("%02d",date);
+            		
             		Editor editor = sp.edit();
 					editor.putString("NEW_TIME", newtime);
 					editor.commit();

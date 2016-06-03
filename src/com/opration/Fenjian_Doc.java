@@ -137,7 +137,11 @@ public class Fenjian_Doc extends Activity{
 //			            		int hour = t.hour; // 0-23  
 //			            		int minute = t.minute;  
 //			            		int second = t.second;
-	            		newtime = getString(year)+"-"+getString(month)+"-"+getString(date);
+
+	            		newtime = String.valueOf(year)
+	            				+"-"+String.format("%02d",month)
+			            		+"-"+String.format("%02d",date);
+	            		
 	            		Editor editor = sp.edit();
 						editor.putString("NEW_TIME", newtime);
 						editor.commit();

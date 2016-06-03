@@ -1,6 +1,5 @@
 package com.timeout;
 
-import com.dhl.Mythread;
 import com.dhl.broadrec;
 import com.login.R;
 
@@ -10,9 +9,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
-import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -53,6 +52,23 @@ public class Timeout extends Activity {
 		sp = this.getSharedPreferences("userInfo", Context.MODE_WORLD_READABLE);
 	}
 	
+	@Override 
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		if(keyCode == KeyEvent.KEYCODE_BACK) { //监控/拦截/屏蔽返回键
+			//dialog(); 
+			Toast.makeText(Timeout.this, "请输入正确DOCID", Toast.LENGTH_SHORT).show();
+			return false; 
+		} else if(keyCode == KeyEvent.KEYCODE_MENU) {
+			// rl.setVisibility(View.VISIBLE);
+			Toast.makeText(Timeout.this, "请输入正确DOCID", Toast.LENGTH_SHORT).show();
+			return false;
+		} else if(keyCode == KeyEvent.KEYCODE_HOME) {
+			//由于Home键为系统键，此处不能捕获，需要重写onAttachedToWindow()
+			Toast.makeText(Timeout.this, "请输入正确DOCID", Toast.LENGTH_SHORT).show();
+			return false;
+		}
+		return super.onKeyDown(keyCode, event);
+	}
 	
 	public void timeout_back(View v)
 	{
@@ -76,12 +92,14 @@ public class Timeout extends Activity {
         super.onResume();
         // The activity has become visible (it is now "resumed").
         registerReceiver(mreceiver,mFilter); 
+        Log.i("TimeOut", "进入超时界面");
     }
     @Override
     protected void onPause() {
         super.onPause();
         // Another activity is taking focus (this activity is about to be "paused").
         unregisterReceiver(mreceiver);
-
+        Log.i("TimeOut", "退出&销毁超时界面");
+        finish();
     }
 }
