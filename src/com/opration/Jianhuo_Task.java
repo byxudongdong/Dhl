@@ -1,6 +1,3 @@
-/**
- * 
- */
 package com.opration;
 
 import com.dhl.broadrec;
@@ -40,6 +37,8 @@ public class Jianhuo_Task extends Activity {
 	
 	private EditText task_id_data;
 	
+	DatabaseHelper helper;
+	SQLiteDatabase db;
 	IntentFilter mFilter =null;
 	public String bt_data;
 	BroadcastReceiver mreceiver = new  BroadcastReceiver(){
@@ -87,9 +86,9 @@ public class Jianhuo_Task extends Activity {
 						editor.putString("NEW_TIME", newtime);
 						editor.commit();
 						//创建一个SQLiteHelper对象
-				        DatabaseHelper helper = new DatabaseHelper(Jianhuo_Task.this, newtime.substring(0,10) + ".db");
+				        helper = new DatabaseHelper(Jianhuo_Task.this, newtime.substring(0,10) + ".db");
 				        //使用getWritableDatabase()或getReadableDatabase()方法获得SQLiteDatabase对象
-				        SQLiteDatabase db = helper.getWritableDatabase();
+				        db = helper.getWritableDatabase();
 				        
 				      //创建一个表				        
 				        db.execSQL("create table if not exists ptsdata "
@@ -108,34 +107,23 @@ public class Jianhuo_Task extends Activity {
 			                    +"last_opt_id integer,"
 			                    +"pushstate integer not null"
 			                    + ")"
-			                    );
-				        				        
-				        db.execSQL("insert into ptsdata (user_id,task_name,"
-				        		+ "task_event,doc_id,"+"task_id,"
-				        		+ "last_opt_id,"
-				        		+ "pushstate) "
-				        		+ "values ("
-				        		+ "'"+sp.getString("user_id", "")+"'"+","
-				        		+ "'总拣','扫描TASKID',"
-				        		+ sp.getInt("doc_id", 0)+","
-				        		+ sp.getInt("task_id",0)+","
-				        		+ "0,0)");
+			                    );				        				        
+
 				        
 				        //获取游标对象
 				        Cursor queryResult = db.rawQuery("select * from ptsdata", null);
 				        if (queryResult.getColumnCount() != 0) {
 				            //打印记录
-				            while (queryResult.moveToNext()) {
+				            if (queryResult.moveToLast()) {
 				                Log.i("info", "user_id: " + queryResult.getInt(queryResult.getColumnIndex("user_id"))
 				                        + " timastamp: " + queryResult.getString(queryResult.getColumnIndex("task_time"))
-				                        + " String: " + queryResult.getInt(queryResult.getColumnIndex("task_id"))
+				                        + " String: " + queryResult.getString(queryResult.getColumnIndex("sku"))
 				                        );
 				            }				            
 				        }
 					      	//关闭游标对象
 				            queryResult.close();
-				        //关闭数据库
-				        db.close();
+
 	            	}
 	            	else{
 	            		Time t=new Time(); // or Time t=new Time("GMT+8"); 加上Time Zone资料。  
@@ -152,7 +140,7 @@ public class Jianhuo_Task extends Activity {
 						editor.putString("NEW_TIME", newtime);
 						editor.commit();
 						//创建一个SQLiteHelper对象
-				        DatabaseHelper helper = new DatabaseHelper(Jianhuo_Task.this, newtime.substring(0,10) + ".db");
+				        helper = new DatabaseHelper(Jianhuo_Task.this, newtime.substring(0,10) + ".db");
 				        //使用getWritableDatabase()或getReadableDatabase()方法获得SQLiteDatabase对象
 				        SQLiteDatabase db = helper.getWritableDatabase();
 				        
@@ -174,25 +162,25 @@ public class Jianhuo_Task extends Activity {
 			                    +"pushstate integer not null"
 			                    + ")"
 			                    );
-				        				        
-				        db.execSQL("insert into ptsdata (user_id,task_name,"
-				        		+ "task_event,doc_id,"+"task_id,"
-				        		+ "last_opt_id,"
-				        		+ "pushstate) "
-				        		+ "values ("
-				        		+ "'"+sp.getString("user_id", "")+"'"+","
-				        		+ "'总拣','扫描TASKID',"
-				        		+ sp.getInt("doc_id", 0)+","
-				        		+ sp.getInt("task_id",0)+","
-				        		+ "0,0)");
 				        
-				        //关闭数据库
-				        db.close();
+				        //获取游标对象
+				        Cursor queryResult = db.rawQuery("select * from ptsdata", null);
+				        if (queryResult.getColumnCount() != 0) {
+				            //打印记录
+				            if (queryResult.moveToLast()) {
+				                Log.i("info", "user_id: " + queryResult.getInt(queryResult.getColumnIndex("user_id"))
+				                        + " timastamp: " + queryResult.getString(queryResult.getColumnIndex("task_time"))
+				                        + " String: " + queryResult.getString(queryResult.getColumnIndex("sku"))
+				                        );
+				            }				            
+				        }
+					      	//关闭游标对象
+				            queryResult.close();
 				        
 	            	}
 	            }
         	},"zongjian_task");
-		
+		newThread.start();
 	}
 	
 	public void opration_task(View v)
@@ -202,7 +190,7 @@ public class Jianhuo_Task extends Activity {
 			Editor editor = sp.edit();
 			editor.putInt("task_id", Integer.parseInt( task_id_data.getText().toString() ));
 			editor.commit();
-			newThread.start(); //启动线程
+			record();
 			
 			startActivity( new Intent( Jianhuo_Task.this,
 	              com.opration.Jianhuo_huowei.class));
@@ -212,6 +200,21 @@ public class Jianhuo_Task extends Activity {
 	public void jianhuo_back(View v)
 	{
 		finish();
+	}
+	
+	private void record()
+	{
+		db = helper.getWritableDatabase();
+        db.execSQL("insert into ptsdata (user_id,task_name,"
+        		+ "task_event,doc_id,"+"task_id,"
+        		+ "last_opt_id,"
+        		+ "pushstate) "
+        		+ "values ("
+        		+ "'"+sp.getString("user_id", "")+"'"+","
+        		+ "'总拣','扫描TASKID',"
+        		+ sp.getInt("doc_id", 0)+","
+        		+ sp.getInt("task_id",0)+","
+        		+ "0,0)");
 	}
 	
 	@Override
@@ -226,6 +229,9 @@ public class Jianhuo_Task extends Activity {
         super.onPause();
         // Another activity is taking focus (this activity is about to be "paused").
         unregisterReceiver(mreceiver);
+        mHandler.removeMessages(SHOW_ANOTHER_ACTIVITY);//從消息隊列中移除  
+        //关闭数据库
+        db.close();
     }
 	
 	

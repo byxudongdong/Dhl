@@ -3,7 +3,6 @@
  */
 package com.baozhuang;
 
-import com.dhl.Mythread;
 import com.dhl.broadrec;
 import com.login.DatabaseHelper;
 import com.login.R;
@@ -42,6 +41,7 @@ public class SKU_baozhuang extends Activity {
 	private EditText sku_id_data;
 	private EditText count_data;
 	
+	DatabaseHelper helper;
 	SQLiteDatabase db;
 	IntentFilter mFilter =null;
 	public String bt_data;
@@ -97,7 +97,7 @@ public class SKU_baozhuang extends Activity {
 								editor.putString("NEW_TIME", newtime);
 								editor.commit();
 								//创建一个SQLiteHelper对象
-						        DatabaseHelper helper = new DatabaseHelper(SKU_baozhuang.this, newtime.substring(0,10) + ".db");
+						        helper = new DatabaseHelper(SKU_baozhuang.this, newtime.substring(0,10) + ".db");
 						        //使用getWritableDatabase()或getReadableDatabase()方法获得SQLiteDatabase对象
 						        db = helper.getWritableDatabase();
 						        
@@ -151,7 +151,7 @@ public class SKU_baozhuang extends Activity {
 								editor.putString("NEW_TIME", newtime);
 								editor.commit();
 								//创建一个SQLiteHelper对象
-						        DatabaseHelper helper = new DatabaseHelper(SKU_baozhuang.this, newtime.substring(0,10) + ".db");
+						        helper = new DatabaseHelper(SKU_baozhuang.this, newtime.substring(0,10) + ".db");
 						        //使用getWritableDatabase()或getReadableDatabase()方法获得SQLiteDatabase对象
 						        db = helper.getWritableDatabase();
 						        
@@ -173,7 +173,7 @@ public class SKU_baozhuang extends Activity {
 					                    +"pushstate integer not null"
 					                    + ")"
 					                    );
-						        				        					        
+						        
 			            	}
 
 	            }
@@ -189,7 +189,8 @@ public class SKU_baozhuang extends Activity {
 			editor.putString("task_event", "pack");
 			editor.putString("sku",  sku_id_data.getText().toString() ); //Integer.parseInt()
 			editor.putInt("qty", Integer.parseInt( count_data.getText().toString() ));
-			editor.commit();			
+			editor.commit();
+			
 			record();
 		}
 	}	
@@ -201,6 +202,7 @@ public class SKU_baozhuang extends Activity {
 	
 	private void record()
 	{
+		db = helper.getWritableDatabase();
         db.execSQL("insert into ptsdata (user_id,task_name,"
         		+ "task_event,doc_id,"+"box_id,"+"sku,"+"qty,"
         		+ "last_opt_id,"
@@ -231,6 +233,7 @@ public class SKU_baozhuang extends Activity {
         super.onPause();
         // Another activity is taking focus (this activity is about to be "paused").
         unregisterReceiver(mreceiver);
+        mHandler.removeMessages(SHOW_ANOTHER_ACTIVITY);//從消息隊列中移除  
         //关闭数据库
         db.close();
     }

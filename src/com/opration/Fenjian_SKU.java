@@ -41,6 +41,7 @@ public class Fenjian_SKU extends Activity {
 	private EditText sku_id_data;
 	private EditText count_data;
 	
+	DatabaseHelper helper;
 	SQLiteDatabase db;
 	IntentFilter mFilter =null;
 	public String bt_data;
@@ -95,7 +96,7 @@ public class Fenjian_SKU extends Activity {
 								editor.putString("NEW_TIME", newtime);
 								editor.commit();
 								//创建一个SQLiteHelper对象
-						        DatabaseHelper helper = new DatabaseHelper(Fenjian_SKU.this, newtime.substring(0,10) + ".db");
+						        helper = new DatabaseHelper(Fenjian_SKU.this, newtime.substring(0,10) + ".db");
 						        //使用getWritableDatabase()或getReadableDatabase()方法获得SQLiteDatabase对象
 						        db = helper.getWritableDatabase();
 						        
@@ -148,7 +149,7 @@ public class Fenjian_SKU extends Activity {
 								editor.putString("NEW_TIME", newtime);
 								editor.commit();
 								//创建一个SQLiteHelper对象
-						        DatabaseHelper helper = new DatabaseHelper(Fenjian_SKU.this, newtime.substring(0,10) + ".db");
+						        helper = new DatabaseHelper(Fenjian_SKU.this, newtime.substring(0,10) + ".db");
 						        //使用getWritableDatabase()或getReadableDatabase()方法获得SQLiteDatabase对象
 						        db = helper.getWritableDatabase();
 						        
@@ -199,6 +200,7 @@ public class Fenjian_SKU extends Activity {
 	
 	private void record()
 	{
+		db = helper.getWritableDatabase();
         db.execSQL("insert into ptsdata (user_id,task_name,"
         		+ "task_event,doc_id,"+"task_id,"+"loc_id,"+"sku,"+"qty,"
         		+ "last_opt_id,"
@@ -229,6 +231,7 @@ public class Fenjian_SKU extends Activity {
         super.onPause();
         // Another activity is taking focus (this activity is about to be "paused").
         unregisterReceiver(mreceiver);
+        mHandler.removeMessages(SHOW_ANOTHER_ACTIVITY);//從消息隊列中移除  
         //关闭数据库
         db.close();
     }

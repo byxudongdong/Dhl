@@ -40,6 +40,8 @@ public class Fenjian_Huowei extends Activity {
 	
 	private EditText huowei_data;
 	
+	DatabaseHelper helper;
+	SQLiteDatabase db;
 	IntentFilter mFilter =null;
 	public String bt_data;
 	BroadcastReceiver mreceiver = new  BroadcastReceiver(){
@@ -87,9 +89,9 @@ public class Fenjian_Huowei extends Activity {
 					editor.putString("NEW_TIME", newtime);
 					editor.commit();
 					//创建一个SQLiteHelper对象
-			        DatabaseHelper helper = new DatabaseHelper(Fenjian_Huowei.this, newtime.substring(0,10) + ".db");
+			        helper = new DatabaseHelper(Fenjian_Huowei.this, newtime.substring(0,10) + ".db");
 			        //使用getWritableDatabase()或getReadableDatabase()方法获得SQLiteDatabase对象
-			        SQLiteDatabase db = helper.getWritableDatabase();
+			        db = helper.getWritableDatabase();
 			        
 			      //创建一个表				        
 			        db.execSQL("create table if not exists ptsdata "
@@ -108,20 +110,7 @@ public class Fenjian_Huowei extends Activity {
 		                    +"last_opt_id integer,"
 		                    +"pushstate integer not null"
 		                    + ")"
-		                    );
-			        				        
-			        db.execSQL("insert into ptsdata (user_id,task_name,"
-			        		+ "task_event,doc_id,"+"task_id,"+"loc_id,"
-			        		+ "last_opt_id,"
-			        		+ "pushstate) "
-			        		+ "values ("
-			        		+ "'"+sp.getString("user_id", "")+"'"+","
-			        		+ "'分拣',"
-			        		+ "'扫描LOCID'"+","
-			        		+ sp.getInt("doc_id", 0)+","
-			        		+ sp.getInt("task_id",0)+","
-			        		+ "'"+sp.getString("loc_id", "")+"'"+","
-			        		+ "0,0)");
+		                    );			        				        
 			        
 			        //获取游标对象
 			        Cursor queryResult = db.rawQuery("select * from ptsdata", null);
@@ -136,8 +125,7 @@ public class Fenjian_Huowei extends Activity {
 			        }
 				      	//关闭游标对象
 			            queryResult.close();
-			        //关闭数据库
-			        db.close();
+
             	}
             	else{
             		Time t=new Time(); // or Time t=new Time("GMT+8"); 加上Time Zone资料。  
@@ -154,9 +142,9 @@ public class Fenjian_Huowei extends Activity {
 					editor.putString("NEW_TIME", newtime);
 					editor.commit();
 					//创建一个SQLiteHelper对象
-			        DatabaseHelper helper = new DatabaseHelper(Fenjian_Huowei.this, newtime.substring(0,10) + ".db");
+			        helper = new DatabaseHelper(Fenjian_Huowei.this, newtime.substring(0,10) + ".db");
 			        //使用getWritableDatabase()或getReadableDatabase()方法获得SQLiteDatabase对象
-			        SQLiteDatabase db = helper.getWritableDatabase();
+			        db = helper.getWritableDatabase();
 			        
 			      //创建一个表				        
 			        db.execSQL("create table if not exists ptsdata "
@@ -176,27 +164,12 @@ public class Fenjian_Huowei extends Activity {
 		                    +"pushstate integer not null"
 		                    + ")"
 		                    );
-			        				        
-			        db.execSQL("insert into ptsdata (user_id,task_name,"
-			        		+ "task_event,doc_id,"+"task_id,"+"loc_id,"
-			        		+ "last_opt_id,"
-			        		+ "pushstate) "
-			        		+ "values ("
-			        		+ sp.getString("user_id", "")+","
-			        		+ "'分拣','扫描LOCID',"
-			        		+ sp.getInt("doc_id", 0)+","
-			        		+ sp.getInt("task_id",0)+","
-			        		+ "'"+sp.getString("loc_id", "")+"'"+","
-			        		+ "0,0)");
-			        
-			        //关闭数据库
-			        db.close();
 			        
             	}
 
             }
     	},"fenjian_huojia");
-		
+		newThread.start(); //启动线程
 	}
 	
 	public void huowei(View v)
@@ -206,7 +179,8 @@ public class Fenjian_Huowei extends Activity {
 			Editor editor = sp.edit();
 			editor.putString("loc_id",  huowei_data.getText().toString() ); //Integer.parseInt()
 			editor.commit();
-			newThread.start(); //启动线程
+			
+			record();
 			
 			startActivity( new Intent( Fenjian_Huowei.this,
               com.opration.Fenjian_SKU.class));
@@ -231,8 +205,27 @@ public class Fenjian_Huowei extends Activity {
         super.onPause();
         // Another activity is taking focus (this activity is about to be "paused").
         unregisterReceiver(mreceiver);
+        mHandler.removeMessages(SHOW_ANOTHER_ACTIVITY);//從消息隊列中移除  
+        //关闭数据库
+        db.close();
     }
 	
+	private void record()
+	{
+		db = helper.getWritableDatabase();
+        db.execSQL("insert into ptsdata (user_id,task_name,"
+        		+ "task_event,doc_id,"+"task_id,"+"loc_id,"
+        		+ "last_opt_id,"
+        		+ "pushstate) "
+        		+ "values ("
+        		+ "'"+sp.getString("user_id", "")+"'"+","
+        		+ "'分拣',"
+        		+ "'扫描LOCID'"+","
+        		+ sp.getInt("doc_id", 0)+","
+        		+ sp.getInt("task_id",0)+","
+        		+ "'"+sp.getString("loc_id", "")+"'"+","
+        		+ "0,0)");
+	}
 	
 	@Override  
     public boolean dispatchTouchEvent(MotionEvent ev) {  
