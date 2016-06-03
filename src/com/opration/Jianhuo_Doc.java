@@ -139,7 +139,7 @@ public class Jianhuo_Doc extends Activity{
 						//创建一个SQLiteHelper对象
 				        helper = new DatabaseHelper(Jianhuo_Doc.this, newtime.substring(0,10) + ".db");
 				        //使用getWritableDatabase()或getReadableDatabase()方法获得SQLiteDatabase对象
-				        SQLiteDatabase db = helper.getWritableDatabase();
+				        db = helper.getWritableDatabase();
 				        
 				      //创建一个表				        
 				        db.execSQL("create table if not exists ptsdata "
@@ -202,7 +202,6 @@ public class Jianhuo_Doc extends Activity{
 
 	private void record()
 	{
-
 		db = helper.getWritableDatabase();
 
         db.execSQL("insert into ptsdata (user_id,task_name,"
