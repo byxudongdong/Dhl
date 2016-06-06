@@ -116,7 +116,7 @@ public class Box_baozhuang extends Activity {
 			        Cursor queryResult = db.rawQuery("select * from ptsdata", null);
 			        if (queryResult.getColumnCount() != 0) {
 			            //´òÓ¡¼ÇÂ¼
-			            while (queryResult.moveToNext()) {
+			            if (queryResult.moveToNext()) {
 			                Log.i("info", "user_id: " + queryResult.getInt(queryResult.getColumnIndex("user_id"))
 			                        + " timastamp: " + queryResult.getString(queryResult.getColumnIndex("task_time"))
 			                        + " String: " + queryResult.getString(queryResult.getColumnIndex("box_id"))

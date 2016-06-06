@@ -73,6 +73,7 @@ public class MainActivity extends Activity {
     protected void onResume() {
         super.onResume();
         // The activity has become visible (it is now "resumed").
+        registerReceiver(mreceiver,mFilter);
     }
     @Override
     protected void onPause() {
