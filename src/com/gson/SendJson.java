@@ -12,7 +12,7 @@ import android.util.Log;
 
 public class SendJson{
 
-   public static void main(String ref_id,  
+   public static Task main(String ref_id,  
 						    String user_id,  
 						    String task_time,						     
 						    String task_name, 
@@ -87,51 +87,41 @@ public class SendJson{
         //task1.setPushState(pushstate);       
   
         // //////////////////////////////////////////////////////////  
-        System.out.println("----------简单对象之间的转化-------------");  
-        // 简单的bean转为json  
-        String s1 = gson.toJson(task1);  
-//        s1 = "{"
-//        		+"ref_id" + "\"1\","
-//        		+"}";
-        System.out.println("简单Bean转化为Json===" + s1);  
-  
+//        System.out.println("----------简单对象之间的转化-------------");  
+//        // 简单的bean转为json  
+//        String TaskJson = gson.toJson(task1);  
+//
+//        System.out.println("简单Bean转化为Json===" + TaskJson); 
+        return task1;
         // json转为简单Bean  
-//        Task student = gson.fromJson(s1, Task.class);  
-//        System.out.println("Json转为简单Bean===" + student);  
-
-  
-//        Task task2 = new Task();  
-//        task2.setRefId(2);  
-//        task2.setTaskName("李坤");  
-//        task2.setTaskTime(new Date());  
-//  
-//        Task task3 = new Task();  
-//        task3.setRefId(3);  
-//        task3.setTaskName("李坤");  
-//        task3.setTaskTime(new Date()); 
-//  
-//        List<Task> list = new ArrayList<Task>();  
-//        list.add(task1);  
-//        list.add(task2);  
-//        list.add(task3);  
-//  
-//        System.out.println("----------带泛型的List之间的转化-------------");  
-//        // 带泛型的list转化为json  
-//        String s2 = gson.toJson(list);  
-//        System.out.println("带泛型的list转化为json==" + s2);  
-//  
-//        // json转为带泛型的list  
-//        List<Task> retList = gson.fromJson(s2,  
-//                new TypeToken<List<Task>>() {  
-//                }.getType());  
-//        for (Task stu : retList) {  
-//            System.out.println(stu);  
-//        }
+//      Task student = gson.fromJson(s1, Task.class);  
+//      System.out.println("Json转为简单Bean===" + student);  
     }
 	
-	public SendJson() {
+	public static List<Task> SendTasks(List<Task> taskJsons, Task taskJson,Boolean endFlag) 
+	{
+		//Gson gson = new Gson();
 		// TODO 自动生成的构造函数存根
-		
+		if(endFlag == false)
+		{	
+			
+			//List<Task> taskJsons = new ArrayList<Task>();  
+			taskJsons.add(taskJson);   
+			
+//			System.out.println("----------带泛型的List之间的转化-------------");  
+//			//带泛型的list转化为json  
+//			String TaskList = gson.toJson(taskJsons);  
+//			System.out.println("带泛型的list转化为json==" + TaskList);  
+			
+//			//json转为带泛型的list  
+//			List<Task> retList = gson.fromJson(TaskList,  
+//			        new TypeToken<List<Task>>() {  
+//			        }.getType());  
+//			for (Task tasks : retList) {  
+//			    System.out.println(tasks);  
+//			}
+		}
+		return taskJsons;
 	}
 
 }

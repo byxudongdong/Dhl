@@ -1,8 +1,21 @@
 package com.others;
 
+import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
+import org.apache.http.entity.StringEntity;
+
+import com.google.gson.Gson;
 import com.gson.SendJson;
+import com.gson.Task;
+import com.gson.TaskList;
+import com.gson.UtilsPost;
+import com.lidroid.xutils.HttpUtils;
+import com.lidroid.xutils.http.RequestParams;
+import com.lidroid.xutils.http.callback.RequestCallBack;
+import com.lidroid.xutils.http.client.HttpRequest.HttpMethod;
 import com.login.DatabaseHelper;
 import com.login.R;
 
@@ -26,8 +39,13 @@ public class Sync extends Activity {
 	SQLiteDatabase db;
 	private String newdate;
 	String newtime = null;
-	Thread newThread = null; //ÉùÃ÷Ò»¸ö×ÓÏß³Ì    
+	Thread newThread = null; //å£°æ˜ä¸€ä¸ªå­çº¿ç¨‹    
 	private SharedPreferences sp;
+	
+	private Task sendtask;
+	private List<Task> sendtasks = new ArrayList<Task>();;
+	Boolean endFlag = false;
+	Gson gson = new Gson();
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
@@ -35,7 +53,7 @@ public class Sync extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.sync);
 		
-		//»ñµÃÊµÀı¶ÔÏó
+		//è·å¾—å®ä¾‹å¯¹è±¡
 		sp = this.getSharedPreferences("userInfo", Context.MODE_WORLD_READABLE);
 		newdate = sp.getString("NEWTIME", "");
 		Log.i("NEWDATE", newdate);
@@ -44,8 +62,8 @@ public class Sync extends Activity {
 		    @Override
 	            public void run() {
 	            	
-	            		Time t=new Time(); // or Time t=new Time("GMT+8"); ¼ÓÉÏTime Zone×ÊÁÏ¡£  
-	            		t.setToNow(); // È¡µÃÏµÍ³Ê±¼ä¡£  
+	            		Time t=new Time(); // or Time t=new Time("GMT+8"); åŠ ä¸ŠTime Zoneèµ„æ–™ã€‚  
+	            		t.setToNow(); // å–å¾—ç³»ç»Ÿæ—¶é—´ã€‚  
 	            		int year = t.year;  
 	            		int month = t.month + 1;  
 	            		int date = t.monthDay;  
@@ -60,12 +78,12 @@ public class Sync extends Activity {
 	            		Editor editor = sp.edit();
 						editor.putString("NEW_TIME", newtime);
 						editor.commit();
-						//´´½¨Ò»¸öSQLiteHelper¶ÔÏó
+						//åˆ›å»ºä¸€ä¸ªSQLiteHelperå¯¹è±¡
 				        helper = new DatabaseHelper(Sync.this, newtime.substring(0,10) + ".db");
-				        //Ê¹ÓÃgetWritableDatabase()»ògetReadableDatabase()·½·¨»ñµÃSQLiteDatabase¶ÔÏó
+				        //ä½¿ç”¨getWritableDatabase()æˆ–getReadableDatabase()æ–¹æ³•è·å¾—SQLiteDatabaseå¯¹è±¡
 				        db = helper.getWritableDatabase();
 				        
-				      //´´½¨Ò»¸ö±í				        
+				      //åˆ›å»ºä¸€ä¸ªè¡¨				        
 				        db.execSQL("create table if not exists ptsdata "
 				        		+"("			                    				                    
 			                    +"ref_id integer primary key," 
@@ -84,12 +102,13 @@ public class Sync extends Activity {
 			                    + ")"
 			            );
 				        
-				      //»ñÈ¡ÓÎ±ê¶ÔÏó
+				      //è·å–æ¸¸æ ‡å¯¹è±¡
 				        Cursor queryResult = db.rawQuery("select * from ptsdata", null);
 				        if (queryResult.getColumnCount() != 0) {
-				        	
-				            //´òÓ¡¼ÇÂ¼
-				            if (queryResult.moveToLast()) {
+				        	endFlag = false;
+				            //æ‰“å°è®°å½•
+				        	//queryResult.moveToPosition(queryResult.getColumnCount()-3);
+				            while (queryResult.moveToNext() == true ) {
 				            	
 					        	int ref_id =  queryResult.getInt(queryResult.getColumnIndex("ref_id"));
 							    String user_id = queryResult.getString(queryResult.getColumnIndex("user_id"));  
@@ -110,25 +129,48 @@ public class Sync extends Activity {
 				                        + " String: " + task_event
 				                        );
 				                
-						        SendJson.main( String.valueOf(ref_id),  
-									     user_id,  
-									     task_time,						     
-									     task_name, 
-									     task_event,   						   
-									     String.valueOf(doc_id),
-									     String.valueOf(task_id),						   
-									     loc_id,
-									     box_id,
-									     sku,
-									     String.valueOf(qty),
-									     String.valueOf(last_opt_id),
-									     pushstate);
+						        sendtask = SendJson.main( String.valueOf(ref_id),  
+														     user_id,  
+														     task_time,						     
+														     task_name, 
+														     task_event,   						   
+														     String.valueOf(doc_id),
+														     String.valueOf(task_id),						   
+														     loc_id,
+														     box_id,
+														     sku,
+														     String.valueOf(qty),
+														     String.valueOf(last_opt_id),
+														     pushstate);
 						        //GsonTest1.main(null);
+						        sendtasks = SendJson.SendTasks(sendtasks, sendtask, endFlag);
 				            }				            
 				        }
-				      	//¹Ø±ÕÓÎ±ê¶ÔÏó
+				      	//å…³é—­æ¸¸æ ‡å¯¹è±¡
 			            queryResult.close();
-				            
+			            //Jsonè½¬æ¢
+						System.out.println("----------Listä¹‹é—´çš„è½¬åŒ–-------------");  
+						//å¸¦æ³›å‹çš„listè½¬åŒ–ä¸ºjson  
+						String TaskListJson = gson.toJson(sendtasks);  
+						System.out.println("listè½¬åŒ–ä¸ºjson==" + TaskListJson); 
+						
+//						TaskList tasklist = new TaskList(); 
+//						tasklist.setListName("tasklist");
+//						tasklist.setTaskList(TaskListJson);
+						
+						String senddata = "{\"tasklist\":" + TaskListJson + "}"; 
+						System.out.println("----------Jsonè½¬åŒ–-------------");
+						System.out.println("listè½¬åŒ–ä¸ºjson==" + senddata); 
+						
+						//è®¾ç½®ä¼ è¾“å‚æ•°ã€‚
+						//HttpUtils httpUtils=new HttpUtils();
+					    RequestParams params = new RequestParams();
+					    //params.addBodyParameter("op", "PTS_DATA");					    
+					    params.addBodyParameter("scanDataList", senddata);
+					    
+					    UtilsPost.doPost("http://117.185.79.178:8005/PTSService.asmx/PTS_DATA", 
+					    				params, null);
+					    
 	            	}	            
         	},"wait");
 		newThread.start();
@@ -141,9 +183,9 @@ public class Sync extends Activity {
 	
 	protected void dialog() { 
 		AlertDialog.Builder builder = new Builder(Sync.this); 
-		builder.setMessage("È·¶¨ÒªÍË³öÂğ?"); 
-		builder.setTitle("ÌáÊ¾"); 
-		builder.setPositiveButton("È·ÈÏ", 
+		builder.setMessage("ç¡®å®šè¦é€€å‡ºå—?"); 
+		builder.setTitle("æç¤º"); 
+		builder.setPositiveButton("ç¡®è®¤", 
 			new android.content.DialogInterface.OnClickListener() { 
 				public void onClick(DialogInterface dialog, int which) 
 				{ 
@@ -153,7 +195,7 @@ public class Sync extends Activity {
 				} 
 			}
 		); 
-		builder.setNegativeButton("È¡Ïû", 
+		builder.setNegativeButton("å–æ¶ˆ", 
 			new android.content.DialogInterface.OnClickListener() 
 			{ 
 				public void onClick(DialogInterface dialog, int which) 
@@ -167,7 +209,7 @@ public class Sync extends Activity {
 	
 	@Override 
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
-		if(keyCode == KeyEvent.KEYCODE_BACK) { //¼à¿Ø/À¹½Ø/ÆÁ±Î·µ»Ø¼ü
+		if(keyCode == KeyEvent.KEYCODE_BACK) { //ç›‘æ§/æ‹¦æˆª/å±è”½è¿”å›é”®
 			dialog(); 
 			return false; 
 		} 
