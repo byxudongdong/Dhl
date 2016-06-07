@@ -1,11 +1,16 @@
 package com.login;
 
+import com.dhl.MainActivity;
+
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
+import android.text.InputType;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
@@ -22,7 +27,7 @@ public class LoginActivity extends Activity {
 	
 	private EditText userName, password;
 	private CheckBox rem_pw, auto_login;
-	private Button btn_login;
+	private Button btn_login,btn_set;
 	private ImageButton btnQuit;
     private String userNameValue,passwordValue;
     private LinearLayout login_dialog_progress_line;
@@ -42,6 +47,7 @@ public class LoginActivity extends Activity {
         rem_pw = (CheckBox) findViewById(R.id.cb_mima);
 		auto_login = (CheckBox) findViewById(R.id.cb_auto);
         btn_login = (Button) findViewById(R.id.btn_login);
+        btn_set = (Button) findViewById(R.id.btn_set);
         btnQuit = (ImageButton)findViewById(R.id.img_btn);
         login_dialog_progress_line = (LinearLayout) findViewById(R.id.login_dialog_progress_line);
 		login_dialog_progress_line.setVisibility(View.GONE);
@@ -65,6 +71,43 @@ public class LoginActivity extends Activity {
        	  }
         }
 		
+        btn_set.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO 自动生成的方法存根
+				final EditText et = new EditText(LoginActivity.this);
+				et.setInputType(InputType.TYPE_CLASS_NUMBER);
+	  			
+				new AlertDialog.Builder(LoginActivity.this).setTitle("管理员密码")
+				.setIcon(android.R.drawable.ic_dialog_info)
+				.setView(et)
+				.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int which) {
+					String input = et.getText().toString();
+					if (input.equals("")) {
+						Toast.makeText(getApplicationContext(), "内容不能为空！" + input, Toast.LENGTH_LONG).show();
+					}
+					else{
+							if(input.equals("1234"))
+							{
+								//跳转界面
+								Intent intent = new Intent(LoginActivity.this,Setting.class);
+								LoginActivity.this.startActivity(intent);
+							}else {
+								Toast.makeText(getApplicationContext(), "验证失败！" + input, Toast.LENGTH_SHORT).show();
+								//finish();
+							}						
+						}
+					}
+					})
+				.setNegativeButton("取消", null)
+				.show();
+
+				
+			}
+		});
+      
 	    // 登录监听事件  现在默认为用户名为：123 密码：1234
 		btn_login.setOnClickListener(new OnClickListener() {
 
@@ -85,7 +128,7 @@ public class LoginActivity extends Activity {
 					  editor.commit();
 					}
 					//跳转界面
-					Intent intent = new Intent(LoginActivity.this,LogoActivity.class);
+					Intent intent = new Intent(LoginActivity.this,MainActivity.class);
 					LoginActivity.this.startActivity(intent);
 					//finish();
 					

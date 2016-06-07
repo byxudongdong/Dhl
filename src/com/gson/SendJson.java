@@ -1,14 +1,8 @@
 package com.gson;
 
-import java.util.ArrayList;  
-import java.util.Date;  
 import java.util.List;  
   
-import com.google.gson.Gson;  
-import com.google.gson.reflect.TypeToken;
-
-import android.renderscript.Sampler.Value;
-import android.util.Log;
+import com.google.gson.Gson;
 
 public class SendJson{
 

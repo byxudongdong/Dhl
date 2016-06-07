@@ -109,9 +109,6 @@ public class Main_menu extends Activity{
 	            		int year = t.year;  
 	            		int month = t.month + 1;  
 	            		int date = t.monthDay;  
-	            		int hour = t.hour; // 0-23  
-	            		int minute = t.minute;  
-	            		int second = t.second;
 	            		newtime = getString(year)+"-"+getString(month)+"-"+getString(date);
 	            		Editor editor = sp.edit();
 						editor.putString("NEW_TIME", newtime);

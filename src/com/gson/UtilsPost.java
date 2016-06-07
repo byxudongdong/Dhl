@@ -8,12 +8,14 @@ import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.lidroid.xutils.http.client.HttpRequest.HttpMethod;
 
 import android.os.Handler;
-import android.os.Message;
 import android.util.Log;
 
 public class UtilsPost {
-	
-	public static void doPost(String url, RequestParams params, final Handler handler) {
+	static Boolean result = false;
+	static String receiveFail;
+	static int receiveSuccess;
+	public static Boolean doPost(String url, RequestParams params, final Handler handler) {
+		
 		HttpUtils http = new HttpUtils();
 		http.configCurrentHttpCacheExpiry(1000 * 10);
 		http.send(HttpMethod.POST, url, params, new RequestCallBack<String>() {
@@ -23,6 +25,8 @@ public class UtilsPost {
 				// TODO Auto-generated method stub
 				Log.i("MyLog", "发送失败");
 				Log.i("MyLog", arg1);
+				receiveFail = arg1;
+				result = false;
 			}
 		
 			@Override
@@ -31,16 +35,28 @@ public class UtilsPost {
 				String data = info.result;//这里是返回值
 				
 				if(info.statusCode == 200){
-					Log.i("MyLog", "发送成功");
+					Log.i("MyLog", "发送成功");					
 				}
 				Log.i("请求结果", String.valueOf(info.statusCode));
 				
+				receiveSuccess = info.statusCode;
+				result = true;
 				//Message message = new Message();
 				//message.obj = data;
 				//handler.sendMessage(message);
 			}
 		});
+		return result;
 	}
-
+	
+	public String getReceiveFail()
+	{
+		return receiveFail;
+	}
+	
+	public int getReceiveSuccess()
+	{
+		return receiveSuccess;
+	}
 }
 

@@ -25,7 +25,7 @@
     <string name="baozhuang">包装操作</string>
     <string name="BoxID">请输入Box ID</string>
     <string name="timeout">返回工作</string>
-    <string name="pandian">盘点</string>
+    <string name="pandian">  盘  点  </string>
     <string name="qita">其他</string>
     <string name="sync">同步数据</string>
     <string name="end">结束</string>
@@ -61,6 +61,8 @@
     <string name="bluetooth_scan_connect_w16">已配对的设备:</string>
     <string name="bluetooth_scan_noconnect_w16">暂无设备连接</string>
     <string name="bluetooth_scan_device">搜索设备</string>
+    <string name="login_set">设置</string>
+    <string name="service">设置服务器</string>
 
     
 

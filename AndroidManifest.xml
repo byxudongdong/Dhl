@@ -92,5 +92,9 @@
             <category android:name="android.intent.category.DEFAULT"/>
         </activity>   
         
+        <activity android:label="设置" android:name="com.login.Setting">
+            <category android:name="android.intent.category.DEFAULT"/>
+        </activity> 
+        
     </application>
 </manifest>
