@@ -15,7 +15,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 public class Setting extends Activity{
-	private Button set_timeout,set_service,set_back;
+	private Button set_timeout,set_service,set_back,locidservice;
 	private SharedPreferences sp;
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
@@ -28,6 +28,7 @@ public class Setting extends Activity{
 		set_timeout = (Button)findViewById(R.id.set_timeout);
 		set_service = (Button)findViewById(R.id.set_service);
 		set_back = (Button)findViewById(R.id.set_back);
+		locidservice = (Button)findViewById(R.id.locidservice);
 		
         set_timeout.setOnClickListener(new OnClickListener() {
 			
@@ -84,6 +85,38 @@ public class Setting extends Activity{
 						editor.putString("service", input);
 						editor.commit();
 						Toast.makeText(getApplicationContext(), "成功设置服务器地址为：" + input, Toast.LENGTH_LONG).show();
+						
+						}
+					}
+					})
+				.setNegativeButton("取消", null)
+				.show();
+				
+			}
+		});
+        
+        locidservice.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO 自动生成的方法存根
+				final EditText et = new EditText(Setting.this);
+				et.setHint(sp.getString("locidservice", "http://117.185.79.178:8005/PTSService.asmx"));
+	  			
+				new AlertDialog.Builder(Setting.this).setTitle("设置货架接口")
+				.setIcon(android.R.drawable.ic_dialog_info)
+				.setView(et)
+				.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int which) {
+					String input = et.getText().toString();
+					if (input.equals("")) {
+						Toast.makeText(getApplicationContext(), "内容不能为空！" + input, Toast.LENGTH_LONG).show();
+					}
+					else {
+	            		Editor editor = sp.edit();
+						editor.putString("locidservice", input);
+						editor.commit();
+						Toast.makeText(getApplicationContext(), "成功设置货架接口为：" + input, Toast.LENGTH_LONG).show();
 						
 						}
 					}

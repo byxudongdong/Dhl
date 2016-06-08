@@ -103,7 +103,11 @@ public class Main_menu extends Activity{
 			                    +"pushstate integer not null"
 			                    + ")"
 			                    );
-				        //HttpUser.getJsonContent(String Url);  //请求数据地址
+				        String Url = sp.getString("locidservice", "http://117.185.79.178:8005/PTSService.asmx");
+				        //String Url = "http://www.kuaidi100.com/query?type=shentong&postid=3307313264542";
+				        String getdata = HttpUser.getJsonContent(Url);  //请求数据地址
+				        Log.i("网络数据","json-lib，JSON转对象:"+getdata);
+				        
 				        String s1 = "{\"loc_id\":[\"001\",\"002\",\"003\",\"004\",\"005\",\"006\",\"007\",\"008\",\"009\",\"010\"]}";
 				        System.out.println("Json转为简单Bean===" + s1); 
 				    	//JSON对象 转 JSONModel对象

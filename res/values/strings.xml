@@ -62,7 +62,8 @@
     <string name="bluetooth_scan_noconnect_w16">暂无设备连接</string>
     <string name="bluetooth_scan_device">搜索设备</string>
     <string name="login_set">设置</string>
-    <string name="service">设置服务器</string>
+    <string name="service">同步服务器</string>
+    <string name="locidservice">更新货架接口</string>
 
     
 
