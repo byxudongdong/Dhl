@@ -23,9 +23,13 @@ import android.os.Message;
 import android.text.TextUtils;
 import android.text.format.Time;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.Toast;
 
 /**
  * @author 
@@ -188,17 +192,42 @@ public class Jianhuo_huowei extends Activity {
 	
 	public void huowei(View v)
 	{
-		if(!TextUtils.isEmpty(huowei_data.getText().toString() ) )
+		if(!TextUtils.isEmpty(huowei_data.getText().toString()) &&  chackLocIdRules(huowei_data.getText().toString())==true)
 		{
 			Editor editor = sp.edit();
 			editor.putString("loc_id",  huowei_data.getText().toString() ); //Integer.parseInt()
 			editor.commit();
 			record();
-			while(newThread.isAlive());
-			 
+			while(newThread.isAlive());			 
 			startActivity( new Intent( Jianhuo_huowei.this,
 	              com.opration.Jianhuo_SKU.class));
+		}else{
+			Toast toast = Toast.makeText(getApplicationContext(),
+				     "不存在的货架", Toast.LENGTH_LONG);
+				   toast.setGravity(Gravity.CENTER, 0, 0);
+				   LinearLayout toastView = (LinearLayout) toast.getView();
+				   ImageView imageCodeProject = new ImageView(getApplicationContext());
+				   imageCodeProject.setImageResource(R.drawable.quit);
+				   toastView.addView(imageCodeProject, 0);
+				   toast.show();
 		}
+	}
+	
+	public Boolean chackLocIdRules(String loc_id)
+	{
+		//获取游标对象
+        Cursor queryResult = db.rawQuery("select * from locid where String=? limit ?,?", 
+        							new String[]{loc_id,"0","1" });//String.valueOf(packSize)
+        int count=queryResult.getCount();
+        Log.i("取出条数", String.valueOf(count));
+        if (count > 0)
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}				
 	}
 	
 	public void huowei_back(View v)

@@ -1,7 +1,5 @@
 package com.gson;
 
-import java.util.Date;
-
 public class Task {
 
 	private String ref_id;  

@@ -174,7 +174,7 @@ public class Fenjian_Huowei extends Activity {
 	
 	public void huowei(View v)
 	{
-		if(!TextUtils.isEmpty(huowei_data.getText().toString() ) )
+		if(!TextUtils.isEmpty(huowei_data.getText().toString()) &&  chackLocIdRules(huowei_data.getText().toString())==true)
 		{
 			Editor editor = sp.edit();
 			editor.putString("loc_id",  huowei_data.getText().toString() ); //Integer.parseInt()
@@ -185,6 +185,23 @@ public class Fenjian_Huowei extends Activity {
 			startActivity( new Intent( Fenjian_Huowei.this,
               com.opration.Fenjian_SKU.class));
 		}
+	}
+	
+	public Boolean chackLocIdRules(String loc_id)
+	{
+		//获取游标对象
+        Cursor queryResult = db.rawQuery("select * from locid where String=? limit ?,?", 
+        							new String[]{loc_id,"0","1" });//String.valueOf(packSize)
+        int count=queryResult.getCount();
+        Log.i("取出条数", String.valueOf(count));
+        if (count > 0)
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}				
 	}
 	
 	public void huowei_back(View v)

@@ -3,7 +3,6 @@ package com.others;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.google.gson.FieldNamingStrategy;
 import com.google.gson.Gson;
 import com.gson.SendJson;
 import com.gson.Task;
@@ -34,7 +33,7 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.widget.TextView;
 
-public class Sync extends Activity {
+public class Sync<Public> extends Activity {
 	DatabaseHelper helper;
 	SQLiteDatabase db;
 	private String newdate;
@@ -115,7 +114,7 @@ public class Sync extends Activity {
                     + ")"
             );
 	        
-	      //获取游标对象
+	        //获取游标对象
 	        //Cursor queryResult = db.rawQuery("select * from ptsdata", null);
 	        Cursor queryResult = db.rawQuery("select * from ptsdata where pushstate=? limit ?,?", 
 	        									new String[]{"0","0","3" });//String.valueOf(packSize)

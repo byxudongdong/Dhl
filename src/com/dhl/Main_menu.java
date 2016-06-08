@@ -1,6 +1,15 @@
 package com.dhl;
 
+import java.util.List;
+
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import com.gson.Loc_id;
+import com.gson.Root;
+import com.lidroid.xutils.HttpUtils;
 import com.login.DatabaseHelper;
+import com.login.HttpUser;
+import com.login.JavaBean;
 import com.login.R;
 
 import android.app.Activity;
@@ -11,7 +20,9 @@ import android.content.SharedPreferences.Editor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.os.Handler;
+import android.provider.ContactsContract.Contacts.Data;
 import android.text.format.Time;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.GridLayout;
@@ -69,7 +80,7 @@ public class Main_menu extends Activity{
 				        //使用getWritableDatabase()或getReadableDatabase()方法获得SQLiteDatabase对象
 				        SQLiteDatabase db = helper.getWritableDatabase();
 				        
-				      //创建一个表
+				        //创建一个表
 				        db.execSQL("create table if not exists locid (" +
 				                    "_id integer primary key,"				                    
 				                    +"loc_id text not null," 
@@ -92,13 +103,23 @@ public class Main_menu extends Activity{
 			                    +"pushstate integer not null"
 			                    + ")"
 			                    );
-				        
+				        //HttpUser.getJsonContent(String Url);  //请求数据地址
+				        String s1 = "{\"loc_id\":[\"001\",\"002\",\"003\",\"004\",\"005\",\"006\",\"007\",\"008\",\"009\",\"010\"]}";
+				        System.out.println("Json转为简单Bean===" + s1); 
+				    	//JSON对象 转 JSONModel对象
+				    	Root result = JavaBean.getPerson(s1, com.gson.Root.class);
+				    	
+				    	//转成String 方便输出
+				    	Log.i("货架列表","json-lib，JSON转对象:"+result.toString());
+				    	
 				        if(db.rawQuery("select * from locid", null).moveToNext() == false)
 				        {
 				        //插入同步货架记录
-					        db.execSQL("insert into locid (loc_id,String) values ('loc_id','001')");
-					        db.execSQL("insert into locid (loc_id,String) values ('loc_id','002')");
-					        db.execSQL("insert into locid (loc_id,String) values ('loc_id','003')");
+				        	for(int i=0;i<result.getLoc_id().size();i++)
+				    		{
+						        db.execSQL("insert into locid (loc_id,String) "
+						        		+ "values ('loc_id','"+result.getLoc_id().get(i)+"')");
+				    		}
 				        }
 
 				        db.close();
