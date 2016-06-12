@@ -112,7 +112,7 @@ public class Sync<Public> extends Activity {
                     +"last_opt_id integer,"
                     +"pushstate integer not null"
                     + ")"
-            );
+            );	       
 	        
 	        //获取游标对象
 	        //Cursor queryResult = db.rawQuery("select * from ptsdata", null);

@@ -1,12 +1,10 @@
 package com.dhl;
 
-import java.util.List;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonObject;
-import com.gson.Loc_id;
 import com.gson.Root;
-import com.lidroid.xutils.HttpUtils;
+import com.lidroid.xutils.util.LogUtils;
 import com.login.DatabaseHelper;
 import com.login.HttpUser;
 import com.login.JavaBean;
@@ -18,9 +16,9 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteStatement;
 import android.os.Bundle;
 import android.os.Handler;
-import android.provider.ContactsContract.Contacts.Data;
 import android.text.format.Time;
 import android.util.Log;
 import android.view.View;
@@ -106,10 +104,10 @@ public class Main_menu extends Activity{
 				        String Url = sp.getString("locidservice", "http://117.185.79.178:8005/PTSService.asmx");
 				        //String Url = "http://www.kuaidi100.com/query?type=shentong&postid=3307313264542";
 				        String getdata = HttpUser.getJsonContent(Url);  //请求数据地址
-				        Log.i("网络数据","json-lib，JSON转对象:"+getdata);
+				        //Log.i("网络数据","json-lib，JSON转对象:"+getdata);
 				        
 				        String s1 = "{\"loc_id\":[\"001\",\"002\",\"003\",\"004\",\"005\",\"006\",\"007\",\"008\",\"009\",\"010\"]}";
-				        System.out.println("Json转为简单Bean===" + s1); 
+				        //System.out.println("Json转为简单Bean===" + s1); 
 				    	//JSON对象 转 JSONModel对象
 				    	Root result = JavaBean.getPerson(s1, com.gson.Root.class);
 				    	
@@ -118,12 +116,35 @@ public class Main_menu extends Activity{
 				    	
 				        if(db.rawQuery("select * from locid", null).moveToNext() == false)
 				        {
-				        //插入同步货架记录
-				        	for(int i=0;i<result.getLoc_id().size();i++)
-				    		{
-						        db.execSQL("insert into locid (loc_id,String) "
-						        		+ "values ('loc_id','"+result.getLoc_id().get(i)+"')");
-				    		}
+				        	Boolean opStyle = false;
+				        	//插入同步货架记录
+				        	if(opStyle==true)
+				        	{
+				        		LogUtils.i("开始插入数据*****************"+ new SimpleDateFormat("yyyy-MM-dd  HH:mm:ss").format(new Date()));
+					        	for(int i=0;i<result.getLoc_id().size();i++)
+					    		{
+							        db.execSQL("insert into locid (loc_id,String) "
+							        		+ "values ('loc_id','"+result.getLoc_id().get(i)+"')");
+					    		}
+					        	LogUtils.i("插入数据完毕*****************"+ new SimpleDateFormat("yyyy-MM-dd  HH:mm:ss").format(new Date()));
+					        	
+				        	}else{	
+					            LogUtils.i("开始插入数据*****************"+ new SimpleDateFormat("yyyy-MM-dd  HH:mm:ss").format(new Date()));
+					            
+					            db.beginTransaction();
+					            String sql = "insert into locid (loc_id,String) values(?,?)";
+					        	for (int i=0;i<result.getLoc_id().size();i++) {
+					        		SQLiteStatement stat = db.compileStatement(sql);
+					        		stat.bindString(1, "loc_id");
+					        		stat.bindString(2, result.getLoc_id().get(i));
+					        		stat.executeInsert();
+					        	}
+					        	db.setTransactionSuccessful();
+					        	db.endTransaction();
+					        	
+					            LogUtils.i("插入数据完毕*****************"+ new SimpleDateFormat("yyyy-MM-dd  HH:mm:ss").format(new Date()));
+				        	}
+				        	
 				        }
 
 				        db.close();
@@ -167,17 +188,55 @@ public class Main_menu extends Activity{
 			                    + ")"
 			                    );
 				        
-				        db.close();
+				        String Url = sp.getString("locidservice", "http://117.185.79.178:8005/PTSService.asmx");
+				        //String Url = "http://www.kuaidi100.com/query?type=shentong&postid=3307313264542";
+				        String getdata = HttpUser.getJsonContent(Url);  //请求数据地址
+				        //Log.i("网络数据","json-lib，JSON转对象:"+getdata);
 				        
+				        String s1 = "{\"loc_id\":[\"001\",\"002\",\"003\",\"004\",\"005\",\"006\",\"007\",\"008\",\"009\",\"010\"]}";
+				        //System.out.println("Json转为简单Bean===" + s1); 
+				    	//JSON对象 转 JSONModel对象
+				    	Root result = JavaBean.getPerson(s1, com.gson.Root.class);
+				    	
+				    	//转成String 方便输出
+				    	Log.i("货架列表","json-lib，JSON转对象:"+result.toString());
+				    	
+				        if(db.rawQuery("select * from locid", null).moveToNext() == false)
+				        {
+				        	Boolean opStyle = false;
+				        	//插入同步货架记录
+				        	if(opStyle==true)
+				        	{
+				        		LogUtils.i("开始插入数据*****************"+ new SimpleDateFormat("yyyy-MM-dd  HH:mm:ss").format(new Date()));
+					        	for(int i=0;i<result.getLoc_id().size();i++)
+					    		{
+							        db.execSQL("insert into locid (loc_id,String) "
+							        		+ "values ('loc_id','"+result.getLoc_id().get(i)+"')");
+					    		}
+					        	LogUtils.i("插入数据完毕*****************"+ new SimpleDateFormat("yyyy-MM-dd  HH:mm:ss").format(new Date()));
+					        	
+				        	}else{	
+					            LogUtils.i("开始插入数据*****************"+ new SimpleDateFormat("yyyy-MM-dd  HH:mm:ss").format(new Date()));
+					            
+					            db.beginTransaction();
+					            String sql = "insert into locid (loc_id,String) values(?,?)";
+					        	for (int i=0;i<result.getLoc_id().size();i++) {
+					        		SQLiteStatement stat = db.compileStatement(sql);
+					        		stat.bindString(1, "loc_id");
+					        		stat.bindString(2, result.getLoc_id().get(i));
+					        		stat.executeInsert();
+					        	}
+					        	db.setTransactionSuccessful();
+					        	db.endTransaction();
+					        	
+					            LogUtils.i("插入数据完毕*****************"+ new SimpleDateFormat("yyyy-MM-dd  HH:mm:ss").format(new Date()));
+				        	}
+				        	
+				        }
+				        
+				        db.close();				        
 	            	}
-	            	
-	            	
-	            	try {
-						Thread.sleep(500);
-					} catch (InterruptedException e) {
-						// TODO 自动生成的 catch 块
-						e.printStackTrace();
-					}
+
 	            	handler.sendEmptyMessage(0x001);
 	            }
         	},"gettime");
