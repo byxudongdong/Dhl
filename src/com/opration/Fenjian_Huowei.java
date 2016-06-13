@@ -23,9 +23,13 @@ import android.os.Message;
 import android.text.TextUtils;
 import android.text.format.Time;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.Toast;
 
 /**
  * @author 
@@ -184,6 +188,15 @@ public class Fenjian_Huowei extends Activity {
 			
 			startActivity( new Intent( Fenjian_Huowei.this,
               com.opration.Fenjian_SKU.class));
+		}else{
+			Toast toast = Toast.makeText(getApplicationContext(),
+				     "不存在的货架", Toast.LENGTH_LONG);
+				   toast.setGravity(Gravity.CENTER, 0, 0);
+				   LinearLayout toastView = (LinearLayout) toast.getView();
+				   ImageView imageCodeProject = new ImageView(getApplicationContext());
+				   imageCodeProject.setImageResource(R.drawable.quit);
+				   toastView.addView(imageCodeProject, 0);
+				   toast.show();
 		}
 	}
 	

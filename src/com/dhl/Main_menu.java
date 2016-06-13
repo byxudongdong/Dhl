@@ -101,15 +101,15 @@ public class Main_menu extends Activity{
 			                    +"pushstate integer not null"
 			                    + ")"
 			                    );
-				        String Url = sp.getString("locidservice", "http://117.185.79.178:8005/PTSService.asmx");
+				        String Url = sp.getString("locidservice", "http://aux.dhl.com/pts/interface/getLocIdList");
 				        //String Url = "http://www.kuaidi100.com/query?type=shentong&postid=3307313264542";
 				        String getdata = HttpUser.getJsonContent(Url);  //请求数据地址
 				        //Log.i("网络数据","json-lib，JSON转对象:"+getdata);
 				        
-				        String s1 = "{\"loc_id\":[\"001\",\"002\",\"003\",\"004\",\"005\",\"006\",\"007\",\"008\",\"009\",\"010\"]}";
+				        //String s1 = "{\"loc_id\":[\"001\",\"002\",\"003\",\"004\",\"005\",\"006\",\"007\",\"008\",\"009\",\"010\"]}";
 				        //System.out.println("Json转为简单Bean===" + s1); 
 				    	//JSON对象 转 JSONModel对象
-				    	Root result = JavaBean.getPerson(s1, com.gson.Root.class);
+				    	Root result = JavaBean.getPerson(getdata, com.gson.Root.class);
 				    	
 				    	//转成String 方便输出
 				    	Log.i("货架列表","json-lib，JSON转对象:"+result.toString());

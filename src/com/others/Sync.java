@@ -171,13 +171,14 @@ public class Sync<Public> extends Activity {
 				//System.out.println("list转化为json==" + TaskListJson); 
 				
 				String senddata = "{\"tasklist\":" + TaskListJson + "}"; 
-				System.out.println("----------Json转化-------------");
+				//System.out.println("----------Json转化-------------");
 				//System.out.println("list转化为json==" + senddata); 
 				
 				//设置传输参数。
 			    RequestParams params = new RequestParams();					    
 			    params.addBodyParameter("scanDataList", senddata);
-			    String serviseUrl = sp.getString("service", "http://117.185.79.178:8005/PTSService.asmx/PTS_DATA");
+			    //String serviseUrl = sp.getString("service", "http://117.185.79.178:8005/PTSService.asmx/PTS_DATA");
+			    String serviseUrl = sp.getString("service", "http://aux.dhl.com/pts/interface/pushTask");
 			    doPost(serviseUrl,params, handler);
 	        }
 	    }
