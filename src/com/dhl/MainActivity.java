@@ -15,6 +15,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 public class MainActivity extends Activity {
 	IntentFilter mFilter =null;
@@ -66,6 +67,8 @@ public class MainActivity extends Activity {
 			Log.i("user_id", userid.getText().toString());
 			startActivity( new Intent( MainActivity.this,
 	              com.dhl.Main_menu.class));
+		}else{
+			Toast.makeText(getApplicationContext(), "用户ID不能为空！", Toast.LENGTH_SHORT).show();
 		}
 	}
 	

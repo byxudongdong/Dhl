@@ -203,6 +203,12 @@ public class Jianhuo_SKU extends Activity {
 			editor.commit();
 			
 			record();
+			
+			Intent intent = new Intent();  
+			intent.setClass(this, Jianhuo_Task.class);  
+			intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);  
+			startActivity(intent);  
+			finish();
 		}
 	}
 	
@@ -217,6 +223,12 @@ public class Jianhuo_SKU extends Activity {
 			editor.commit();
 			
 			record();
+			
+			Intent intent = new Intent();  
+			intent.setClass(this, Jianhuo_Task.class);  
+			intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);  
+			startActivity(intent);  
+			finish();
 		}
 	}
 	
@@ -231,6 +243,12 @@ public class Jianhuo_SKU extends Activity {
 			editor.commit();
 			
 			record();
+
+			Intent intent = new Intent();  
+			intent.setClass(this, Jianhuo_Task.class);  
+			intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);  
+			startActivity(intent);  
+			finish();
 		}
 		
 	}

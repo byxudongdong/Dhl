@@ -198,6 +198,7 @@ public class Fenjian_Task extends Activity {
         // The activity has become visible (it is now "resumed").
         resetTime();
         registerReceiver(mreceiver,mFilter); 
+        task_id_data.setText("");
     }
     @Override
     protected void onPause() {

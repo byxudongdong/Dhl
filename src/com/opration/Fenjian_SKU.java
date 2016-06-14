@@ -189,6 +189,12 @@ public class Fenjian_SKU extends Activity {
 			editor.commit();
 			
 			record();
+			
+			Intent intent = new Intent();  
+			intent.setClass(this, Fenjian_Task.class);  
+			intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);  
+			startActivity(intent);  
+			finish();
 		}
 
 	}	

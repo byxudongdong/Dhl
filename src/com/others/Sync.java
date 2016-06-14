@@ -1,7 +1,10 @@
 package com.others;
 
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
+
+import org.apache.http.entity.StringEntity;
 
 import com.google.gson.Gson;
 import com.gson.SendJson;
@@ -32,6 +35,7 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class Sync<Public> extends Activity {
 	DatabaseHelper helper;
@@ -51,7 +55,7 @@ public class Sync<Public> extends Activity {
 	static String receiveFail;
 	static int receiveSuccess;
 	int firstCursor=0;
-	int packSize = 3;
+	int packSize = 50;
 	int sendpackSize = 0;
 	int totalCount = 0;
 	@Override
@@ -117,7 +121,7 @@ public class Sync<Public> extends Activity {
 	        //获取游标对象
 	        //Cursor queryResult = db.rawQuery("select * from ptsdata", null);
 	        Cursor queryResult = db.rawQuery("select * from ptsdata where pushstate=? limit ?,?", 
-	        									new String[]{"0","0","3" });//String.valueOf(packSize)
+	        									new String[]{"0","0","50" });//String.valueOf(packSize)
 	        int count=queryResult.getCount();
 	        Log.i("取出条数", String.valueOf(count));
 	        if (count > 0)
@@ -172,14 +176,24 @@ public class Sync<Public> extends Activity {
 				
 				String senddata = "{\"tasklist\":" + TaskListJson + "}"; 
 				//System.out.println("----------Json转化-------------");
-				//System.out.println("list转化为json==" + senddata); 
+				System.out.println("list转化为json==" + senddata); 
 				
 				//设置传输参数。
 			    RequestParams params = new RequestParams();					    
-			    params.addBodyParameter("scanDataList", senddata);
+			    //params.addBodyParameter("scanDataList", senddata);
+			    try {
+					params.setBodyEntity(new StringEntity(senddata,"utf-8"));
+				} catch (UnsupportedEncodingException e) {
+					// TODO 自动生成的 catch 块
+					e.printStackTrace();
+				}
 			    //String serviseUrl = sp.getString("service", "http://117.185.79.178:8005/PTSService.asmx/PTS_DATA");
 			    String serviseUrl = sp.getString("service", "http://aux.dhl.com/pts/interface/pushTask");
 			    doPost(serviseUrl,params, handler);
+	        }else{
+	        	Message message=new Message();
+		    	message.what=2;
+		    	handler.sendMessage(message);	        	
 	        }
 	    }
 	};
@@ -191,18 +205,23 @@ public class Sync<Public> extends Activity {
            	super.handleMessage(msg);
           
            	switch(msg.what){
-           	case 0:
-           		sendtasks.clear(); //清空jsonlist          		
-           		totalCount = totalCount + sendpackSize;  //总计上传成功条数
-//           		sendpackSize = 0;	//发送包包含条数
-           		textView1.setText("同步成功:"+totalCount+"条");
-           		changePushState();
-           		db.close();
-           		new Thread(sendData).start();
-        	    break;
-           	case 1:
-        	   	textView1.setText("同步失败，错误代码" + receiveFail );
-                break;
+	           	case 0:
+	           		sendtasks.clear(); //清空jsonlist          		
+	           		totalCount = totalCount + sendpackSize;  //总计上传成功条数
+	//           		sendpackSize = 0;	//发送包包含条数
+	           		textView1.setText("同步成功:"+totalCount+"条");
+	           		Toast.makeText(getApplicationContext(), "同步成功:"+totalCount+"条", Toast.LENGTH_SHORT).show();
+	           		changePushState();
+	           		db.close();
+	           		new Thread(sendData).start();
+	        	    break;
+	           	case 1:
+	        	   	textView1.setText("同步失败，错误代码" + receiveFail );
+	                break;
+	           	
+	           	case 2:
+	           		textView1.setText("同步完成");
+	           		break;
            	}
         }		        
 	};
@@ -283,6 +302,8 @@ public class Sync<Public> extends Activity {
 					Log.i("MyLog", "发送成功");					
 				}
 				Log.i("请求结果", String.valueOf(info.statusCode));
+				Log.i("请求结果", String.valueOf(info.result));
+				
 				
 				receiveSuccess = info.statusCode;
 				result = true;
@@ -303,4 +324,6 @@ public class Sync<Public> extends Activity {
         	db.close();
         }
     }
+	
+	
 }

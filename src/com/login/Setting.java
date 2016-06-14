@@ -69,7 +69,7 @@ public class Setting extends Activity{
 			public void onClick(View v) {
 				// TODO 自动生成的方法存根
 				final EditText et = new EditText(Setting.this);
-				et.setHint(sp.getString("service", "http://117.185.79.178:8005/PTSService.asmx/PTS_DATA"));
+				et.setHint(sp.getString("service", "http://aux.dhl.com/pts/interface/pushTask"));
 	  			
 				new AlertDialog.Builder(Setting.this).setTitle("设置服务器地址")
 				.setIcon(android.R.drawable.ic_dialog_info)
@@ -101,7 +101,7 @@ public class Setting extends Activity{
 			public void onClick(View v) {
 				// TODO 自动生成的方法存根
 				final EditText et = new EditText(Setting.this);
-				et.setHint(sp.getString("locidservice", "http://117.185.79.178:8005/PTSService.asmx"));
+				et.setHint(sp.getString("locidservice", "http://aux.dhl.com/pts/interface/getLocIdList"));
 	  			
 				new AlertDialog.Builder(Setting.this).setTitle("设置货架接口")
 				.setIcon(android.R.drawable.ic_dialog_info)

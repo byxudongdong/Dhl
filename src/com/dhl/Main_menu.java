@@ -25,6 +25,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.GridLayout;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 import gettime.Gettime;
 
 public class Main_menu extends Activity{
@@ -110,7 +111,10 @@ public class Main_menu extends Activity{
 				        //System.out.println("Json转为简单Bean===" + s1); 
 				    	//JSON对象 转 JSONModel对象
 				    	Root result = JavaBean.getPerson(getdata, com.gson.Root.class);
-				    	
+				    	if(result == null)
+				    	{
+				    		handler.sendEmptyMessage(0x002);
+				    	}
 				    	//转成String 方便输出
 				    	Log.i("货架列表","json-lib，JSON转对象:"+result.toString());
 				    	
@@ -254,7 +258,8 @@ public class Main_menu extends Activity{
 			}
 			else if(msg.what == 0x002)
 			{
-
+	    		Toast.makeText(getApplicationContext(), "更新货架失败！", Toast.LENGTH_SHORT).show();
+	    		finish();
 			}
 		};
 	};

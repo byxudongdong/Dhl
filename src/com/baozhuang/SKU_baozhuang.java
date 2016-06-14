@@ -192,6 +192,8 @@ public class SKU_baozhuang extends Activity {
 			editor.commit();
 			
 			record();
+			
+			finish();
 		}
 	}	
 	

@@ -115,7 +115,7 @@ public class LoginActivity extends Activity {
 				userNameValue = userName.getText().toString();
 			    passwordValue = password.getText().toString();
 			    
-				if(userNameValue.equals("123")&&passwordValue.equals("1234"))
+				if(userNameValue.equals("test")&&passwordValue.equals("123"))
 				{
 					Toast.makeText(LoginActivity.this,"登录成功", Toast.LENGTH_SHORT).show();
 					//登录成功和记住密码框为选中状态才保存用户信息

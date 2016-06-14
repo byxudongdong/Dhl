@@ -15,16 +15,16 @@
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
 	        android:layout_marginTop="40dp"
-	        android:layout_marginLeft="40dp"
+	        android:layout_marginLeft="80dp"
 	        android:text="5S进行中。。。"
 	        android:textSize="32sp" />
 
 	    <Button
 	        android:id="@+id/button1"
-	        android:layout_width="wrap_content"
+	        android:layout_width="130dp"
 	        android:layout_height="wrap_content"
-	        android:layout_marginTop="20dp"
-	        android:layout_marginLeft="80dp"
+	        android:layout_marginTop="40dp"
+	        android:layout_marginLeft="120dp"
 	        android:background="@drawable/draw_button"
 	        android:onClick="back"
 	        android:text="@string/end" />

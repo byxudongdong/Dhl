@@ -15,20 +15,20 @@
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
 	        android:layout_marginTop="50dp"
-	        android:layout_marginLeft="40dp"
+	        android:layout_marginLeft="60dp"
 	        android:text="正在同步数据。。。"
 	        
 	        android:textSize="32sp" />
 
 	    <Button
 	        android:id="@+id/button1"
-	        android:layout_width="wrap_content"
+	        android:layout_width="130dp"
 	        android:layout_height="wrap_content"
 	        android:layout_marginTop="40dp"
-	        android:layout_marginLeft="80dp"
+	        android:layout_marginLeft="120dp"
 	        android:background="@drawable/draw_button"
 	        android:onClick="back"
-	        android:text=" 返 回   " />
+	        android:text="  返 回   " />
 
 	</LinearLayout>
 

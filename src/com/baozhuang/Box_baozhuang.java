@@ -199,6 +199,8 @@ public class Box_baozhuang extends Activity {
         // The activity has become visible (it is now "resumed").
         resetTime();
         registerReceiver(mreceiver,mFilter); 
+        huowei_data.setText("");
+        
     }
     @Override
     protected void onPause() {
