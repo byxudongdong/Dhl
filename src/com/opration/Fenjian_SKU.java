@@ -85,6 +85,8 @@ public class Fenjian_SKU extends Activity {
 		newdate = sp.getString("NEWTIME", "");
 		Log.i("NEWDATE", newdate);
 		
+		resetTime();
+		
 		newThread = new Thread(new Runnable() {
 		    @Override
 	            public void run() {
@@ -229,7 +231,7 @@ public class Fenjian_SKU extends Activity {
     protected void onResume() {
         super.onResume();
         // The activity has become visible (it is now "resumed").
-        resetTime();
+        //resetTime();
         registerReceiver(mreceiver,mFilter); 
     }
     @Override
@@ -237,17 +239,24 @@ public class Fenjian_SKU extends Activity {
         super.onPause();
         // Another activity is taking focus (this activity is about to be "paused").
         unregisterReceiver(mreceiver);
-        mHandler.removeMessages(SHOW_ANOTHER_ACTIVITY);//從消息隊列中移除  
+        //mHandler.removeMessages(SHOW_ANOTHER_ACTIVITY);//從消息隊列中移除  
         //关闭数据库
         db.close();
     }
 	
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		Log.i("销毁", "销毁");
+		mHandler.removeMessages(SHOW_ANOTHER_ACTIVITY);//從消息隊列中移除  
+		
+	};
 	
 	@Override  
     public boolean dispatchTouchEvent(MotionEvent ev) {  
         // TODO Auto-generated method stub  
         //Log.i("TAG", "操作ing");  
-        resetTime();  
+        //resetTime();  
         return super.dispatchTouchEvent(ev);  
     }  
       

@@ -62,6 +62,8 @@ public class Fenjian_Huowei extends Activity {
 				Log.i("user_data", huowei_data.getText().toString());
 			}							
 			editor.commit();
+			
+			huowei(null);
 		}
 	};
 	
@@ -80,6 +82,9 @@ public class Fenjian_Huowei extends Activity {
 		sp = this.getSharedPreferences("userInfo", Context.MODE_WORLD_READABLE);
 		newdate = sp.getString("NEWTIME", "");
 		Log.i("NEWDATE", newdate);
+		
+		
+		resetTime();
 		
 		newThread = new Thread(new Runnable() {
 		    @Override
@@ -188,6 +193,8 @@ public class Fenjian_Huowei extends Activity {
 			
 			startActivity( new Intent( Fenjian_Huowei.this,
               com.opration.Fenjian_SKU.class));
+			
+			finish();
 		}else{
 			Toast toast = Toast.makeText(getApplicationContext(),
 				     "不存在的货架", Toast.LENGTH_LONG);
@@ -227,7 +234,7 @@ public class Fenjian_Huowei extends Activity {
     protected void onResume() {
         super.onResume();
         // The activity has become visible (it is now "resumed").
-        resetTime();
+        //resetTime();
         registerReceiver(mreceiver,mFilter); 
     }
     @Override
@@ -235,10 +242,18 @@ public class Fenjian_Huowei extends Activity {
         super.onPause();
         // Another activity is taking focus (this activity is about to be "paused").
         unregisterReceiver(mreceiver);
-        mHandler.removeMessages(SHOW_ANOTHER_ACTIVITY);//從消息隊列中移除  
+        //mHandler.removeMessages(SHOW_ANOTHER_ACTIVITY);//從消息隊列中移除  
         //关闭数据库
         db.close();
     }
+	
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		Log.i("销毁", "销毁");
+		mHandler.removeMessages(SHOW_ANOTHER_ACTIVITY);//從消息隊列中移除  
+		
+	};
 	
 	private void record()
 	{
@@ -261,7 +276,7 @@ public class Fenjian_Huowei extends Activity {
     public boolean dispatchTouchEvent(MotionEvent ev) {  
         // TODO Auto-generated method stub  
         //Log.i("TAG", "操作ing");  
-        resetTime();  
+        //resetTime();  
         return super.dispatchTouchEvent(ev);  
     }  
       

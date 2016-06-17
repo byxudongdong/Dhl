@@ -116,7 +116,7 @@ public class Main_menu extends Activity{
 				    		handler.sendEmptyMessage(0x002);
 				    	}
 				    	//转成String 方便输出
-				    	Log.i("货架列表","json-lib，JSON转对象:"+result.toString());
+				    	//Log.i("货架列表","json-lib，JSON转对象:"+result.toString());
 				    	
 				        if(db.rawQuery("select * from locid", null).moveToNext() == false)
 				        {

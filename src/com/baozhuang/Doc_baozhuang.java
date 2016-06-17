@@ -50,6 +50,7 @@ public class Doc_baozhuang extends Activity{
 				Log.i("user_data", doc_id_data.getText().toString());
 			}							
 			editor.commit();
+			DocID_ok(null);
 		}
 	};
 	
@@ -181,7 +182,7 @@ public class Doc_baozhuang extends Activity{
 			record();
 			
 			startActivity( new Intent( Doc_baozhuang.this,
-              com.baozhuang.Box_baozhuang.class));
+					com.baozhuang.Box_baozhuang.class));
 		}
 	}
 	
@@ -202,7 +203,7 @@ public class Doc_baozhuang extends Activity{
         super.onPause();
         // Another activity is taking focus (this activity is about to be "paused").
         unregisterReceiver(mreceiver);
-        mHandler.removeMessages(SHOW_ANOTHER_ACTIVITY);//從消息隊列中移除  
+        //mHandler.removeMessages(SHOW_ANOTHER_ACTIVITY);//從消息隊列中移除  
         //关闭数据库
         db.close();
     }
@@ -224,7 +225,7 @@ public class Doc_baozhuang extends Activity{
     public boolean dispatchTouchEvent(MotionEvent ev) {  
         // TODO Auto-generated method stub  
         //Log.i("TAG", "操作ing");  
-        resetTime();  
+        //resetTime();  
         return super.dispatchTouchEvent(ev);  
     }  
       

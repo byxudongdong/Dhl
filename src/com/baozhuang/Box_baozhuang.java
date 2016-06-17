@@ -58,6 +58,7 @@ public class Box_baozhuang extends Activity {
 				Log.i("user_data", huowei_data.getText().toString());
 			}							
 			editor.commit();
+			opration_task(null);
 		}
 	};
 	
@@ -76,6 +77,8 @@ public class Box_baozhuang extends Activity {
 		sp = this.getSharedPreferences("userInfo", Context.MODE_WORLD_READABLE);
 		newdate = sp.getString("NEWTIME", "");
 		Log.i("NEWDATE", newdate);
+		
+		resetTime();
 		
 		newThread = new Thread(new Runnable() {
 		    @Override
@@ -182,9 +185,11 @@ public class Box_baozhuang extends Activity {
 			
 			record();
 			while(newThread.isAlive());
-			
+			huowei_data.setText("");
 			startActivity( new Intent( Box_baozhuang.this,
               com.baozhuang.SKU_baozhuang.class));
+			
+			finish();
 		}
 	}
 	
@@ -197,9 +202,9 @@ public class Box_baozhuang extends Activity {
     protected void onResume() {
         super.onResume();
         // The activity has become visible (it is now "resumed").
-        resetTime();
+        //resetTime();
         registerReceiver(mreceiver,mFilter); 
-        huowei_data.setText("");
+        
         
     }
     @Override
@@ -207,10 +212,18 @@ public class Box_baozhuang extends Activity {
         super.onPause();
         // Another activity is taking focus (this activity is about to be "paused").
         unregisterReceiver(mreceiver);
-        mHandler.removeMessages(SHOW_ANOTHER_ACTIVITY);//從消息隊列中移除  
+        //mHandler.removeMessages(SHOW_ANOTHER_ACTIVITY);//從消息隊列中移除  
         //关闭数据库
         db.close();
     }
+    
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		Log.i("销毁", "销毁");
+		mHandler.removeMessages(SHOW_ANOTHER_ACTIVITY);//從消息隊列中移除  
+		
+	};
 	
 	private void record()
 	{
@@ -233,7 +246,7 @@ public class Box_baozhuang extends Activity {
     public boolean dispatchTouchEvent(MotionEvent ev) {  
         // TODO Auto-generated method stub  
         //Log.i("TAG", "操作ing");  
-        resetTime();  
+        //resetTime();  
         return super.dispatchTouchEvent(ev);  
     }  
       

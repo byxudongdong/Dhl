@@ -139,7 +139,9 @@ public class Timeout extends Activity {
 			Log.i("timeout", String.valueOf(sp.getInt("doc_id", 0)) );
 			if(String.valueOf(sp.getInt("doc_id", 0)).equals(doc_id_data.getText().toString()) )
 			{
+				Log.i("TimeOut", "退出&销毁超时界面");
 				finish();
+				
 			}else {
 				Toast.makeText(this, "DocId错误", 500).show();
 			}
@@ -164,8 +166,8 @@ public class Timeout extends Activity {
         record();
         //关闭数据库
         db.close();
-        Log.i("TimeOut", "退出&销毁超时界面");
-        finish();
+        
+        //finish();
     }
     
     private void record()

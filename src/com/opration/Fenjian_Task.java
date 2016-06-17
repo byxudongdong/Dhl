@@ -58,6 +58,8 @@ public class Fenjian_Task extends Activity {
 				Log.i("user_data", task_id_data.getText().toString());
 			}							
 			editor.commit();
+			
+			opration_task(null);
 		}
 	};
 	
@@ -76,6 +78,8 @@ public class Fenjian_Task extends Activity {
 		sp = this.getSharedPreferences("userInfo", Context.MODE_WORLD_READABLE);
 		newdate = sp.getString("NEWTIME", "");
 		Log.i("NEWDATE", newdate);
+		
+		resetTime();
 		
 		newThread = new Thread(new Runnable() {
 		    @Override
@@ -184,6 +188,7 @@ public class Fenjian_Task extends Activity {
 			
 			startActivity( new Intent( Fenjian_Task.this,
               com.opration.Fenjian_Huowei.class));
+			finish();
 		}
 	}
 	
@@ -196,7 +201,7 @@ public class Fenjian_Task extends Activity {
     protected void onResume() {
         super.onResume();
         // The activity has become visible (it is now "resumed").
-        resetTime();
+        //resetTime();
         registerReceiver(mreceiver,mFilter); 
         task_id_data.setText("");
     }
@@ -205,10 +210,18 @@ public class Fenjian_Task extends Activity {
         super.onPause();
         // Another activity is taking focus (this activity is about to be "paused").
         unregisterReceiver(mreceiver);
-        mHandler.removeMessages(SHOW_ANOTHER_ACTIVITY);//從消息隊列中移除  
+        //mHandler.removeMessages(SHOW_ANOTHER_ACTIVITY);//從消息隊列中移除  
         //关闭数据库
         db.close();
     }
+    
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		Log.i("销毁", "销毁");
+		mHandler.removeMessages(SHOW_ANOTHER_ACTIVITY);//從消息隊列中移除  
+		
+	};
     
 	private void record()
 	{
@@ -230,7 +243,7 @@ public class Fenjian_Task extends Activity {
     public boolean dispatchTouchEvent(MotionEvent ev) {  
         // TODO Auto-generated method stub  
         //Log.i("TAG", "操作ing");  
-        resetTime();  
+        //resetTime();  
         return super.dispatchTouchEvent(ev);  
     }  
       

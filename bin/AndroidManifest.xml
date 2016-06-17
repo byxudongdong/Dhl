@@ -40,7 +40,8 @@
             <category android:name="android.intent.category.DEFAULT"/>
         </activity>
         <activity android:label="@string/jianhuo" android:name="com.opration.Jianhuo_Task">
-            <category android:name="android.intent.category.DEFAULT"/>
+            <category android:name="android.intent.category.DEFAULT"
+                	  android:configChanges="keyboardHidden"/>
         </activity>
         <activity android:label="@string/jianhuo" android:name="com.opration.Jianhuo_huowei">
             <category android:name="android.intent.category.DEFAULT"/>

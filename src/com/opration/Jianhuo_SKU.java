@@ -65,6 +65,7 @@ public class Jianhuo_SKU extends Activity {
 				Log.i("user_data", count_data.getText().toString());
 			}								
 			editor.commit();
+			
 		}
 	};
 	
@@ -84,6 +85,8 @@ public class Jianhuo_SKU extends Activity {
 		sp = this.getSharedPreferences("userInfo", Context.MODE_WORLD_READABLE);
 		newdate = sp.getString("NEWTIME", "");
 		Log.i("NEWDATE", newdate);
+		
+		resetTime();
 		
 		newThread = new Thread(new Runnable() {
 		    @Override
@@ -284,7 +287,7 @@ public class Jianhuo_SKU extends Activity {
     protected void onResume() {
         super.onResume();
         // The activity has become visible (it is now "resumed").
-        resetTime();
+        //resetTime();
         registerReceiver(mreceiver,mFilter); 
     }
     @Override
@@ -293,17 +296,24 @@ public class Jianhuo_SKU extends Activity {
         // Another activity is taking focus (this activity is about to be "paused").
         unregisterReceiver(mreceiver);
         
-        mHandler.removeMessages(SHOW_ANOTHER_ACTIVITY);//從消息隊列中移除  
+        //mHandler.removeMessages(SHOW_ANOTHER_ACTIVITY);//從消息隊列中移除  
         //关闭数据库
         db.close();
     }
 	
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		Log.i("销毁", "销毁");
+		mHandler.removeMessages(SHOW_ANOTHER_ACTIVITY);//從消息隊列中移除  
+		
+	};
 	
 	@Override  
     public boolean dispatchTouchEvent(MotionEvent ev) {  
         // TODO Auto-generated method stub  
         //Log.i("TAG", "操作ing");  
-        resetTime();  
+        //resetTime();  
         return super.dispatchTouchEvent(ev);  
     }  
       
@@ -311,7 +321,7 @@ public class Jianhuo_SKU extends Activity {
         // TODO Auto-generated method stub  
         mHandler.removeMessages(SHOW_ANOTHER_ACTIVITY);//從消息隊列中移除  
         Message msg = mHandler.obtainMessage(SHOW_ANOTHER_ACTIVITY);  
-        mHandler.sendMessageDelayed(msg, 1000*2* sp.getInt("timeout", 10) );//無操作?分钟后進入屏保  
+        mHandler.sendMessageDelayed(msg, 1000*60* sp.getInt("timeout", 10) );//無操作?分钟后進入屏保  
     }
       
     private Handler mHandler = new Handler()  

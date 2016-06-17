@@ -176,7 +176,7 @@ public class Sync<Public> extends Activity {
 				
 				String senddata = "{\"tasklist\":" + TaskListJson + "}"; 
 				//System.out.println("----------Json转化-------------");
-				System.out.println("list转化为json==" + senddata); 
+				//System.out.println("list转化为json==" + senddata); 
 				
 				//设置传输参数。
 			    RequestParams params = new RequestParams();					    

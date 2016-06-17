@@ -6,6 +6,7 @@ package com.baozhuang;
 import com.dhl.broadrec;
 import com.login.DatabaseHelper;
 import com.login.R;
+import com.opration.Fenjian_Task;
 import com.timeout.Timeout;
 
 import android.app.Activity;
@@ -85,6 +86,8 @@ public class SKU_baozhuang extends Activity {
 		newdate = sp.getString("NEWTIME", "");
 		Log.i("NEWDATE", newdate);
 	
+		resetTime();
+		
 		newThread = new Thread(new Runnable() {
 		    @Override
 	            public void run() {
@@ -193,6 +196,10 @@ public class SKU_baozhuang extends Activity {
 			
 			record();
 			
+			Intent intent = new Intent();  
+			intent.setClass(this, Box_baozhuang.class);  
+			intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);  
+			startActivity(intent);  
 			finish();
 		}
 	}	
@@ -227,7 +234,7 @@ public class SKU_baozhuang extends Activity {
     protected void onResume() {
         super.onResume();
         // The activity has become visible (it is now "resumed").
-        resetTime();
+        //resetTime();
         registerReceiver(mreceiver,mFilter); 
     }
     @Override
@@ -235,17 +242,25 @@ public class SKU_baozhuang extends Activity {
         super.onPause();
         // Another activity is taking focus (this activity is about to be "paused").
         unregisterReceiver(mreceiver);
-        mHandler.removeMessages(SHOW_ANOTHER_ACTIVITY);//從消息隊列中移除  
+        //mHandler.removeMessages(SHOW_ANOTHER_ACTIVITY);//從消息隊列中移除  
         //关闭数据库
         db.close();
     }
+    
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		Log.i("销毁", "销毁");
+		mHandler.removeMessages(SHOW_ANOTHER_ACTIVITY);//從消息隊列中移除  
+		
+	};
 	
 	
 	@Override  
     public boolean dispatchTouchEvent(MotionEvent ev) {  
         // TODO Auto-generated method stub  
         //Log.i("TAG", "操作ing");  
-        resetTime();  
+        //resetTime();  
         return super.dispatchTouchEvent(ev);  
     }  
       

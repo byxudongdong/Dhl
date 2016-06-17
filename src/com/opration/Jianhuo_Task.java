@@ -55,6 +55,7 @@ public class Jianhuo_Task extends Activity {
 				Log.i("user_data", task_id_data.getText().toString());
 			}							
 			editor.commit();
+			opration_task(null);
 		}
 	};
 	
@@ -68,11 +69,13 @@ public class Jianhuo_Task extends Activity {
 		mFilter = new IntentFilter();
 		mFilter.addAction(broadrec.ACTION_DATA_AVAILABLE);
 		registerReceiver(mreceiver,mFilter);
-		
 		//获得实例对象
 		sp = this.getSharedPreferences("userInfo", Context.MODE_WORLD_READABLE);
 		newdate = sp.getString("NEWTIME", "");
 		Log.i("NEWDATE", newdate);
+		
+		Log.i("创建窗体", "重置时间");
+		resetTime();
 		
 		newThread = new Thread(new Runnable() {
 		    @Override
@@ -192,8 +195,10 @@ public class Jianhuo_Task extends Activity {
 			editor.commit();
 			record();
 			
+			//mHandler.removeMessages(SHOW_ANOTHER_ACTIVITY);//從消息隊列中移除  
 			startActivity( new Intent( Jianhuo_Task.this,
 	              com.opration.Jianhuo_huowei.class));
+			finish();
 		}
 	}
 	
@@ -218,29 +223,49 @@ public class Jianhuo_Task extends Activity {
 	}
 	
 	@Override
+	protected void onStart() {
+		super.onStart();
+		Log.i("开始", "重置时间");
+		//resetTime();
+	};
+	
+	@Override
     protected void onResume() {
         super.onResume();
+        //Log.i("恢复显示", "重置时间");
         // The activity has become visible (it is now "resumed").
-        resetTime();
+        //resetTime();
         registerReceiver(mreceiver,mFilter); 
-        task_id_data.setText("");
+        
     }
     @Override
     protected void onPause() {
         super.onPause();
+        Log.i("关闭显示", "关闭数据库");
         // Another activity is taking focus (this activity is about to be "paused").
         unregisterReceiver(mreceiver);
-        mHandler.removeMessages(SHOW_ANOTHER_ACTIVITY);//從消息隊列中移除  
+        
         //关闭数据库
         db.close();
     }
-	
+    @Override
+    protected void onStop() {
+    	super.onStop();
+    	Log.i("停止", "停止");
+    };
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		Log.i("销毁", "销毁");
+		mHandler.removeMessages(SHOW_ANOTHER_ACTIVITY);//從消息隊列中移除  
+		
+	};
 	
 	@Override  
     public boolean dispatchTouchEvent(MotionEvent ev) {  
         // TODO Auto-generated method stub  
         //Log.i("TAG", "操作ing");  
-        resetTime();  
+        //resetTime();  
         return super.dispatchTouchEvent(ev);  
     }  
       
