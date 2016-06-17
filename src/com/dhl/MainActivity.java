@@ -36,6 +36,8 @@ public class MainActivity extends Activity {
 			Editor editor = sp.edit();
 			editor.putString("user_id", bt_data);
 			editor.commit();
+			
+			login_ok(null);
 
 		}
 	};

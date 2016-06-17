@@ -58,6 +58,7 @@ public class Jianhuo_SKU extends Activity {
 				sku_id_data.setSelection(bt_data.length());
 				editor.putString("sku", bt_data);
 				Log.i("user_data", sku_id_data.getText().toString());
+				count_data.requestFocus();//ªÒ»°Ωπµ„
 			}else if (count_data.hasFocus()) {
 				count_data.setText(bt_data);
 				count_data.setSelection(bt_data.length());
