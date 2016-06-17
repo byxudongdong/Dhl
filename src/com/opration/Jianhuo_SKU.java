@@ -6,6 +6,7 @@ package com.opration;
 import com.dhl.broadrec;
 import com.login.DatabaseHelper;
 import com.login.R;
+import com.rules.LocIdRules;
 import com.timeout.Timeout;
 
 import android.app.Activity;
@@ -60,9 +61,12 @@ public class Jianhuo_SKU extends Activity {
 				Log.i("user_data", sku_id_data.getText().toString());
 				count_data.requestFocus();//ªÒ»°Ωπµ„
 			}else if (count_data.hasFocus()) {
-				count_data.setText(bt_data);
-				count_data.setSelection(bt_data.length());
-				editor.putInt("qty", Integer.valueOf(bt_data).intValue());
+				if(LocIdRules.isNumeric(bt_data) && bt_data.length()<8)
+				{
+					count_data.setText(bt_data);
+					count_data.setSelection(bt_data.length());
+					editor.putInt("qty", Integer.valueOf(bt_data).intValue());
+				}
 				Log.i("user_data", count_data.getText().toString());
 			}								
 			editor.commit();
@@ -112,8 +116,8 @@ public class Jianhuo_SKU extends Activity {
 			                    +"task_time timestamp not null default (datetime('now','localtime')),"
 			                    +"task_name text not null,"
 			                    +"task_event text,"
-			                    +"doc_id integer,"
-			                    +"task_id integer,"
+			                    +"doc_id text,"
+			                    +"task_id text,"
 			                    +"loc_id text,"
 			                    +"box_id text,"
 			                    +"sku text,"
@@ -164,8 +168,8 @@ public class Jianhuo_SKU extends Activity {
 			                    +"task_time timestamp not null default (datetime('now','localtime')),"
 			                    +"task_name text not null,"
 			                    +"task_event text,"
-			                    +"doc_id integer,"
-			                    +"task_id integer,"
+			                    +"doc_id text,"
+			                    +"task_id text,"
 			                    +"loc_id text,"
 			                    +"box_id text,"
 			                    +"sku text,"
@@ -276,8 +280,8 @@ public class Jianhuo_SKU extends Activity {
         		+ "'"
         		+ "…®√ËSKU"+"-"+sp.getString("task_event", "")
         		+ "',"
-        		+ sp.getInt("doc_id", 0)+","
-        		+ sp.getInt("task_id",0)+","
+        		+ sp.getString("doc_id", "")+","
+        		+ sp.getString("task_id", "")+","
         		+ "'"+sp.getString("loc_id", "")+"'"+","
         		+ "'"+sp.getString("sku", "")+"'"+","
         		+ sp.getInt("qty", 0)+","

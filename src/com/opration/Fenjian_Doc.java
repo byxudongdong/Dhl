@@ -46,7 +46,7 @@ public class Fenjian_Doc extends Activity{
 			{
 				doc_id_data.setText(bt_data);
 				doc_id_data.setSelection(bt_data.length());
-				editor.putInt("box_id", Integer.valueOf(bt_data).intValue() );
+				editor.putString("box_id", bt_data );
 				Log.i("user_data", doc_id_data.getText().toString());
 			}							
 			editor.commit();
@@ -94,8 +94,8 @@ public class Fenjian_Doc extends Activity{
 			                    +"task_time timestamp not null default (datetime('now','localtime')),"
 			                    +"task_name text not null,"
 			                    +"task_event text,"
-			                    +"doc_id integer,"
-			                    +"task_id integer,"
+			                    +"doc_id text,"
+			                    +"task_id text,"
 			                    +"loc_id text,"
 			                    +"box_id text,"
 			                    +"sku text,"
@@ -151,8 +151,8 @@ public class Fenjian_Doc extends Activity{
 			                    +"task_time timestamp not null default (datetime('now','localtime')),"
 			                    +"task_name text not null,"
 			                    +"task_event text,"
-			                    +"doc_id integer,"
-			                    +"task_id integer,"
+			                    +"doc_id text,"
+			                    +"task_id text,"
 			                    +"loc_id text,"
 			                    +"box_id text,"
 			                    +"sku text,"
@@ -175,7 +175,7 @@ public class Fenjian_Doc extends Activity{
 		if(!TextUtils.isEmpty(doc_id_data.getText()) )
 		{
 			Editor editor = sp.edit();
-			editor.putInt("doc_id", Integer.parseInt( doc_id_data.getText().toString() ));
+			editor.putString("doc_id", doc_id_data.getText().toString() );
 			editor.commit();
 			
 			record();
@@ -216,7 +216,7 @@ public class Fenjian_Doc extends Activity{
         		+ "values ("
         		+ "'"+sp.getString("user_id", "")+"'"+","
         		+ "'·Ö¼ð','É¨ÃèDOCID',"
-        		+  sp.getInt("doc_id", 0)+","
+        		+  sp.getString("doc_id", "")+","
         		+ "0,0)");
 	}
 	

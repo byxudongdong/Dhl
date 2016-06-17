@@ -107,8 +107,8 @@ public class Sync<Public> extends Activity {
                     +"task_time timestamp not null default (datetime('now','localtime')),"
                     +"task_name text not null,"
                     +"task_event text,"
-                    +"doc_id integer,"
-                    +"task_id integer,"
+                    +"doc_id text,"
+                    +"task_id text,"
                     +"loc_id text,"
                     +"box_id text,"
                     +"sku text,"
@@ -136,8 +136,8 @@ public class Sync<Public> extends Activity {
 				    String task_time = queryResult.getString(queryResult.getColumnIndex("task_time"));						     
 				    String task_name = queryResult.getString(queryResult.getColumnIndex("task_name"));
 				    String task_event = queryResult.getString(queryResult.getColumnIndex("task_event"));  						   
-				    int doc_id = queryResult.getInt(queryResult.getColumnIndex("doc_id"));
-				    int task_id = queryResult.getInt(queryResult.getColumnIndex("task_id"));					   
+				    String doc_id = queryResult.getString(queryResult.getColumnIndex("doc_id"));
+				    String task_id = queryResult.getString(queryResult.getColumnIndex("task_id"));					   
 				    String loc_id = queryResult.getString(queryResult.getColumnIndex("loc_id"));
 				    String box_id = queryResult.getString(queryResult.getColumnIndex("box_id"));
 				    String sku = queryResult.getString(queryResult.getColumnIndex("sku"));
@@ -155,8 +155,8 @@ public class Sync<Public> extends Activity {
 											     task_time,						     
 											     task_name, 
 											     task_event,   						   
-											     String.valueOf(doc_id),
-											     String.valueOf(task_id),						   
+											     doc_id,
+											     task_id,						   
 											     loc_id,
 											     box_id,
 											     sku,

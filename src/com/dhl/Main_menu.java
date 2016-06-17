@@ -9,9 +9,13 @@ import com.login.DatabaseHelper;
 import com.login.HttpUser;
 import com.login.JavaBean;
 import com.login.R;
+import com.others.Wait_pandian;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.AlertDialog.Builder;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
@@ -92,8 +96,8 @@ public class Main_menu extends Activity{
 			                    +"task_time timestamp not null default (datetime('now','localtime')),"
 			                    +"task_name text not null,"
 			                    +"task_event text,"
-			                    +"doc_id integer,"
-			                    +"task_id integer,"
+			                    +"doc_id text,"
+			                    +"task_id text,"
 			                    +"loc_id text,"
 			                    +"box_id text,"
 			                    +"sku text,"
@@ -181,8 +185,8 @@ public class Main_menu extends Activity{
 			                    +"task_time timestamp not null default (datetime('now','localtime')),"
 			                    +"task_name text not null,"
 			                    +"task_event text,"
-			                    +"doc_id integer,"
-			                    +"task_id integer,"
+			                    +"doc_id text,"
+			                    +"task_id text,"
 			                    +"loc_id text,"
 			                    +"box_id text,"
 			                    +"sku text,"
@@ -284,6 +288,33 @@ public class Main_menu extends Activity{
 
 	public void back(View v)
 	{
-		finish();
+		dialog();
+		//finish();
 	}
+	
+	protected void dialog() { 
+		AlertDialog.Builder builder = new Builder(Main_menu.this); 
+		builder.setMessage("确定要退出操作吗?"); 
+		builder.setTitle("提示"); 
+		builder.setPositiveButton("确认", 
+			new android.content.DialogInterface.OnClickListener() { 
+				public void onClick(DialogInterface dialog, int which) 
+				{ 
+					dialog.dismiss(); 
+					
+					Main_menu.this.finish(); 
+				} 
+			}
+		); 
+		builder.setNegativeButton("取消", 
+			new android.content.DialogInterface.OnClickListener() 
+			{ 
+				public void onClick(DialogInterface dialog, int which) 
+				{ 
+					dialog.dismiss(); 
+				} 
+			}
+		); 
+		builder.create().show(); 
+	} 
 }

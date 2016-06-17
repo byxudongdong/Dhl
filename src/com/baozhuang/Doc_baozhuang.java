@@ -94,8 +94,8 @@ public class Doc_baozhuang extends Activity{
 			                    +"task_time timestamp not null default (datetime('now','localtime')),"
 			                    +"task_name text not null,"
 			                    +"task_event text,"
-			                    +"doc_id integer,"
-			                    +"task_id integer,"
+			                    +"doc_id text,"
+			                    +"task_id text,"
 			                    +"loc_id text,"
 			                    +"box_id text,"
 			                    +"sku text,"
@@ -151,8 +151,8 @@ public class Doc_baozhuang extends Activity{
 			                    +"task_time timestamp not null default (datetime('now','localtime')),"
 			                    +"task_name text not null,"
 			                    +"task_event text,"
-			                    +"doc_id integer,"
-			                    +"task_id integer,"
+			                    +"doc_id text,"
+			                    +"task_id text,"
 			                    +"loc_id text,"
 			                    +"box_id text,"
 			                    +"sku text,"
@@ -176,7 +176,7 @@ public class Doc_baozhuang extends Activity{
 		if(!TextUtils.isEmpty(doc_id_data.getText()) )
 		{
 			Editor editor = sp.edit();
-			editor.putInt("doc_id", Integer.parseInt( doc_id_data.getText().toString() ));
+			editor.putString("doc_id",  doc_id_data.getText().toString() );
 			editor.commit();
 			
 			record();
@@ -217,7 +217,7 @@ public class Doc_baozhuang extends Activity{
         		+ "values ("
         		+ "'"+sp.getString("user_id", "")+"'"+","
         		+ "'°ü×°','É¨ÃèDOCID',"
-        		+  sp.getInt("doc_id", 0)+","
+        		+  sp.getString("doc_id", "")+","
         		+ "0,0)");
 	}
 	

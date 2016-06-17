@@ -34,13 +34,13 @@ public class SendJson{
         }else {
         	task1.setTaskEvent(task_event); 
 		}
-        if(doc_id.equals("0"))
+        if(doc_id == null)
         {
         	task1.setDocId("");
         }else {
         	task1.setDocId(doc_id);
 		}
-        if(task_id.equals("0"))
+        if(task_id == null)
         {
         	task1.setTaskId("");
         }else {

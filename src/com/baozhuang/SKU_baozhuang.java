@@ -7,6 +7,7 @@ import com.dhl.broadrec;
 import com.login.DatabaseHelper;
 import com.login.R;
 import com.opration.Fenjian_Task;
+import com.rules.LocIdRules;
 import com.timeout.Timeout;
 
 import android.app.Activity;
@@ -61,9 +62,12 @@ public class SKU_baozhuang extends Activity {
 				Log.i("user_data", sku_id_data.getText().toString());
 				count_data.requestFocus();//ªÒ»°Ωπµ„
 			}else if (count_data.hasFocus()) {
-				count_data.setText(bt_data);
-				count_data.setSelection(bt_data.length());
-				editor.putInt("qty", Integer.valueOf(bt_data).intValue());
+				if(LocIdRules.isNumeric(bt_data) && bt_data.length()<8)
+				{
+					count_data.setText(bt_data);
+					count_data.setSelection(bt_data.length());
+					editor.putInt("qty", Integer.valueOf(bt_data).intValue());
+				}
 				Log.i("user_data", count_data.getText().toString());
 			}								
 			editor.commit();
@@ -223,7 +227,7 @@ public class SKU_baozhuang extends Activity {
         		+ "'"
         		+ "…®√ËSKU"+"-"+sp.getString("task_event", "")
         		+ "',"
-        		+ sp.getInt("doc_id", 0)+","
+        		+ sp.getString("doc_id", "")+","
         		//+ sp.getInt("task_id",0)+","
         		+ "'"+sp.getString("box_id", "")+"'"+","
         		+ "'"+sp.getString("sku", "")+"'"+","

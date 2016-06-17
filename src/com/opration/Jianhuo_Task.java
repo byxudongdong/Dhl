@@ -51,7 +51,7 @@ public class Jianhuo_Task extends Activity {
 			{
 				task_id_data.setText(bt_data);
 				task_id_data.setSelection(bt_data.length());
-				editor.putInt("box_id", Integer.valueOf(bt_data).intValue() );
+				editor.putString("box_id", bt_data );
 				Log.i("user_data", task_id_data.getText().toString());
 			}							
 			editor.commit();
@@ -101,8 +101,8 @@ public class Jianhuo_Task extends Activity {
 			                    +"task_time timestamp not null default (datetime('now','localtime')),"
 			                    +"task_name text not null,"
 			                    +"task_event text,"
-			                    +"doc_id integer,"
-			                    +"task_id integer,"
+			                    +"doc_id text,"
+			                    +"task_id text,"
 			                    +"loc_id text,"
 			                    +"box_id text,"
 			                    +"sku text,"
@@ -118,7 +118,7 @@ public class Jianhuo_Task extends Activity {
 				        if (queryResult.getColumnCount() != 0) {
 				            //´òÓ¡¼ÇÂ¼
 				            if (queryResult.moveToLast()) {
-				                Log.i("info", "user_id: " + queryResult.getInt(queryResult.getColumnIndex("user_id"))
+				                Log.i("info", "user_id: " + queryResult.getString(queryResult.getColumnIndex("user_id"))
 				                        + " timastamp: " + queryResult.getString(queryResult.getColumnIndex("task_time"))
 				                        + " String: " + queryResult.getString(queryResult.getColumnIndex("sku"))
 				                        );
@@ -155,8 +155,8 @@ public class Jianhuo_Task extends Activity {
 			                    +"task_time timestamp not null default (datetime('now','localtime')),"
 			                    +"task_name text not null,"
 			                    +"task_event text,"
-			                    +"doc_id integer,"
-			                    +"task_id integer,"
+			                    +"doc_id text,"
+			                    +"task_id text,"
 			                    +"loc_id text,"
 			                    +"box_id text,"
 			                    +"sku text,"
@@ -191,7 +191,7 @@ public class Jianhuo_Task extends Activity {
 		if(!TextUtils.isEmpty(task_id_data.getText()) )
 		{
 			Editor editor = sp.edit();
-			editor.putInt("task_id", Integer.parseInt( task_id_data.getText().toString() ));
+			editor.putString("task_id",  task_id_data.getText().toString() );
 			editor.commit();
 			record();
 			
@@ -217,8 +217,8 @@ public class Jianhuo_Task extends Activity {
         		+ "values ("
         		+ "'"+sp.getString("user_id", "")+"'"+","
         		+ "'×Ü¼ð','É¨ÃèTASKID',"
-        		+ sp.getInt("doc_id", 0)+","
-        		+ sp.getInt("task_id",0)+","
+        		+ sp.getString("doc_id", "")+","
+        		+ sp.getString("task_id","")+","
         		+ "0,0)");
 	}
 	
