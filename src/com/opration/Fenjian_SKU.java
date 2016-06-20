@@ -24,6 +24,7 @@ import android.os.Message;
 import android.text.TextUtils;
 import android.text.format.Time;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.EditText;
@@ -265,6 +266,15 @@ public class Fenjian_SKU extends Activity {
         return super.dispatchTouchEvent(ev);  
     }  
       
+	@Override 
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		if(keyCode == KeyEvent.KEYCODE_ENTER) { //监控/拦截/屏蔽返回键			
+			sku_tijiao(null);
+			return false; 
+		} 
+		return super.onKeyDown(keyCode, event);
+	}
+	
     private void resetTime() {  
         // TODO Auto-generated method stub  
         mHandler.removeMessages(SHOW_ANOTHER_ACTIVITY);//從消息隊列中移除  

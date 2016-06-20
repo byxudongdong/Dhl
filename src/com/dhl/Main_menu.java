@@ -20,6 +20,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteStatement;
 import android.os.Bundle;
@@ -32,9 +33,13 @@ import android.widget.Button;
 import android.widget.GridLayout;
 import android.widget.LinearLayout;
 import android.widget.Toast;
+import gettime.GetThisDay;
 import gettime.Gettime;
 
 public class Main_menu extends Activity{
+	
+	DatabaseHelper helper;
+	SQLiteDatabase db;
 	public Button fahuo_main;
 	public Button qita_main;
 	public Button sync_main;
@@ -44,6 +49,7 @@ public class Main_menu extends Activity{
 	private SharedPreferences sp;
 	int newref_id;
 	String newtime = null;
+	String newtimeYesterday = null;
 	Thread newThread = null; //声明一个子线程    
 	
 	@Override
@@ -72,8 +78,25 @@ public class Main_menu extends Activity{
 		    @Override
 	            public void run() {
 
-	            	newtime = Gettime.main(null);//这里写入子线程需要做的工作
+	            	//newtime = Gettime.main(null);//这里写入子线程需要做的工作
+	        		Time t=new Time(); // or Time t=new Time("GMT+8"); 加上Time Zone资料。  
+	        		t.setToNow(); // 取得系统时间。  	            		            		
+	        		
+	        		int year = t.year;  
+	        		int month = t.month + 1;  
+	        		int date = t.monthDay; 
+	        		int hour = t.hour; // 0-23  
+	        		int minute = t.minute;  
+	        		int second = t.second;
+	        		
+	        		newtime = String.valueOf(year)
+	        				+"-"+String.format("%02d",month)
+		            		+"-"+String.format("%02d",date)
+		            		+"-"+String.format("%02d",hour)
+		            		+"-"+String.format("%02d",minute)
+		            		+"-"+String.format("%02d",second);
 					//记住同步时间
+	        		
 	            	if(newtime != null)
 	            	{
 						Editor editor = sp.edit();
@@ -81,9 +104,9 @@ public class Main_menu extends Activity{
 						//editor.putInt("ref_id", 1);
 						editor.commit();
 						//创建一个SQLiteHelper对象
-				        DatabaseHelper helper = new DatabaseHelper(Main_menu.this, newtime.substring(0,10) + ".db");
+				        helper = new DatabaseHelper(Main_menu.this, newtime.substring(0,10) + ".db");
 				        //使用getWritableDatabase()或getReadableDatabase()方法获得SQLiteDatabase对象
-				        SQLiteDatabase db = helper.getWritableDatabase();
+				        db = helper.getWritableDatabase();
 				        
 				        //创建一个表
 				        db.execSQL("create table if not exists locid (" +
@@ -108,6 +131,112 @@ public class Main_menu extends Activity{
 			                    +"pushstate integer not null"
 			                    + ")"
 			                    );
+				        String Url = sp.getString("locidservice", "http://aux.dhl.com/pts/interface/getLocIdList");
+				        //String Url = "http://www.kuaidi100.com/query?type=shentong&postid=3307313264542";
+				        //String getdata = HttpUser.getJsonContent(Url);  //请求数据地址
+				        //Log.i("网络数据","json-lib，JSON转对象:"+getdata);
+				        
+				        String s1 = "{\"loc_id\":[\"001\",\"002\",\"003\",\"004\",\"005\",\"006\",\"007\",\"008\",\"009\",\"010\"]}";
+				        //System.out.println("Json转为简单Bean===" + s1); 
+				    	//JSON对象 转 JSONModel对象
+				    	Root result = JavaBean.getPerson(s1, com.gson.Root.class);
+				    	if(result == null)
+				    	{
+				    		handler.sendEmptyMessage(0x002);
+				    	}else{					    	
+					    	//转成String 方便输出
+					    	//Log.i("货架列表","json-lib，JSON转对象:"+result.toString());
+					    	
+					        if(db.rawQuery("select * from locid", null).moveToNext() == false)
+					        {
+					        	Boolean opStyle = false;
+					        	//插入同步货架记录
+					        	if(opStyle==true)
+					        	{
+					        		LogUtils.i("开始插入数据*****************"+ new SimpleDateFormat("yyyy-MM-dd  HH:mm:ss").format(new Date()));
+						        	for(int i=0;i<result.getLoc_id().size();i++)
+						    		{
+								        db.execSQL("insert into locid (loc_id,String) "
+								        		+ "values ('loc_id','"+result.getLoc_id().get(i)+"')");
+						    		}
+						        	LogUtils.i("插入数据完毕*****************"+ new SimpleDateFormat("yyyy-MM-dd  HH:mm:ss").format(new Date()));
+						        	
+					        	}else{	
+						            LogUtils.i("开始插入数据*****************"+ new SimpleDateFormat("yyyy-MM-dd  HH:mm:ss").format(new Date()));
+						            
+						            db.beginTransaction();
+						            String sql = "insert into locid (loc_id,String) values(?,?)";
+						        	for (int i=0;i<result.getLoc_id().size();i++) {
+						        		SQLiteStatement stat = db.compileStatement(sql);
+						        		stat.bindString(1, "loc_id");
+						        		stat.bindString(2, result.getLoc_id().get(i));
+						        		stat.executeInsert();
+						        	}
+						        	db.setTransactionSuccessful();
+						        	db.endTransaction();
+						        	
+						            LogUtils.i("插入数据完毕*****************"+ new SimpleDateFormat("yyyy-MM-dd  HH:mm:ss").format(new Date()));
+					        	}
+					        	
+					        }
+				    	}
+
+				        db.close();
+	            	}
+	            	else{
+	            		Time t_1=new Time(); // or Time t=new Time("GMT+8"); 加上Time Zone资料。  
+	            		t_1.setToNow(); // 取得系统时间。  	            		            		
+	            		
+	            		int year_1 = t_1.year;  
+	            		int month_1 = t_1.month + 1;  
+	            		int date_1 = t_1.monthDay; 
+	            		int hour_1 = t_1.hour; // 0-23  
+	            		int minute_1 = t_1.minute;  
+	            		int second_1 = t_1.second;
+	            		
+	            		newtime = String.valueOf(year_1)
+	            				+"-"+String.format("%02d",month_1)
+			            		+"-"+String.format("%02d",date_1)
+			            		+"-"+String.format("%02d",hour_1)
+			            		+"-"+String.format("%02d",minute_1)
+			            		+"-"+String.format("%02d",second_1);
+	            		
+	            		newtimeYesterday = GetThisDay.getSpecifiedDayBefore(newtime.toString());
+	            		
+	            		Editor editor = sp.edit();
+						editor.putString("NEW_TIME", newtime);
+						editor.commit();
+						//创建一个SQLiteHelper对象
+				        helper = new DatabaseHelper(Main_menu.this, newtime.substring(0,10) + ".db");
+				        DatabaseHelper helper_Yseterday = new DatabaseHelper(Main_menu.this, newtimeYesterday.substring(0,10) + ".db");
+				        //使用getWritableDatabase()或getReadableDatabase()方法获得SQLiteDatabase对象
+				        db = helper.getWritableDatabase();
+				        SQLiteDatabase db_Yseterday = helper_Yseterday.getWritableDatabase();
+				        
+				      //创建一个表
+				        db.execSQL("create table if not exists locid (" +
+				                    "_id integer primary key,"				                    
+				                    +"loc_id text not null," 
+				                    +"String text not null)");				        
+				        
+				        db.execSQL("create table if not exists ptsdata "
+				        		+"("			                    				                    
+			                    +"ref_id integer primary key," 
+			                    +"user_id text not null,"
+			                    +"task_time timestamp not null default (datetime('now','localtime')),"
+			                    +"task_name text not null,"
+			                    +"task_event text,"
+			                    +"doc_id text,"
+			                    +"task_id text,"
+			                    +"loc_id text,"
+			                    +"box_id text,"
+			                    +"sku text,"
+			                    +"qty integer,"
+			                    +"last_opt_id integer,"
+			                    +"pushstate integer not null"
+			                    + ")"
+			                    );
+				        
 				        String Url = sp.getString("locidservice", "http://aux.dhl.com/pts/interface/getLocIdList");
 				        //String Url = "http://www.kuaidi100.com/query?type=shentong&postid=3307313264542";
 				        String getdata = HttpUser.getJsonContent(Url);  //请求数据地址
@@ -138,113 +267,42 @@ public class Main_menu extends Activity{
 					    		}
 					        	LogUtils.i("插入数据完毕*****************"+ new SimpleDateFormat("yyyy-MM-dd  HH:mm:ss").format(new Date()));
 					        	
-				        	}else{	
-					            LogUtils.i("开始插入数据*****************"+ new SimpleDateFormat("yyyy-MM-dd  HH:mm:ss").format(new Date()));
-					            
+				        	}else{	//网络数据
+					            LogUtils.i("开始插入数据*****************"+ new SimpleDateFormat("yyyy-MM-dd  HH:mm:ss").format(new Date()));					            
 					            db.beginTransaction();
 					            String sql = "insert into locid (loc_id,String) values(?,?)";
-					        	for (int i=0;i<result.getLoc_id().size();i++) {
-					        		SQLiteStatement stat = db.compileStatement(sql);
-					        		stat.bindString(1, "loc_id");
-					        		stat.bindString(2, result.getLoc_id().get(i));
-					        		stat.executeInsert();
-					        	}
-					        	db.setTransactionSuccessful();
-					        	db.endTransaction();
+					            Cursor queryResult = db_Yseterday.rawQuery("select * from locid", null);
+					            if (queryResult.getColumnCount() != 0)
+					            {
+						            while(queryResult.moveToNext()==true)
+						            {
+						        		SQLiteStatement stat = db.compileStatement(sql);
+						        		stat.bindString(1, "loc_id");
+						        		stat.bindString(2, queryResult.getString(queryResult.getColumnIndex("String")));
+						        		stat.executeInsert();
+						            }
+						            db.setTransactionSuccessful();
+						        	db.endTransaction();
+					            }else{
+					            	
+					            }
+//					            db.beginTransaction();
+//					            String sql = "insert into locid (loc_id,String) values(?,?)";
+//					        	for (int i=0;i<result.getLoc_id().size();i++) {
+//					        		SQLiteStatement stat = db.compileStatement(sql);
+//					        		stat.bindString(1, "loc_id");
+//					        		stat.bindString(2, result.getLoc_id().get(i));
+//					        		stat.executeInsert();
+//					        	}
+//					        	db.setTransactionSuccessful();
+//					        	db.endTransaction();
 					        	
 					            LogUtils.i("插入数据完毕*****************"+ new SimpleDateFormat("yyyy-MM-dd  HH:mm:ss").format(new Date()));
 				        	}
 				        	
 				        }
 
-				        db.close();
-	            	}
-	            	else{
-	            		Time t=new Time(); // or Time t=new Time("GMT+8"); 加上Time Zone资料。  
-	            		t.setToNow(); // 取得系统时间。  
-	            		int year = t.year;  
-	            		int month = t.month + 1;  
-	            		int date = t.monthDay;  
-	            		newtime = getString(year)+"-"+getString(month)+"-"+getString(date);
-	            		Editor editor = sp.edit();
-						editor.putString("NEW_TIME", newtime);
-						editor.commit();
-						//创建一个SQLiteHelper对象
-				        DatabaseHelper helper = new DatabaseHelper(Main_menu.this, newtime.substring(0,10) + ".db");
-				        //使用getWritableDatabase()或getReadableDatabase()方法获得SQLiteDatabase对象
-				        SQLiteDatabase db = helper.getWritableDatabase();
-				        
-				      //创建一个表
-				        db.execSQL("create table if not exists locid (" +
-				                    "_id integer primary key,"				                    
-				                    +"loc_id text not null," 
-				                    +"String text not null)");
-				        
-				        db.execSQL("create table if not exists ptsdata "
-				        		+"("			                    				                    
-			                    +"ref_id integer primary key," 
-			                    +"user_id text not null,"
-			                    +"task_time timestamp not null default (datetime('now','localtime')),"
-			                    +"task_name text not null,"
-			                    +"task_event text,"
-			                    +"doc_id text,"
-			                    +"task_id text,"
-			                    +"loc_id text,"
-			                    +"box_id text,"
-			                    +"sku text,"
-			                    +"qty integer,"
-			                    +"last_opt_id integer,"
-			                    +"pushstate integer not null"
-			                    + ")"
-			                    );
-				        
-				        String Url = sp.getString("locidservice", "http://117.185.79.178:8005/PTSService.asmx");
-				        //String Url = "http://www.kuaidi100.com/query?type=shentong&postid=3307313264542";
-				        String getdata = HttpUser.getJsonContent(Url);  //请求数据地址
-				        //Log.i("网络数据","json-lib，JSON转对象:"+getdata);
-				        
-				        String s1 = "{\"loc_id\":[\"001\",\"002\",\"003\",\"004\",\"005\",\"006\",\"007\",\"008\",\"009\",\"010\"]}";
-				        //System.out.println("Json转为简单Bean===" + s1); 
-				    	//JSON对象 转 JSONModel对象
-				    	Root result = JavaBean.getPerson(s1, com.gson.Root.class);
-				    	
-				    	//转成String 方便输出
-				    	Log.i("货架列表","json-lib，JSON转对象:"+result.toString());
-				    	
-				        if(db.rawQuery("select * from locid", null).moveToNext() == false)
-				        {
-				        	Boolean opStyle = false;
-				        	//插入同步货架记录
-				        	if(opStyle==true)
-				        	{
-				        		LogUtils.i("开始插入数据*****************"+ new SimpleDateFormat("yyyy-MM-dd  HH:mm:ss").format(new Date()));
-					        	for(int i=0;i<result.getLoc_id().size();i++)
-					    		{
-							        db.execSQL("insert into locid (loc_id,String) "
-							        		+ "values ('loc_id','"+result.getLoc_id().get(i)+"')");
-					    		}
-					        	LogUtils.i("插入数据完毕*****************"+ new SimpleDateFormat("yyyy-MM-dd  HH:mm:ss").format(new Date()));
-					        	
-				        	}else{	
-					            LogUtils.i("开始插入数据*****************"+ new SimpleDateFormat("yyyy-MM-dd  HH:mm:ss").format(new Date()));
-					            
-					            db.beginTransaction();
-					            String sql = "insert into locid (loc_id,String) values(?,?)";
-					        	for (int i=0;i<result.getLoc_id().size();i++) {
-					        		SQLiteStatement stat = db.compileStatement(sql);
-					        		stat.bindString(1, "loc_id");
-					        		stat.bindString(2, result.getLoc_id().get(i));
-					        		stat.executeInsert();
-					        	}
-					        	db.setTransactionSuccessful();
-					        	db.endTransaction();
-					        	
-					            LogUtils.i("插入数据完毕*****************"+ new SimpleDateFormat("yyyy-MM-dd  HH:mm:ss").format(new Date()));
-				        	}
-				        	
-				        }
-				        
-				        db.close();				        
+				        db.close();			        
 	            	}
 
 	            	handler.sendEmptyMessage(0x001);
@@ -294,9 +352,20 @@ public class Main_menu extends Activity{
 		//finish();
 	}
 	
+	@Override
+    protected void onPause() {
+        super.onPause();
+        //关闭数据库
+        if(db.isOpen())
+        {
+        	db.close();
+        }
+    }
+	
+	
 	protected void dialog() { 
 		AlertDialog.Builder builder = new Builder(Main_menu.this); 
-		builder.setMessage("确定要退出操作吗?"); 
+		builder.setMessage("建议先同步数据，确定要退出业务操作吗?"); 
 		builder.setTitle("提示"); 
 		builder.setPositiveButton("确认", 
 			new android.content.DialogInterface.OnClickListener() { 

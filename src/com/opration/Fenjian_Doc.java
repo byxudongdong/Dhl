@@ -20,9 +20,11 @@ import android.os.Message;
 import android.text.TextUtils;
 import android.text.format.Time;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.Toast;
 
 public class Fenjian_Doc extends Activity{
 	private static final int SHOW_ANOTHER_ACTIVITY = 0;
@@ -227,6 +229,15 @@ public class Fenjian_Doc extends Activity{
         //resetTime();  
         return super.dispatchTouchEvent(ev);  
     }  
+	
+	@Override 
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		if(keyCode == KeyEvent.KEYCODE_ENTER) { //¼à¿Ø/À¹½Ø/ÆÁ±Î·µ»Ø¼ü			
+			DocID_ok(null);
+			return false; 
+		} 
+		return super.onKeyDown(keyCode, event);
+	}
       
     private void resetTime() {  
         // TODO Auto-generated method stub  

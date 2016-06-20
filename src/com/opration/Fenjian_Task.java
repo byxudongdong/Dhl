@@ -23,6 +23,7 @@ import android.os.Message;
 import android.text.TextUtils;
 import android.text.format.Time;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.EditText;
@@ -195,6 +196,15 @@ public class Fenjian_Task extends Activity {
 	public void jianhuo_back(View v)
 	{
 		finish();
+	}
+	
+	@Override 
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		if(keyCode == KeyEvent.KEYCODE_ENTER) { //¼à¿Ø/À¹½Ø/ÆÁ±Î·µ»Ø¼ü			
+			opration_task(null);
+			return false; 
+		} 
+		return super.onKeyDown(keyCode, event);
 	}
 	
 	@Override
