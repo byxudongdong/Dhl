@@ -2,8 +2,6 @@ package com.others;
 
 import com.login.DatabaseHelper;
 import com.login.R;
-import com.timeout.Timeout;
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
@@ -149,7 +147,21 @@ public class Fahuo_Other extends Activity {
 	        		+ "'出货信息核验','结束',"
 	        		+  Integer.parseInt(editText.getText().toString())+","
 	        		+ "0,0)");
-
+        
+	}
+	
+	private void end_record_1()
+	{
+		db = helper.getWritableDatabase();
+		
+	        db.execSQL("insert into ptsdata (user_id,task_name,"
+	        		+ "task_event,qty,last_opt_id,"
+	        		+ "pushstate) "
+	        		+ "values ("
+	        		+ "'"+sp.getString("user_id", "")+"'"+","
+	        		+ "'出货信息核验','结束',"
+	        		+"0,"
+	        		+ "0,0)");
         
 	}
 	
@@ -166,6 +178,11 @@ public class Fahuo_Other extends Activity {
 						dialog.dismiss(); 
 						end_record();
 						Fahuo_Other.this.finish(); 
+					}else{
+						dialog.dismiss(); 
+						end_record_1();
+						Fahuo_Other.this.finish();
+						
 					}
 				} 
 			}

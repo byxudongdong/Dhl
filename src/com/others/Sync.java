@@ -75,7 +75,9 @@ public class Sync<Public> extends Activity {
 		newdate = sp.getString("NEWTIME", "");
 		Log.i("NEWDATE", newdate);
 		
-		new Thread(sendData).start();
+		//new Thread(sendData).start();
+
+		new Thread(sendDataYesterday).start();
 		
 	}
 	
@@ -231,85 +233,101 @@ public class Sync<Public> extends Activity {
 			//创建一个SQLiteHelper对象
 	        helper_Yesterday = new DatabaseHelper(Sync.this, newtimeYesterday.substring(0,10) + ".db");
 	        //使用getWritableDatabase()或getReadableDatabase()方法获得SQLiteDatabase对象
-	        db_Yesterday = helper_Yesterday.getWritableDatabase();	               
+	        db_Yesterday = helper_Yesterday.getWritableDatabase();	 
 	        
+	        Cursor queryResult = null;
 	        //获取游标对象
 	        //Cursor queryResult = db.rawQuery("select * from ptsdata", null);
-	        Cursor queryResult = db_Yesterday.rawQuery("select * from ptsdata where pushstate=? limit ?,?", 
-	        									new String[]{"0","0","50" });//String.valueOf(packSize)
-	        int count=queryResult.getCount();
-	        Log.i("取出条数", String.valueOf(count));
-	        if (count > 0)
-	        {
-	        	endFlag = false;
-	            //打印记录
-	        	//queryResult.moveToPosition(queryResult.getColumnCount()-3);
-	            while (queryResult.moveToNext() == true && sendtasks.size()<packSize) {
-	            	
-		        	int ref_id =  queryResult.getInt(queryResult.getColumnIndex("ref_id"));
-				    String user_id = queryResult.getString(queryResult.getColumnIndex("user_id"));  
-				    String task_time = queryResult.getString(queryResult.getColumnIndex("task_time"));						     
-				    String task_name = queryResult.getString(queryResult.getColumnIndex("task_name"));
-				    String task_event = queryResult.getString(queryResult.getColumnIndex("task_event"));  						   
-				    String doc_id = queryResult.getString(queryResult.getColumnIndex("doc_id"));
-				    String task_id = queryResult.getString(queryResult.getColumnIndex("task_id"));					   
-				    String loc_id = queryResult.getString(queryResult.getColumnIndex("loc_id"));
-				    String box_id = queryResult.getString(queryResult.getColumnIndex("box_id"));
-				    String sku = queryResult.getString(queryResult.getColumnIndex("sku"));
-				    int qty = queryResult.getInt(queryResult.getColumnIndex("qty"));
-				    int last_opt_id = queryResult.getInt(queryResult.getColumnIndex("last_opt_id"));
-				    int pushstate = queryResult.getInt(queryResult.getColumnIndex("pushstate"));
-	            	
-//	                Log.i("info", "user_id: " + user_id
-//	                        + " timastamp: " + task_time
-//	                        + " String: " + task_event
-//	                        );
-	                
-			        sendtask = SendJson.main( String.valueOf(ref_id),  
-											     user_id,  
-											     task_time,						     
-											     task_name, 
-											     task_event,   						   
-											     doc_id,
-											     task_id,						   
-											     loc_id,
-											     box_id,
-											     sku,
-											     String.valueOf(qty),
-											     String.valueOf(last_opt_id),
-											     pushstate);
-			        sendtasks = SendJson.SendTasks(sendtasks, sendtask, endFlag);
-			        sendpackSize++;
-			        firstCursor = ref_id;
-	            }				            
-	        
-		      	//关闭游标对象
-	            queryResult.close();
-	            //Json转换
-				String TaskListJson = gson.toJson(sendtasks);  
-				//System.out.println("list转化为json==" + TaskListJson); 
+	        String sql = "select count(*) as c from sqlite_master where type ='table' and name ='ptsdata';";
+	        Cursor myCursor = db_Yesterday.rawQuery(sql, null);
+	        if(myCursor.moveToNext()){
+	        	int count_1 = myCursor.getInt(0);
+                if(count_1>0){
+		            //table exists
+			        queryResult = db_Yesterday.rawQuery("select * from ptsdata where pushstate=? limit ?,?", 
+							new String[]{"0","0","50" });//String.valueOf(packSize)
 				
-				String senddata = "{\"tasklist\":" + TaskListJson + "}"; 
-				//System.out.println("----------Json转化-------------");
-				//System.out.println("list转化为json==" + senddata); 
-				
-				//设置传输参数。
-			    RequestParams params = new RequestParams();					    
-			    //params.addBodyParameter("scanDataList", senddata);
-			    try {
-					params.setBodyEntity(new StringEntity(senddata,"utf-8"));
-				} catch (UnsupportedEncodingException e) {
-					// TODO 自动生成的 catch 块
-					e.printStackTrace();
-				}
-			    //String serviseUrl = sp.getString("service", "http://117.185.79.178:8005/PTSService.asmx/PTS_DATA");
-			    String serviseUrl = sp.getString("service", "http://aux.dhl.com/pts/interface/pushTask");
-			    doPost_Yesterday(serviseUrl,params, handler);
-	        }else{
-	        	Message message=new Message();
-		    	message.what=2;
-		    	handler.sendMessage(message);	        	
+			        int count=queryResult.getCount();
+			        Log.i("取出条数", String.valueOf(count));
+			        if (count > 0)
+			        {
+			        	endFlag = false;
+			            //打印记录
+			        	//queryResult.moveToPosition(queryResult.getColumnCount()-3);
+			            while (queryResult.moveToNext() == true && sendtasks.size()<packSize) {
+			            	
+				        	int ref_id =  queryResult.getInt(queryResult.getColumnIndex("ref_id"));
+						    String user_id = queryResult.getString(queryResult.getColumnIndex("user_id"));  
+						    String task_time = queryResult.getString(queryResult.getColumnIndex("task_time"));						     
+						    String task_name = queryResult.getString(queryResult.getColumnIndex("task_name"));
+						    String task_event = queryResult.getString(queryResult.getColumnIndex("task_event"));  						   
+						    String doc_id = queryResult.getString(queryResult.getColumnIndex("doc_id"));
+						    String task_id = queryResult.getString(queryResult.getColumnIndex("task_id"));					   
+						    String loc_id = queryResult.getString(queryResult.getColumnIndex("loc_id"));
+						    String box_id = queryResult.getString(queryResult.getColumnIndex("box_id"));
+						    String sku = queryResult.getString(queryResult.getColumnIndex("sku"));
+						    int qty = queryResult.getInt(queryResult.getColumnIndex("qty"));
+						    int last_opt_id = queryResult.getInt(queryResult.getColumnIndex("last_opt_id"));
+						    int pushstate = queryResult.getInt(queryResult.getColumnIndex("pushstate"));
+			            	
+		//	                Log.i("info", "user_id: " + user_id
+		//	                        + " timastamp: " + task_time
+		//	                        + " String: " + task_event
+		//	                        );
+			                
+					        sendtask = SendJson.main( String.valueOf(ref_id),  
+													     user_id,  
+													     task_time,						     
+													     task_name, 
+													     task_event,   						   
+													     doc_id,
+													     task_id,						   
+													     loc_id,
+													     box_id,
+													     sku,
+													     String.valueOf(qty),
+													     String.valueOf(last_opt_id),
+													     pushstate);
+					        sendtasks = SendJson.SendTasks(sendtasks, sendtask, endFlag);
+					        sendpackSize++;
+					        firstCursor = ref_id;
+			            }				            
+			        
+				      	//关闭游标对象
+			            queryResult.close();
+			            //Json转换
+						String TaskListJson = gson.toJson(sendtasks);  
+						//System.out.println("list转化为json==" + TaskListJson); 
+						
+						String senddata = "{\"tasklist\":" + TaskListJson + "}"; 
+						//System.out.println("----------Json转化-------------");
+						//System.out.println("list转化为json==" + senddata); 
+						
+						//设置传输参数。
+					    RequestParams params = new RequestParams();					    
+					    //params.addBodyParameter("scanDataList", senddata);
+					    try {
+							params.setBodyEntity(new StringEntity(senddata,"utf-8"));
+						} catch (UnsupportedEncodingException e) {
+							// TODO 自动生成的 catch 块
+							e.printStackTrace();
+						}
+					    //String serviseUrl = sp.getString("service", "http://117.185.79.178:8005/PTSService.asmx/PTS_DATA");
+					    String serviseUrl = sp.getString("service", "http://aux.dhl.com/pts/interface/pushTask");
+					    doPost_Yesterday(serviseUrl,params, handler);
+			        }else{
+			        	Message message=new Message();
+				    	message.what=2;
+				    	handler.sendMessage(message);	        	
+			        }
+                } 
+		        else 
+		        {
+		        	//table does not exist
+		        	Log.i("上传昨天数据", "昨天数据为空");
+			    } 
 	        }
+		        
 	    }
 	};
 	

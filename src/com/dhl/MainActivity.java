@@ -1,5 +1,7 @@
 package com.dhl;
 
+import java.util.HashMap;
+
 import com.login.LoginActivity;
 import com.login.R;
 import com.opration.PlayBeepSound;
@@ -11,6 +13,8 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+import android.media.AudioManager;
+import android.media.SoundPool;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -26,7 +30,9 @@ public class MainActivity extends Activity {
 	public EditText userid;
 	public String bt_data;
 	private SharedPreferences sp;
-	public PlayBeepSound playBeepSound ;
+	
+	private SoundPool mSoundPool = null;
+	HashMap<Integer, Integer> soundMap = new HashMap<Integer, Integer>();
 	
 	BroadcastReceiver mreceiver = new  BroadcastReceiver(){
 		@Override
@@ -39,7 +45,8 @@ public class MainActivity extends Activity {
 			Editor editor = sp.edit();
 			editor.putString("user_id", bt_data);
 			editor.commit();
-			playBeepSound.playBeepSoundAndVibrate(0);
+
+			mSoundPool.play(soundMap.get(1), 1, 1, 0, 0, 1);
 			login_ok(null);
 
 		}
@@ -53,7 +60,9 @@ public class MainActivity extends Activity {
 		button_close = (Button) findViewById(R.id.back);
 		userid = (EditText) findViewById(R.id.user_id_data);
 		
-		playBeepSound = new PlayBeepSound(MainActivity.this);
+		mSoundPool = new SoundPool(2, AudioManager.STREAM_SYSTEM, 5);
+		soundMap.put(1, mSoundPool.load(this, R.raw.test_2k_8820_200ms, 1));
+		soundMap.put(2, mSoundPool.load(this, R.raw.error, 1));
 		
 		mFilter = new IntentFilter();
 		mFilter.addAction(broadrec.ACTION_DATA_AVAILABLE);
