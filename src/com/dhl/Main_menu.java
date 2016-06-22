@@ -135,7 +135,7 @@ public class Main_menu extends Activity{
 			                    + ")"
 			                    );
 				        
-				        if(sp.getString("LocIdUpDate", "").substring(0, 10).equals(newtime.substring(0,10)) )
+				        if(sp.getString("LocIdUpDate", "1991_09_09").substring(0, 10).equals(newtime.substring(0,10)) )
 			        	{
 				        	Log.i("货架更新", "无需更新");
 				        }
