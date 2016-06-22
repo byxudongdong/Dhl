@@ -6,6 +6,8 @@ package com.baozhuang;
 import com.dhl.broadrec;
 import com.login.DatabaseHelper;
 import com.login.R;
+import com.opration.Jianhuo_Doc;
+import com.opration.PlayBeepSound;
 import com.timeout.Timeout;
 
 import android.app.Activity;
@@ -38,6 +40,7 @@ public class Box_baozhuang extends Activity {
 	String newtime = null;
 	Thread newThread = null; //声明一个子线程    
 	
+	private PlayBeepSound playBeepSound;
 	private EditText huowei_data;
 	
 	DatabaseHelper helper;
@@ -55,6 +58,8 @@ public class Box_baozhuang extends Activity {
 				huowei_data.setText(bt_data);
 				huowei_data.setSelection(bt_data.length());
 				editor.putString("box_id", bt_data);
+				
+				playBeepSound.playBeepSoundAndVibrate(0);
 				Log.i("user_data", huowei_data.getText().toString());
 			}							
 			editor.commit();
@@ -68,6 +73,8 @@ public class Box_baozhuang extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.box_baozhuang);
 		huowei_data = (EditText)findViewById(R.id.box_id_data);
+		
+		playBeepSound = new PlayBeepSound(Box_baozhuang.this);
 		
 		mFilter = new IntentFilter();
 		mFilter.addAction(broadrec.ACTION_DATA_AVAILABLE);
@@ -214,7 +221,10 @@ public class Box_baozhuang extends Activity {
         unregisterReceiver(mreceiver);
         //mHandler.removeMessages(SHOW_ANOTHER_ACTIVITY);//從消息隊列中移除  
         //关闭数据库
-        db.close();
+        if(db.isOpen())
+        {
+        	db.close();
+        }
     }
     
 	@Override
@@ -236,7 +246,7 @@ public class Box_baozhuang extends Activity {
         		+ "'"+sp.getString("user_id", "")+"'"+","
         		+ "'包装',"
         		+ "'扫描BOXID'"+","
-        		+ sp.getString("doc_id", "")+","
+        		+  "'"+sp.getString("doc_id", "")+"'"+","
         		//+ sp.getInt("task_id",0)+","
         		+ "'"+sp.getString("box_id", "")+"'"+","
         		+ "0,0)");

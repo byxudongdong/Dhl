@@ -165,7 +165,10 @@ public class Timeout extends Activity {
         unregisterReceiver(mreceiver);
         record();
         //¹Ø±ÕÊý¾Ý¿â
-        db.close();
+        if(db.isOpen())
+        {
+        	db.close();
+        }
         
         //finish();
     }

@@ -7,6 +7,8 @@ import com.dhl.broadrec;
 import com.login.DatabaseHelper;
 import com.login.R;
 import com.opration.Fenjian_Task;
+import com.opration.Jianhuo_Doc;
+import com.opration.PlayBeepSound;
 import com.rules.LocIdRules;
 import com.timeout.Timeout;
 
@@ -40,6 +42,7 @@ public class SKU_baozhuang extends Activity {
 	String newtime = null;
 	Thread newThread = null; //声明一个子线程    
 	
+	private PlayBeepSound playBeepSound;
 	private EditText sku_id_data;
 	private EditText count_data;
 	
@@ -59,6 +62,7 @@ public class SKU_baozhuang extends Activity {
 				sku_id_data.setText(bt_data);
 				sku_id_data.setSelection(bt_data.length());
 				editor.putString("sku", bt_data);
+				playBeepSound.playBeepSoundAndVibrate(0);
 				Log.i("user_data", sku_id_data.getText().toString());
 				count_data.requestFocus();//获取焦点
 			}else if (count_data.hasFocus()) {
@@ -81,6 +85,8 @@ public class SKU_baozhuang extends Activity {
 		setContentView(R.layout.fenjian_sku);
 		sku_id_data = (EditText)findViewById(R.id.sku_id_data);
 		count_data = (EditText)findViewById(R.id.count_data);
+		
+		playBeepSound = new PlayBeepSound(SKU_baozhuang.this);
 		
 		mFilter = new IntentFilter();
 		mFilter.addAction(broadrec.ACTION_DATA_AVAILABLE);
@@ -227,7 +233,7 @@ public class SKU_baozhuang extends Activity {
         		+ "'"
         		+ "扫描SKU"+"-"+sp.getString("task_event", "")
         		+ "',"
-        		+ sp.getString("doc_id", "")+","
+        		+  "'"+sp.getString("doc_id", "")+"'"+","
         		//+ sp.getInt("task_id",0)+","
         		+ "'"+sp.getString("box_id", "")+"'"+","
         		+ "'"+sp.getString("sku", "")+"'"+","
@@ -249,7 +255,10 @@ public class SKU_baozhuang extends Activity {
         unregisterReceiver(mreceiver);
         //mHandler.removeMessages(SHOW_ANOTHER_ACTIVITY);//從消息隊列中移除  
         //关闭数据库
-        db.close();
+        if(db.isOpen())
+        {
+        	db.close();
+        }
     }
     
 	@Override

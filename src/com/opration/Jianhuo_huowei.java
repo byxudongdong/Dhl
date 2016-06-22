@@ -42,6 +42,7 @@ public class Jianhuo_huowei extends Activity {
 	String newtime = null;
 	Thread newThread = null; //声明一个子线程    
 	
+	private PlayBeepSound playBeepSound;
 	private EditText huowei_data;
 	
 	DatabaseHelper helper;
@@ -59,6 +60,7 @@ public class Jianhuo_huowei extends Activity {
 				huowei_data.setText(bt_data);
 				huowei_data.setSelection(bt_data.length());
 				editor.putString("box_id", bt_data);
+				playBeepSound.playBeepSoundAndVibrate(0);
 				Log.i("user_data", huowei_data.getText().toString());
 			}							
 			editor.commit();
@@ -73,6 +75,8 @@ public class Jianhuo_huowei extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.opration_huowei);
 		huowei_data = (EditText)findViewById(R.id.huowei_data);
+		
+		playBeepSound = new PlayBeepSound(Jianhuo_huowei.this);
 		
 		mFilter = new IntentFilter();
 		mFilter.addAction(broadrec.ACTION_DATA_AVAILABLE);
@@ -252,8 +256,8 @@ public class Jianhuo_huowei extends Activity {
         		+ "'"+sp.getString("user_id", "")+"'"+","
         		+ "'总拣',"
         		+ "'扫描LOCID'"+","
-        		+ sp.getString("doc_id", "")+","
-        		+ sp.getString("task_id","")+","
+        		+  "'"+sp.getString("doc_id", "")+"'"+","
+        		+  "'"+sp.getString("task_id","")+"'"+","
         		+ "'"+sp.getString("loc_id", "")+"'"+","
         		+ "0,0)");
 	}
@@ -272,7 +276,10 @@ public class Jianhuo_huowei extends Activity {
         unregisterReceiver(mreceiver);
         //mHandler.removeMessages(SHOW_ANOTHER_ACTIVITY);//從消息隊列中移除  
         //关闭数据库
-        db.close();
+        if(db.isOpen())
+        {
+        	db.close();
+        }
     }
     
 	@Override

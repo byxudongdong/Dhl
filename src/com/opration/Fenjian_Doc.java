@@ -34,6 +34,8 @@ public class Fenjian_Doc extends Activity{
 	String newtime = null;
 	Thread newThread = null; //声明一个子线程    
 	
+	private PlayBeepSound playBeepSound;
+	
 	DatabaseHelper helper;
 	SQLiteDatabase db;
 	IntentFilter mFilter =null;
@@ -49,6 +51,7 @@ public class Fenjian_Doc extends Activity{
 				doc_id_data.setText(bt_data);
 				doc_id_data.setSelection(bt_data.length());
 				editor.putString("box_id", bt_data );
+				playBeepSound.playBeepSoundAndVibrate(0);
 				Log.i("user_data", doc_id_data.getText().toString());
 			}							
 			editor.commit();
@@ -62,6 +65,8 @@ public class Fenjian_Doc extends Activity{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.jianhuo_doc);
 		doc_id_data = (EditText)findViewById(R.id.doc_id_data);
+		
+		playBeepSound = new PlayBeepSound(Fenjian_Doc.this);
 		
 		mFilter = new IntentFilter();
 		mFilter.addAction(broadrec.ACTION_DATA_AVAILABLE);
@@ -206,7 +211,10 @@ public class Fenjian_Doc extends Activity{
         unregisterReceiver(mreceiver);
         mHandler.removeMessages(SHOW_ANOTHER_ACTIVITY);//從消息隊列中移除  
         //关闭数据库
-        db.close();
+        if(db.isOpen())
+        {
+        	db.close();
+        }
     }
 	
 	private void record()
@@ -218,7 +226,7 @@ public class Fenjian_Doc extends Activity{
         		+ "values ("
         		+ "'"+sp.getString("user_id", "")+"'"+","
         		+ "'分拣','扫描DOCID',"
-        		+  sp.getString("doc_id", "")+","
+        		+  "'"+sp.getString("doc_id", "")+"'"+","
         		+ "0,0)");
 	}
 	

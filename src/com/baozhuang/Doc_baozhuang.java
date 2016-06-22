@@ -3,6 +3,8 @@ package com.baozhuang;
 import com.dhl.broadrec;
 import com.login.DatabaseHelper;
 import com.login.R;
+import com.opration.Jianhuo_Doc;
+import com.opration.PlayBeepSound;
 import com.timeout.Timeout;
 
 import android.app.Activity;
@@ -28,6 +30,8 @@ public class Doc_baozhuang extends Activity{
 	protected static final int SHOW_ANOTHER_ACTIVITY = 0;
 	private SharedPreferences sp;
 	private String newdate;
+	
+	private PlayBeepSound playBeepSound;
 	private EditText doc_id_data;
 	String newtime = null;
 	Thread newThread = null; //声明一个子线程    
@@ -47,6 +51,8 @@ public class Doc_baozhuang extends Activity{
 				doc_id_data.setText(bt_data);
 				doc_id_data.setSelection(bt_data.length());
 				editor.putString("doc_id", bt_data);
+				
+				playBeepSound.playBeepSoundAndVibrate(0);
 				Log.i("user_data", doc_id_data.getText().toString());
 			}							
 			editor.commit();
@@ -60,6 +66,8 @@ public class Doc_baozhuang extends Activity{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.jianhuo_doc);		
 		doc_id_data = (EditText)findViewById(R.id.doc_id_data);
+		
+		playBeepSound = new PlayBeepSound(Doc_baozhuang.this);
 		
 		mFilter = new IntentFilter();
 		mFilter.addAction(broadrec.ACTION_DATA_AVAILABLE);
@@ -205,7 +213,10 @@ public class Doc_baozhuang extends Activity{
         unregisterReceiver(mreceiver);
         //mHandler.removeMessages(SHOW_ANOTHER_ACTIVITY);//從消息隊列中移除  
         //关闭数据库
-        db.close();
+        if(db.isOpen())
+        {
+        	db.close();
+        }
     }
 	
 	private void record()
@@ -217,7 +228,7 @@ public class Doc_baozhuang extends Activity{
         		+ "values ("
         		+ "'"+sp.getString("user_id", "")+"'"+","
         		+ "'包装','扫描DOCID',"
-        		+  sp.getString("doc_id", "")+","
+        		+  "'"+sp.getString("doc_id", "")+"'"+","
         		+ "0,0)");
 	}
 	

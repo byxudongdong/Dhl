@@ -39,6 +39,8 @@ public class Fenjian_Task extends Activity {
 	String newtime = null;
 	Thread newThread = null; //声明一个子线程    
 	
+	private PlayBeepSound playBeepSound;
+	
 	private EditText task_id_data;
 	
 	DatabaseHelper helper;
@@ -56,6 +58,7 @@ public class Fenjian_Task extends Activity {
 				task_id_data.setText(bt_data);
 				task_id_data.setSelection(bt_data.length());
 				editor.putString("box_id", bt_data );
+				playBeepSound.playBeepSoundAndVibrate(0);
 				Log.i("user_data", task_id_data.getText().toString());
 			}							
 			editor.commit();
@@ -70,6 +73,8 @@ public class Fenjian_Task extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.opration_task);
 		task_id_data = (EditText)findViewById(R.id.task_id_data);
+		
+		playBeepSound = new PlayBeepSound(Fenjian_Task.this);
 		
 		mFilter = new IntentFilter();
 		mFilter.addAction(broadrec.ACTION_DATA_AVAILABLE);
@@ -222,7 +227,10 @@ public class Fenjian_Task extends Activity {
         unregisterReceiver(mreceiver);
         //mHandler.removeMessages(SHOW_ANOTHER_ACTIVITY);//從消息隊列中移除  
         //关闭数据库
-        db.close();
+        if(db.isOpen())
+        {
+        	db.close();
+        }
     }
     
 	@Override
@@ -243,8 +251,8 @@ public class Fenjian_Task extends Activity {
         		+ "values ("
         		+ "'"+sp.getString("user_id", "")+"'"+","
         		+ "'分拣','扫描TASKID',"
-        		+ sp.getString("doc_id", "")+","
-        		+ sp.getString("task_id", "")+","
+        		+  "'"+sp.getString("doc_id", "")+"'"+","
+        		+  "'"+sp.getString("task_id","")+"'"+","
         		+ "0,0)");
 	}
 	

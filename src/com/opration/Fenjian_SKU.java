@@ -40,6 +40,7 @@ public class Fenjian_SKU extends Activity {
 	String newtime = null;
 	Thread newThread = null; //声明一个子线程    
 	
+	private PlayBeepSound playBeepSound;
 	private EditText sku_id_data;
 	private EditText count_data;
 	
@@ -59,6 +60,7 @@ public class Fenjian_SKU extends Activity {
 				sku_id_data.setText(bt_data);
 				sku_id_data.setSelection(bt_data.length());
 				editor.putString("sku", bt_data);
+				playBeepSound.playBeepSoundAndVibrate(0);
 				Log.i("user_data", sku_id_data.getText().toString());
 				count_data.requestFocus();//获取焦点
 			}else if (count_data.hasFocus()) {
@@ -78,9 +80,11 @@ public class Fenjian_SKU extends Activity {
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.fenjian_sku);
+		setContentView(R.layout.opration_sku);
 		sku_id_data = (EditText)findViewById(R.id.sku_id_data);
 		count_data = (EditText)findViewById(R.id.count_data);
+		
+		playBeepSound = new PlayBeepSound(Fenjian_SKU.this);
 		
 		mFilter = new IntentFilter();
 		mFilter.addAction(broadrec.ACTION_DATA_AVAILABLE);
@@ -131,7 +135,7 @@ public class Fenjian_SKU extends Activity {
 						        Cursor queryResult = db.rawQuery("select * from ptsdata", null);
 						        if (queryResult.getColumnCount() != 0) {
 						            //打印记录
-						            while (queryResult.moveToNext()) {
+						            if (queryResult.moveToLast()) {
 						                Log.i("info", "user_id: " + queryResult.getString(queryResult.getColumnIndex("user_id"))
 						                        + " timastamp: " + queryResult.getString(queryResult.getColumnIndex("task_time"))
 						                        + " String: " + queryResult.getString(queryResult.getColumnIndex("sku"))
@@ -186,12 +190,33 @@ public class Fenjian_SKU extends Activity {
 		newThread.start();
 	}
 	
-	public void sku_tijiao(View v)
+//	public void sku_tijiao(View v)
+//	{
+//		if(!TextUtils.isEmpty(sku_id_data.getText().toString()) && !TextUtils.isEmpty(count_data.getText().toString() ))
+//		{
+//			Editor editor = sp.edit();
+//			editor.putString("task_event", "sorting");
+//			editor.putString("sku",  sku_id_data.getText().toString() ); //Integer.parseInt()
+//			editor.putInt("qty", Integer.parseInt( count_data.getText().toString() ));
+//			editor.commit();
+//			
+//			record();
+//			
+//			Intent intent = new Intent();  
+//			intent.setClass(this, Fenjian_Task.class);  
+//			intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);  
+//			startActivity(intent);  
+//			finish();
+//		}
+//
+//	}	
+	
+	public void pallet_pick(View v)
 	{
 		if(!TextUtils.isEmpty(sku_id_data.getText().toString()) && !TextUtils.isEmpty(count_data.getText().toString() ))
 		{
 			Editor editor = sp.edit();
-			editor.putString("task_event", "sorting");
+			editor.putString("task_event", "pallet pick");
 			editor.putString("sku",  sku_id_data.getText().toString() ); //Integer.parseInt()
 			editor.putInt("qty", Integer.parseInt( count_data.getText().toString() ));
 			editor.commit();
@@ -199,13 +224,53 @@ public class Fenjian_SKU extends Activity {
 			record();
 			
 			Intent intent = new Intent();  
-			intent.setClass(this, Fenjian_Task.class);  
+			intent.setClass(this, Jianhuo_Task.class);  
 			intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);  
 			startActivity(intent);  
 			finish();
 		}
+	}
+	
+	public void case_pick(View v)
+	{
+		if(!TextUtils.isEmpty(sku_id_data.getText().toString()) && !TextUtils.isEmpty(count_data.getText().toString() ))
+		{
+			Editor editor = sp.edit();
+			editor.putString("task_event", "case pick");
+			editor.putString("sku",  sku_id_data.getText().toString() ); //Integer.parseInt()
+			editor.putInt("qty", Integer.parseInt( count_data.getText().toString() ));
+			editor.commit();
+			
+			record();
+			
+			Intent intent = new Intent();  
+			intent.setClass(this, Jianhuo_Task.class);  
+			intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);  
+			startActivity(intent);  
+			finish();
+		}
+	}
+	
+	public void piece_pick(View v)
+	{
+		if(!TextUtils.isEmpty(sku_id_data.getText().toString()) && !TextUtils.isEmpty(count_data.getText().toString() ))
+		{
+			Editor editor = sp.edit();
+			editor.putString("task_event", "piece pick");
+			editor.putString("sku",  sku_id_data.getText().toString() ); //Integer.parseInt()
+			editor.putInt("qty", Integer.parseInt( count_data.getText().toString() ));
+			editor.commit();
+			
+			record();
 
-	}	
+			Intent intent = new Intent();  
+			intent.setClass(this, Jianhuo_Task.class);  
+			intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);  
+			startActivity(intent);  
+			finish();
+		}
+		
+	}
 	
 	public void sku_back(View v)
 	{
@@ -225,8 +290,8 @@ public class Fenjian_SKU extends Activity {
         		+ "'"
         		+ "扫描SKU"+"-"+sp.getString("task_event", "")
         		+ "',"
-        		+ sp.getString("doc_id", "")+","
-        		+ sp.getString("task_id", "")+","
+        		+  "'"+sp.getString("doc_id", "")+"'"+","
+        		+  "'"+sp.getString("task_id","")+"'"+","
         		+ "'"+sp.getString("loc_id", "")+"'"+","
         		+ "'"+sp.getString("sku", "")+"'"+","
         		+ sp.getInt("qty", 0)+","
@@ -247,7 +312,10 @@ public class Fenjian_SKU extends Activity {
         unregisterReceiver(mreceiver);
         //mHandler.removeMessages(SHOW_ANOTHER_ACTIVITY);//從消息隊列中移除  
         //关闭数据库
-        db.close();
+        if(db.isOpen())
+        {
+        	db.close();
+        }
     }
 	
 	@Override
@@ -269,8 +337,8 @@ public class Fenjian_SKU extends Activity {
 	@Override 
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		if(keyCode == KeyEvent.KEYCODE_ENTER) { //监控/拦截/屏蔽返回键			
-			sku_tijiao(null);
-			return false; 
+			//sku_tijiao(null);
+			//return false; 
 		} 
 		return super.onKeyDown(keyCode, event);
 	}

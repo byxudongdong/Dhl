@@ -76,6 +76,7 @@ public class Sync<Public> extends Activity {
 		Log.i("NEWDATE", newdate);
 		
 		new Thread(sendData).start();
+		
 	}
 	
 	Runnable sendData = new Runnable() 
@@ -301,8 +302,8 @@ public class Sync<Public> extends Activity {
 					// TODO 自动生成的 catch 块
 					e.printStackTrace();
 				}
-			    String serviseUrl = sp.getString("service", "http://117.185.79.178:8005/PTSService.asmx/PTS_DATA");
-			    //String serviseUrl = sp.getString("service", "http://aux.dhl.com/pts/interface/pushTask");
+			    //String serviseUrl = sp.getString("service", "http://117.185.79.178:8005/PTSService.asmx/PTS_DATA");
+			    String serviseUrl = sp.getString("service", "http://aux.dhl.com/pts/interface/pushTask");
 			    doPost_Yesterday(serviseUrl,params, handler);
 	        }else{
 	        	Message message=new Message();

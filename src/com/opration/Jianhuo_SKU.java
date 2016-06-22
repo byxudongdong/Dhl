@@ -39,6 +39,7 @@ public class Jianhuo_SKU extends Activity {
 	String newtime = null;
 	Thread newThread = null; //声明一个子线程    
 	
+	private PlayBeepSound playBeepSound;
 	private EditText sku_id_data;
 	private EditText count_data;
 	
@@ -58,6 +59,7 @@ public class Jianhuo_SKU extends Activity {
 				sku_id_data.setText(bt_data);
 				sku_id_data.setSelection(bt_data.length());
 				editor.putString("sku", bt_data);
+				playBeepSound.playBeepSoundAndVibrate(0);
 				Log.i("user_data", sku_id_data.getText().toString());
 				count_data.requestFocus();//获取焦点
 			}else if (count_data.hasFocus()) {
@@ -81,6 +83,8 @@ public class Jianhuo_SKU extends Activity {
 		setContentView(R.layout.opration_sku);
 		sku_id_data = (EditText)findViewById(R.id.sku_id_data);
 		count_data = (EditText)findViewById(R.id.count_data);
+		
+		playBeepSound = new PlayBeepSound(Jianhuo_SKU.this);
 		
 		mFilter = new IntentFilter();
 		mFilter.addAction(broadrec.ACTION_DATA_AVAILABLE);
@@ -280,8 +284,8 @@ public class Jianhuo_SKU extends Activity {
         		+ "'"
         		+ "扫描SKU"+"-"+sp.getString("task_event", "")
         		+ "',"
-        		+ sp.getString("doc_id", "")+","
-        		+ sp.getString("task_id", "")+","
+        		+  "'"+sp.getString("doc_id", "")+"'"+","
+        		+  "'"+sp.getString("task_id","")+"'"+","
         		+ "'"+sp.getString("loc_id", "")+"'"+","
         		+ "'"+sp.getString("sku", "")+"'"+","
         		+ sp.getInt("qty", 0)+","
@@ -303,7 +307,10 @@ public class Jianhuo_SKU extends Activity {
         
         //mHandler.removeMessages(SHOW_ANOTHER_ACTIVITY);//從消息隊列中移除  
         //关闭数据库
-        db.close();
+        if(db.isOpen())
+        {
+        	db.close();
+        }
     }
 	
 	@Override

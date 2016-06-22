@@ -133,13 +133,13 @@ public class Main_menu extends Activity{
 			                    );
 				        String Url = sp.getString("locidservice", "http://aux.dhl.com/pts/interface/getLocIdList");
 				        //String Url = "http://www.kuaidi100.com/query?type=shentong&postid=3307313264542";
-				        //String getdata = HttpUser.getJsonContent(Url);  //请求数据地址
+				        String getdata = HttpUser.getJsonContent(Url);  //请求数据地址
 				        //Log.i("网络数据","json-lib，JSON转对象:"+getdata);
 				        
-				        String s1 = "{\"loc_id\":[\"001\",\"002\",\"003\",\"004\",\"005\",\"006\",\"007\",\"008\",\"009\",\"010\"]}";
+				        //String s1 = "{\"loc_id\":[\"001\",\"002\",\"003\",\"004\",\"005\",\"006\",\"007\",\"008\",\"009\",\"010\"]}";
 				        //System.out.println("Json转为简单Bean===" + s1); 
 				    	//JSON对象 转 JSONModel对象
-				    	Root result = JavaBean.getPerson(s1, com.gson.Root.class);
+				    	Root result = JavaBean.getPerson(getdata, com.gson.Root.class);
 				    	if(result == null)
 				    	{
 				    		handler.sendEmptyMessage(0x002);
@@ -147,7 +147,7 @@ public class Main_menu extends Activity{
 					    	//转成String 方便输出
 					    	//Log.i("货架列表","json-lib，JSON转对象:"+result.toString());
 					    	
-					        if(db.rawQuery("select * from locid", null).moveToNext() == false)
+					        //if(db.rawQuery("select * from locid", null).moveToNext() == false)
 					        {
 					        	Boolean opStyle = false;
 					        	//插入同步货架记录
@@ -176,6 +176,11 @@ public class Main_menu extends Activity{
 						        	db.endTransaction();
 						        	
 						            LogUtils.i("插入数据完毕*****************"+ new SimpleDateFormat("yyyy-MM-dd  HH:mm:ss").format(new Date()));
+						            
+									Editor editor1 = sp.edit();
+									editor1.putString("LocIdUpDate", newtime);
+									//editor.putInt("ref_id", 1);
+									editor1.commit();
 					        	}
 					        	
 					        }
@@ -322,8 +327,8 @@ public class Main_menu extends Activity{
 			}
 			else if(msg.what == 0x002)
 			{
-	    		Toast.makeText(getApplicationContext(), "更新货架失败！", Toast.LENGTH_SHORT).show();
-	    		finish();
+	    		Toast.makeText(getApplicationContext(), "更新货架失败！", Toast.LENGTH_LONG).show();
+	    		//finish();
 			}
 		};
 	};

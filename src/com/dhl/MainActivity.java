@@ -2,6 +2,8 @@ package com.dhl;
 
 import com.login.LoginActivity;
 import com.login.R;
+import com.opration.PlayBeepSound;
+
 import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -24,6 +26,7 @@ public class MainActivity extends Activity {
 	public EditText userid;
 	public String bt_data;
 	private SharedPreferences sp;
+	public PlayBeepSound playBeepSound ;
 	
 	BroadcastReceiver mreceiver = new  BroadcastReceiver(){
 		@Override
@@ -36,7 +39,7 @@ public class MainActivity extends Activity {
 			Editor editor = sp.edit();
 			editor.putString("user_id", bt_data);
 			editor.commit();
-			
+			playBeepSound.playBeepSoundAndVibrate(0);
 			login_ok(null);
 
 		}
@@ -49,6 +52,8 @@ public class MainActivity extends Activity {
 		buttom_ok = (Button) findViewById(R.id.ok);
 		button_close = (Button) findViewById(R.id.back);
 		userid = (EditText) findViewById(R.id.user_id_data);
+		
+		playBeepSound = new PlayBeepSound(MainActivity.this);
 		
 		mFilter = new IntentFilter();
 		mFilter.addAction(broadrec.ACTION_DATA_AVAILABLE);

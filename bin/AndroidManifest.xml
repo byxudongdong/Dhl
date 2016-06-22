@@ -80,6 +80,10 @@
             <category android:name="android.intent.category.DEFAULT"/>
         </activity> 
         
+        <activity android:label="@string/qita" android:name="com.others.Fahuo_Other">
+            <category android:name="android.intent.category.DEFAULT"/>
+        </activity> 
+        
         <activity android:label="@string/qita" android:name="com.others.Wait_pandian">
             <category android:name="android.intent.category.DEFAULT"/>
         </activity> 
