@@ -77,7 +77,7 @@
 	            android:onClick="pallet_pick"
 	            android:paddingLeft="5dp"
 	            android:paddingRight="5dp"
-	            android:text="Pallet pick"
+	            android:text="  托盘拣货  "
 	            android:textSize="26dp" />
 
 	        <Button
@@ -90,7 +90,7 @@
 	            android:onClick="case_pick"
 	            android:paddingLeft="5dp"
 	            android:paddingRight="5dp"
-	            android:text="Case pick"
+	            android:text="   箱   拣   "
 	            android:textSize="26dp" />
 
 	        <Button
@@ -103,7 +103,7 @@
 	            android:onClick="piece_pick"
 	            android:paddingLeft="5dp"
 	            android:paddingRight="5dp"
-	            android:text="Piece pick"
+	            android:text="   散    拣   "
 	            android:textSize="26dp" />
 	    </LinearLayout>
 	        

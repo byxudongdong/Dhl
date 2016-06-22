@@ -128,6 +128,8 @@ public class Timeout extends Activity {
 	            	}	            
         	},"timeout_doc");
 		newThread.start();
+		
+		Log.i("TimeOut", "进入超时界面");
 	}
 	
 	@Override 
@@ -172,7 +174,7 @@ public class Timeout extends Activity {
         super.onResume();
         // The activity has become visible (it is now "resumed").
         registerReceiver(mreceiver,mFilter); 
-        Log.i("TimeOut", "进入超时界面");
+        
     }
     @Override
     protected void onPause() {

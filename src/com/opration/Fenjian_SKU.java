@@ -3,6 +3,8 @@
  */
 package com.opration;
 
+import java.util.HashMap;
+
 import com.dhl.broadrec;
 import com.login.DatabaseHelper;
 import com.login.R;
@@ -18,6 +20,8 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.media.AudioManager;
+import android.media.SoundPool;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -40,7 +44,8 @@ public class Fenjian_SKU extends Activity {
 	String newtime = null;
 	Thread newThread = null; //声明一个子线程    
 	
-	private PlayBeepSound playBeepSound;
+	private SoundPool mSoundPool = null;
+	HashMap<Integer, Integer> soundMap = new HashMap<Integer, Integer>();
 	private EditText sku_id_data;
 	private EditText count_data;
 	
@@ -60,7 +65,8 @@ public class Fenjian_SKU extends Activity {
 				sku_id_data.setText(bt_data);
 				sku_id_data.setSelection(bt_data.length());
 				editor.putString("sku", bt_data);
-				playBeepSound.playBeepSoundAndVibrate(0);
+
+				mSoundPool.play(soundMap.get(1), 1, 1, 0, 0, 1);
 				Log.i("user_data", sku_id_data.getText().toString());
 				count_data.requestFocus();//获取焦点
 			}else if (count_data.hasFocus()) {
@@ -84,7 +90,9 @@ public class Fenjian_SKU extends Activity {
 		sku_id_data = (EditText)findViewById(R.id.sku_id_data);
 		count_data = (EditText)findViewById(R.id.count_data);
 		
-		playBeepSound = new PlayBeepSound(Fenjian_SKU.this);
+		mSoundPool = new SoundPool(2, AudioManager.STREAM_SYSTEM, 5);
+		soundMap.put(1, mSoundPool.load(this, R.raw.test_2k_8820_200ms, 1));
+		soundMap.put(2, mSoundPool.load(this, R.raw.error, 1));
 		
 		mFilter = new IntentFilter();
 		mFilter.addAction(broadrec.ACTION_DATA_AVAILABLE);
@@ -226,9 +234,7 @@ public class Fenjian_SKU extends Activity {
 			Intent intent = new Intent();  
 			intent.setClass(this, Jianhuo_Task.class);  
 			intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);  
-			startActivity(intent);  
-			
-			playBeepSound.player_release();
+			startActivity(intent);  			
 			
 			finish();
 		}
@@ -250,9 +256,7 @@ public class Fenjian_SKU extends Activity {
 			intent.setClass(this, Jianhuo_Task.class);  
 			intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);  
 			startActivity(intent);  
-			
-			playBeepSound.player_release();
-			
+						
 			finish();
 		}
 	}
@@ -273,8 +277,6 @@ public class Fenjian_SKU extends Activity {
 			intent.setClass(this, Jianhuo_Task.class);  
 			intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);  
 			startActivity(intent);  
-			
-			playBeepSound.player_release();
 			
 			finish();
 		}

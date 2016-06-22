@@ -1,6 +1,7 @@
 package com.opration;
 
-import com.dhl.MainActivity;
+import java.util.HashMap;
+
 import com.dhl.broadrec;
 import com.login.DatabaseHelper;
 import com.login.R;
@@ -15,6 +16,8 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.media.AudioManager;
+import android.media.SoundPool;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -32,7 +35,9 @@ public class Jianhuo_Doc extends Activity{
 	private EditText doc_id_data;
 	String newtime = null;
 	Thread newThread = null; //声明一个子线程    
-	private PlayBeepSound playBeepSound;
+	
+	private SoundPool mSoundPool = null;
+	HashMap<Integer, Integer> soundMap = new HashMap<Integer, Integer>();
 	
 	DatabaseHelper helper;
 	SQLiteDatabase db;
@@ -49,8 +54,8 @@ public class Jianhuo_Doc extends Activity{
 				doc_id_data.setText(bt_data);
 				doc_id_data.setSelection(bt_data.length());
 				editor.putString("box_id", bt_data );
-				//playBeepSound.playBeepSoundAndVibrate(0);
-				playBeepSound.playBeepSoundAndVibrate(0);
+
+				mSoundPool.play(soundMap.get(1), 1, 1, 0, 0, 1);
 				
 				Log.i("user_data", doc_id_data.getText().toString());
 			}							
@@ -66,7 +71,9 @@ public class Jianhuo_Doc extends Activity{
 		setContentView(R.layout.jianhuo_doc);
 		doc_id_data = (EditText)findViewById(R.id.doc_id_data);
 		
-		playBeepSound = new PlayBeepSound(Jianhuo_Doc.this);
+		mSoundPool = new SoundPool(2, AudioManager.STREAM_SYSTEM, 5);
+		soundMap.put(1, mSoundPool.load(this, R.raw.test_2k_8820_200ms, 1));
+		soundMap.put(2, mSoundPool.load(this, R.raw.error, 1));
 		
 		mFilter = new IntentFilter();
 		mFilter.addAction(broadrec.ACTION_DATA_AVAILABLE);
@@ -255,7 +262,7 @@ public class Jianhuo_Doc extends Activity{
         {
         	db.close();
         }
-        playBeepSound.player_release();
+
     }
 	
 	@Override  

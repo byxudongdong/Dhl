@@ -3,6 +3,8 @@
  */
 package com.opration;
 
+import java.util.HashMap;
+
 import com.dhl.broadrec;
 import com.login.DatabaseHelper;
 import com.login.R;
@@ -17,6 +19,8 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.media.AudioManager;
+import android.media.SoundPool;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -33,13 +37,15 @@ import android.widget.EditText;
  *
  */
 public class Fenjian_Task extends Activity {
+	
+	private SoundPool mSoundPool = null;
+	HashMap<Integer, Integer> soundMap = new HashMap<Integer, Integer>();
+	
 	private static final int SHOW_ANOTHER_ACTIVITY = 0;
 	private SharedPreferences sp;
 	private String newdate;
 	String newtime = null;
-	Thread newThread = null; //声明一个子线程    
-	
-	private PlayBeepSound playBeepSound;
+	Thread newThread = null; //声明一个子线程    	
 	
 	private EditText task_id_data;
 	
@@ -58,7 +64,9 @@ public class Fenjian_Task extends Activity {
 				task_id_data.setText(bt_data);
 				task_id_data.setSelection(bt_data.length());
 				editor.putString("box_id", bt_data );
-				playBeepSound.playBeepSoundAndVibrate(0);
+				
+				mSoundPool.play(soundMap.get(1), 1, 1, 0, 0, 1);
+				
 				Log.i("user_data", task_id_data.getText().toString());
 			}							
 			editor.commit();
@@ -74,7 +82,9 @@ public class Fenjian_Task extends Activity {
 		setContentView(R.layout.opration_task);
 		task_id_data = (EditText)findViewById(R.id.task_id_data);
 		
-		playBeepSound = new PlayBeepSound(Fenjian_Task.this);
+		mSoundPool = new SoundPool(2, AudioManager.STREAM_SYSTEM, 5);
+		soundMap.put(1, mSoundPool.load(this, R.raw.test_2k_8820_200ms, 1));
+		soundMap.put(2, mSoundPool.load(this, R.raw.error, 1));
 		
 		mFilter = new IntentFilter();
 		mFilter.addAction(broadrec.ACTION_DATA_AVAILABLE);
@@ -127,7 +137,7 @@ public class Fenjian_Task extends Activity {
 			        Cursor queryResult = db.rawQuery("select * from ptsdata", null);
 			        if (queryResult.getColumnCount() != 0) {
 			            //打印记录
-			            while (queryResult.moveToNext()) {
+			            if (queryResult.moveToLast()) {
 			                Log.i("info", "user_id: " + queryResult.getString(queryResult.getColumnIndex("user_id"))
 			                        + " timastamp: " + queryResult.getString(queryResult.getColumnIndex("task_time"))
 			                        + " String: " + queryResult.getInt(queryResult.getColumnIndex("task_id"))
@@ -193,9 +203,7 @@ public class Fenjian_Task extends Activity {
 			record();
 			
 			startActivity( new Intent( Fenjian_Task.this,
-					com.opration.Fenjian_Huowei.class));
-			
-			playBeepSound.player_release();
+					com.opration.Fenjian_Huowei.class));			
 			
 			finish();
 		}

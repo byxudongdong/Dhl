@@ -3,6 +3,8 @@
  */
 package com.baozhuang;
 
+import java.util.HashMap;
+
 import com.dhl.broadrec;
 import com.login.DatabaseHelper;
 import com.login.R;
@@ -19,6 +21,8 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.media.AudioManager;
+import android.media.SoundPool;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -40,7 +44,8 @@ public class Box_baozhuang extends Activity {
 	String newtime = null;
 	Thread newThread = null; //声明一个子线程    
 	
-	private PlayBeepSound playBeepSound;
+	private SoundPool mSoundPool = null;
+	HashMap<Integer, Integer> soundMap = new HashMap<Integer, Integer>();
 	private EditText huowei_data;
 	
 	DatabaseHelper helper;
@@ -59,7 +64,7 @@ public class Box_baozhuang extends Activity {
 				huowei_data.setSelection(bt_data.length());
 				editor.putString("box_id", bt_data);
 				
-				playBeepSound.playBeepSoundAndVibrate(0);
+				mSoundPool.play(soundMap.get(1), 1, 1, 0, 0, 1);
 				Log.i("user_data", huowei_data.getText().toString());
 			}							
 			editor.commit();
@@ -74,7 +79,9 @@ public class Box_baozhuang extends Activity {
 		setContentView(R.layout.box_baozhuang);
 		huowei_data = (EditText)findViewById(R.id.box_id_data);
 		
-		playBeepSound = new PlayBeepSound(Box_baozhuang.this);
+		mSoundPool = new SoundPool(2, AudioManager.STREAM_SYSTEM, 5);
+		soundMap.put(1, mSoundPool.load(this, R.raw.test_2k_8820_200ms, 1));
+		soundMap.put(2, mSoundPool.load(this, R.raw.error, 1));
 		
 		mFilter = new IntentFilter();
 		mFilter.addAction(broadrec.ACTION_DATA_AVAILABLE);
