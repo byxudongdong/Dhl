@@ -117,7 +117,7 @@ public class Fenjian_Doc extends Activity{
 				        Cursor queryResult = db.rawQuery("select * from ptsdata", null);
 				        if (queryResult.getColumnCount() != 0) {
 				            //打印所有记录
-				            while (queryResult.moveToNext()) {
+				            if ( queryResult.moveToLast() ) {
 				                Log.i("info", "user_id: " + queryResult.getString(queryResult.getColumnIndex("user_id"))
 				                        + " timastamp: " + queryResult.getString(queryResult.getColumnIndex("task_time"))
 				                        + " String: " + queryResult.getString(queryResult.getColumnIndex("doc_id"))
@@ -189,6 +189,8 @@ public class Fenjian_Doc extends Activity{
 			
 			startActivity( new Intent( Fenjian_Doc.this,
               com.opration.Fenjian_Task.class));
+			
+			//playBeepSound.player_release();
 		}
 	}
 	
@@ -210,11 +212,23 @@ public class Fenjian_Doc extends Activity{
         // Another activity is taking focus (this activity is about to be "paused").
         unregisterReceiver(mreceiver);
         mHandler.removeMessages(SHOW_ANOTHER_ACTIVITY);//從消息隊列中移除  
+//        //关闭数据库
+//        if(db.isOpen())
+//        {
+//        	db.close();
+//        }
+    }
+    
+    @Override
+    protected void onDestroy()
+    {
+    	super.onDestroy();
         //关闭数据库
         if(db.isOpen())
         {
         	db.close();
         }
+        playBeepSound.player_release();
     }
 	
 	private void record()

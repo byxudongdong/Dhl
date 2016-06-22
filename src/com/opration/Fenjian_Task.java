@@ -193,7 +193,10 @@ public class Fenjian_Task extends Activity {
 			record();
 			
 			startActivity( new Intent( Fenjian_Task.this,
-              com.opration.Fenjian_Huowei.class));
+					com.opration.Fenjian_Huowei.class));
+			
+			playBeepSound.player_release();
+			
 			finish();
 		}
 	}

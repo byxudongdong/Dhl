@@ -227,6 +227,9 @@ public class Fenjian_SKU extends Activity {
 			intent.setClass(this, Jianhuo_Task.class);  
 			intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);  
 			startActivity(intent);  
+			
+			playBeepSound.player_release();
+			
 			finish();
 		}
 	}
@@ -247,6 +250,9 @@ public class Fenjian_SKU extends Activity {
 			intent.setClass(this, Jianhuo_Task.class);  
 			intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);  
 			startActivity(intent);  
+			
+			playBeepSound.player_release();
+			
 			finish();
 		}
 	}
@@ -267,6 +273,9 @@ public class Fenjian_SKU extends Activity {
 			intent.setClass(this, Jianhuo_Task.class);  
 			intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);  
 			startActivity(intent);  
+			
+			playBeepSound.player_release();
+			
 			finish();
 		}
 		
@@ -365,6 +374,5 @@ public class Fenjian_SKU extends Activity {
             }  
         }  
     };  
-
 
 }

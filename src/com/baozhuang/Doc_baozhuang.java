@@ -118,7 +118,7 @@ public class Doc_baozhuang extends Activity{
 				        Cursor queryResult = db.rawQuery("select * from ptsdata", null);
 				        if (queryResult.getColumnCount() != 0) {
 				            //打印所有记录
-				            while (queryResult.moveToNext()) {
+				            if (queryResult.moveToLast()) {
 				                Log.i("info", "user_id: " + queryResult.getInt(queryResult.getColumnIndex("user_id"))
 				                        + " timastamp: " + queryResult.getString(queryResult.getColumnIndex("task_time"))
 				                        + " String: " + queryResult.getString(queryResult.getColumnIndex("doc_id"))
@@ -217,6 +217,18 @@ public class Doc_baozhuang extends Activity{
         {
         	db.close();
         }
+    }
+    
+    @Override
+    protected void onDestroy()
+    {
+    	super.onDestroy();
+        //关闭数据库
+        if(db.isOpen())
+        {
+        	db.close();
+        }
+        playBeepSound.player_release();
     }
 	
 	private void record()

@@ -202,6 +202,7 @@ public class Jianhuo_Doc extends Activity{
 			startActivity( new Intent( Jianhuo_Doc.this,
 	              com.opration.Jianhuo_Task.class));
 			//finish();
+			//playBeepSound.player_release();
 		}
 	}
 	
@@ -238,13 +239,24 @@ public class Jianhuo_Doc extends Activity{
         // Another activity is taking focus (this activity is about to be "paused").
         unregisterReceiver(mreceiver);
         mHandler.removeMessages(SHOW_ANOTHER_ACTIVITY);//從消息隊列中移除  
+//        //关闭数据库
+//        if(db.isOpen())
+//        {
+//        	db.close();
+//        }
+    }
+	
+    @Override
+    protected void onDestroy()
+    {
+    	super.onDestroy();
         //关闭数据库
         if(db.isOpen())
         {
         	db.close();
         }
+        playBeepSound.player_release();
     }
-	
 	
 	@Override  
     public boolean dispatchTouchEvent(MotionEvent ev) {  

@@ -199,6 +199,8 @@ public class Fenjian_Huowei extends Activity {
 			startActivity( new Intent( Fenjian_Huowei.this,
               com.opration.Fenjian_SKU.class));
 			
+			playBeepSound.player_release();
+			
 			finish();
 		}else{
 			Toast toast = Toast.makeText(getApplicationContext(),

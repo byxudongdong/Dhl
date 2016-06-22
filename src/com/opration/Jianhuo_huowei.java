@@ -275,11 +275,7 @@ public class Jianhuo_huowei extends Activity {
         // Another activity is taking focus (this activity is about to be "paused").
         unregisterReceiver(mreceiver);
         //mHandler.removeMessages(SHOW_ANOTHER_ACTIVITY);//從消息隊列中移除  
-        //关闭数据库
-        if(db.isOpen())
-        {
-        	db.close();
-        }
+
     }
     
 	@Override
@@ -287,6 +283,13 @@ public class Jianhuo_huowei extends Activity {
 		super.onDestroy();
 		Log.i("销毁", "销毁");
 		mHandler.removeMessages(SHOW_ANOTHER_ACTIVITY);//從消息隊列中移除  
+        //关闭数据库
+        if(db.isOpen())
+        {
+        	db.close();
+        }
+        
+        playBeepSound.player_release();
 		
 	};
 	

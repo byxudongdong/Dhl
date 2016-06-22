@@ -138,7 +138,7 @@ public class SKU_baozhuang extends Activity {
 						        Cursor queryResult = db.rawQuery("select * from ptsdata", null);
 						        if (queryResult.getColumnCount() != 0) {
 						            //打印记录
-						            while (queryResult.moveToNext()) {
+						            if (queryResult.moveToLast()) {
 						                Log.i("info", "user_id: " + queryResult.getString(queryResult.getColumnIndex("user_id"))
 						                        + " timastamp: " + queryResult.getString(queryResult.getColumnIndex("task_time"))
 						                        + " String: " + queryResult.getString(queryResult.getColumnIndex("sku"))
@@ -254,11 +254,11 @@ public class SKU_baozhuang extends Activity {
         // Another activity is taking focus (this activity is about to be "paused").
         unregisterReceiver(mreceiver);
         //mHandler.removeMessages(SHOW_ANOTHER_ACTIVITY);//從消息隊列中移除  
-        //关闭数据库
-        if(db.isOpen())
-        {
-        	db.close();
-        }
+//        //关闭数据库
+//        if(db.isOpen())
+//        {
+//        	db.close();
+//        }
     }
     
 	@Override
@@ -266,6 +266,12 @@ public class SKU_baozhuang extends Activity {
 		super.onDestroy();
 		Log.i("销毁", "销毁");
 		mHandler.removeMessages(SHOW_ANOTHER_ACTIVITY);//從消息隊列中移除  
+		
+        //关闭数据库
+        if(db.isOpen())
+        {
+        	db.close();
+        }
 		
 	};
 	

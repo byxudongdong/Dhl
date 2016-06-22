@@ -124,6 +124,7 @@ public class PlayBeepSound {
 			Vibrator vibrator = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
 			vibrator.vibrate(VIBRATE_DURATION);
 		}
+		mediaPlayer2.release();
 	}
 
 	private void setVolumeControlStream(int streamMusic) {

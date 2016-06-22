@@ -43,6 +43,8 @@ public class Timeout extends Activity {
 			{
 				doc_id_data.setText(bt_data);
 				doc_id_data.setSelection(bt_data.length());
+				
+				timeout_back(null);
 				Log.i("user_data", doc_id_data.getText().toString());
 			}
 			
@@ -162,15 +164,28 @@ public class Timeout extends Activity {
     protected void onPause() {
         super.onPause();
         // Another activity is taking focus (this activity is about to be "paused").
-        unregisterReceiver(mreceiver);
-        record();
+        unregisterReceiver(mreceiver);       
+//        //关闭数据库
+//        if(db.isOpen())
+//        {
+//        	db.close();
+//        }
+        
+        //finish();
+    }
+    
+    @Override
+    protected void onDestroy()
+    {
+    	super.onDestroy();
+    	
+    	record();
         //关闭数据库
         if(db.isOpen())
         {
         	db.close();
         }
-        
-        //finish();
+
     }
     
     private void record()
