@@ -215,6 +215,7 @@ public class Fenjian_Doc extends Activity{
         //resetTime();
         registerReceiver(mreceiver,mFilter); 
     }
+	
     @Override
     protected void onPause() {
         super.onPause();
@@ -233,10 +234,7 @@ public class Fenjian_Doc extends Activity{
     {
     	super.onDestroy();
         //¹Ø±ÕÊý¾Ý¿â
-        if(db.isOpen())
-        {
-        	db.close();
-        }
+        db.close();
 
     }
 	

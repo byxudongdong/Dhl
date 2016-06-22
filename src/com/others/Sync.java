@@ -75,7 +75,7 @@ public class Sync<Public> extends Activity {
 		newdate = sp.getString("NEWTIME", "");
 		Log.i("NEWDATE", newdate);
 		
-		//new Thread(sendData).start();
+		new Thread(sendData).start();
 
 		new Thread(sendDataYesterday).start();
 		
@@ -325,6 +325,9 @@ public class Sync<Public> extends Activity {
 		        {
 		        	//table does not exist
 		        	Log.i("上传昨天数据", "昨天数据为空");
+		        	Message message=new Message();
+			    	message.what=2;
+			    	handler.sendMessage(message);
 			    } 
 	        }
 		        
@@ -345,7 +348,7 @@ public class Sync<Public> extends Activity {
 	           		textView1.setText("同步成功:"+totalCount+"条");
 	           		Toast.makeText(getApplicationContext(), "同步成功:"+totalCount+"条", Toast.LENGTH_SHORT).show();
 	           		changePushState();
-	           		db.close();
+	           		//db.close();
 	           		new Thread(sendData).start();
 	        	    break;
 	           	case 1:
@@ -364,7 +367,7 @@ public class Sync<Public> extends Activity {
 	           		textView1.setText("同步成功:"+totalCount+"条");
 	           		Toast.makeText(getApplicationContext(), "同步成功:"+totalCount+"条", Toast.LENGTH_SHORT).show();
 	           		changePushState();
-	           		db_Yesterday.close();
+	           		//db_Yesterday.close();
 	           		new Thread(sendDataYesterday).start();
 	        	    break;
            	}
@@ -503,12 +506,18 @@ public static void doPost_Yesterday(String url, RequestParams params, final Hand
 	@Override
     protected void onPause() {
         super.onPause();
-        //关闭数据库
-        if(db.isOpen())
-        {
-        	db.close();
-        }
+
     }
+	
+	@Override
+	protected void onDestroy(){
+		super.onDestroy();
+        //关闭数据库
+        db.close();
+        db_Yesterday.close();
+
+	}
+	
 	
 	
 }

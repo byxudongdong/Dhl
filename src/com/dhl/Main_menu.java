@@ -252,12 +252,17 @@ public class Main_menu extends Activity{
 	@Override
     protected void onPause() {
         super.onPause();
-        //关闭数据库
-        if(db.isOpen())
-        {
-        	db.close();
-        }
+
     }
+	
+	@Override
+	protected void onDestroy(){
+		super.onDestroy();
+        //关闭数据库
+
+        db.close();
+
+	}
 	
 	
 	protected void dialog() { 
