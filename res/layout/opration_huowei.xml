@@ -29,6 +29,7 @@
 			android:digits="0123456789abcdefghigklmnopqrstuvwxyzABCDEFGHIGKLMNOPQRSTUVWXYZ"
             android:singleLine="true"
             android:hint="@string/huowei_info"
+            android:maxLength="35"
             android:textSize="28dp" />
     </LinearLayout>
 

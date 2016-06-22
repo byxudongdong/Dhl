@@ -27,6 +27,7 @@
             android:layout_marginTop="50dp"
             android:singleLine="true"
             android:hint="@string/TaskID"
+            android:maxLength="35"
             android:textSize="28dp" />
     </LinearLayout>
 
