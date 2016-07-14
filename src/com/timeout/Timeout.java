@@ -42,7 +42,7 @@ public class Timeout extends Activity {
 	SQLiteDatabase db;
 	private String newdate;
 	String newtime = null;
-	Thread newThread = null; //ÉùÃ÷Ò»¸ö×ÓÏß³Ì    
+	Thread newThread = null; //å£°æ˜ä¸€ä¸ªå­çº¿ç¨‹    
 	
 	BroadcastReceiver mreceiver = new  BroadcastReceiver(){
 		@Override
@@ -76,7 +76,7 @@ public class Timeout extends Activity {
 		mFilter.addAction(broadrec.ACTION_DATA_AVAILABLE);
 		registerReceiver(mreceiver,mFilter);
 		
-		//»ñµÃÊµÀı¶ÔÏó
+		//è·å¾—å®ä¾‹å¯¹è±¡
 		sp = this.getSharedPreferences("userInfo", Context.MODE_WORLD_READABLE);
 		newdate = sp.getString("NEWTIME", "");
 		Log.i("NEWDATE", newdate);
@@ -85,8 +85,8 @@ public class Timeout extends Activity {
 		    @Override
 	            public void run() {
 	            	
-	            		Time t=new Time(); // or Time t=new Time("GMT+8"); ¼ÓÉÏTime Zone×ÊÁÏ¡£  
-	            		t.setToNow(); // È¡µÃÏµÍ³Ê±¼ä¡£  
+	            		Time t=new Time(); // or Time t=new Time("GMT+8"); åŠ ä¸ŠTime Zoneèµ„æ–™ã€‚  
+	            		t.setToNow(); // å–å¾—ç³»ç»Ÿæ—¶é—´ã€‚  
 	            		int year = t.year;  
 	            		int month = t.month + 1;  
 	            		int date = t.monthDay;  
@@ -101,12 +101,12 @@ public class Timeout extends Activity {
 	            		Editor editor = sp.edit();
 						editor.putString("NEW_TIME", newtime);
 						editor.commit();
-						//´´½¨Ò»¸öSQLiteHelper¶ÔÏó
+						//åˆ›å»ºä¸€ä¸ªSQLiteHelperå¯¹è±¡
 				        helper = new DatabaseHelper(Timeout.this, newtime.substring(0,10) + ".db");
-				        //Ê¹ÓÃgetWritableDatabase()»ògetReadableDatabase()·½·¨»ñµÃSQLiteDatabase¶ÔÏó
+				        //ä½¿ç”¨getWritableDatabase()æˆ–getReadableDatabase()æ–¹æ³•è·å¾—SQLiteDatabaseå¯¹è±¡
 				        db = helper.getWritableDatabase();
 				        
-				      //´´½¨Ò»¸ö±í				        
+				      //åˆ›å»ºä¸€ä¸ªè¡¨				        
 				        db.execSQL("create table if not exists ptsdata "
 				        		+"("			                    				                    
 			                    +"ref_id integer primary key," 
@@ -129,22 +129,22 @@ public class Timeout extends Activity {
         	},"timeout_doc");
 		newThread.start();
 		
-		Log.i("TimeOut", "½øÈë³¬Ê±½çÃæ");
+		Log.i("TimeOut", "è¿›å…¥è¶…æ—¶ç•Œé¢");
 	}
 	
 	@Override 
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
-		if(keyCode == KeyEvent.KEYCODE_BACK) { //¼à¿Ø/À¹½Ø/ÆÁ±Î·µ»Ø¼ü
+		if(keyCode == KeyEvent.KEYCODE_BACK) { //ç›‘æ§/æ‹¦æˆª/å±è”½è¿”å›é”®
 			//dialog(); 
-			Toast.makeText(Timeout.this, "ÇëÊäÈëÕıÈ·DOCID", Toast.LENGTH_SHORT).show();
+			Toast.makeText(Timeout.this, "è¯·è¾“å…¥æ­£ç¡®DOCID", Toast.LENGTH_SHORT).show();
 			return false; 
 		} else if(keyCode == KeyEvent.KEYCODE_MENU) {
 			// rl.setVisibility(View.VISIBLE);
-			Toast.makeText(Timeout.this, "ÇëÊäÈëÕıÈ·DOCID", Toast.LENGTH_SHORT).show();
+			Toast.makeText(Timeout.this, "è¯·è¾“å…¥æ­£ç¡®DOCID", Toast.LENGTH_SHORT).show();
 			return false;
 		} else if(keyCode == KeyEvent.KEYCODE_HOME) {
-			//ÓÉÓÚHome¼üÎªÏµÍ³¼ü£¬´Ë´¦²»ÄÜ²¶»ñ£¬ĞèÒªÖØĞ´onAttachedToWindow()
-			Toast.makeText(Timeout.this, "ÇëÊäÈëÕıÈ·DOCID", Toast.LENGTH_SHORT).show();
+			//ç”±äºHomeé”®ä¸ºç³»ç»Ÿé”®ï¼Œæ­¤å¤„ä¸èƒ½æ•è·ï¼Œéœ€è¦é‡å†™onAttachedToWindow()
+			Toast.makeText(Timeout.this, "è¯·è¾“å…¥æ­£ç¡®DOCID", Toast.LENGTH_SHORT).show();
 			return false;
 		}
 		return super.onKeyDown(keyCode, event);
@@ -157,15 +157,15 @@ public class Timeout extends Activity {
 			Log.i("timeout", sp.getString("doc_id", "") );
 			if(sp.getString("doc_id", "").equals(doc_id_data.getText().toString()) )
 			{
-				Log.i("TimeOut", "ÍË³ö&Ïú»Ù³¬Ê±½çÃæ");
+				Log.i("TimeOut", "é€€å‡º&é”€æ¯è¶…æ—¶ç•Œé¢");
 				finish();
 				
 			}else {
-				Toast.makeText(this, "DocId´íÎó", 500).show();
+				Toast.makeText(this, "DocIdé”™è¯¯", 500).show();
 			}
 		}else
 		{
-			Toast.makeText(this, "ÇëÌîĞ´µ±Ç°²Ù×÷DocId", 500).show();
+			Toast.makeText(this, "è¯·å¡«å†™å½“å‰æ“ä½œDocId", 500).show();
 		}
 	}
 
@@ -181,7 +181,7 @@ public class Timeout extends Activity {
         super.onPause();
         // Another activity is taking focus (this activity is about to be "paused").
         unregisterReceiver(mreceiver);       
-//        //¹Ø±ÕÊı¾İ¿â
+//        //å…³é—­æ•°æ®åº“
 //        if(db.isOpen())
 //        {
 //        	db.close();
@@ -196,7 +196,7 @@ public class Timeout extends Activity {
     	super.onDestroy();
     	
     	record();
-        //¹Ø±ÕÊı¾İ¿â
+        //å…³é—­æ•°æ®åº“
         if(db.isOpen())
         {
         	db.close();
@@ -213,7 +213,7 @@ public class Timeout extends Activity {
         		+ "pushstate) "
         		+ "values ("
         		+ "'"+sp.getString("user_id", "")+"'"+","
-        		+ "'³¬Ê±','Indirect',"
+        		+ "'è¶…æ—¶','Indirect',"
         		+ "'"+sp.getString("doc_id", "") +"'"+","
         		+ "0,0)");
         
